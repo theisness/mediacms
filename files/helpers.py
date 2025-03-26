@@ -726,7 +726,7 @@ def produce_ffmpeg_commands(media_file, media_info, resolution, codec, output_fi
         return False
 
     if media_info.get("video_height") < resolution:
-        if resolution not in [240, 360]:  # always get these two
+        if resolution not in settings.MINIMUM_RESOLUTIONS_TO_ENCODE:  # always get these two
             return False
 
     #    if codec == "h264_baseline":
