@@ -6,7 +6,7 @@ from .models import Channel, User
 
 
 class SignupForm(forms.Form):
-    name = forms.CharField(max_length=100, label="Name")
+    name = forms.CharField(max_length=100, label="昵称，可以和用户名相同")
 
     def signup(self, request, user):
         user.name = self.cleaned_data["name"]
@@ -27,6 +27,16 @@ class UserForm(forms.ModelForm):
             "is_editor",
             # "allow_contact",
         )
+        labels = {
+            "name":"昵称",
+            "description":"自我介绍",
+            "logo":"头像",
+            "notification_on_comments":"是否收到评论邮件通知",
+            "is_featured":"是否精选",
+            "advancedUser":"高级用户",
+            "is_manager":"管理员门户权限",
+            "is_editor":"媒体审核权限",
+        }
 
     def clean_logo(self):
         image = self.cleaned_data.get("logo", False)
@@ -50,12 +60,13 @@ class ChannelForm(forms.ModelForm):
     class Meta:
         model = Channel
         fields = ("banner_logo",)
+        labels = {"banner_logo": "壁纸"}
 
     def clean_banner_logo(self):
         image = self.cleaned_data.get("banner_logo", False)
         if image:
             if image.size > 2 * 1024 * 1024:
-                raise forms.ValidationError("Image file too large ( > 2mb )")
+                raise forms.ValidationError("文件太大 ( > 2MB )")
             return image
         else:
-            raise forms.ValidationError("Please provide a banner")
+            raise forms.ValidationError("请选择壁纸")

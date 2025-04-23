@@ -388,8 +388,8 @@ function EditBannerButton(props) {
     link = '/edit-channel.html';
   }
   return (
-    <a href={link} className="edit-channel" title="Edit banner">
-      EDIT BANNER
+    <a href={link} className="edit-channel" title="编辑壁纸">
+      编辑壁纸
     </a>
   );
 }
@@ -403,7 +403,7 @@ function EditProfileButton(props) {
 
   return (
     <a href={link} className="edit-profile" title="Edit profile">
-      EDIT PROFILE
+      编辑账户信息
     </a>
   );
 }
@@ -532,23 +532,23 @@ export default function ProfilePagesHeader(props) {
           <span className="delete-profile-wrap">
             <PopupTrigger contentRef={popupContentRef}>
               <button className="delete-profile" title="">
-                REMOVE PROFILE
+                删除账户
               </button>
             </PopupTrigger>
 
             <PopupContent contentRef={popupContentRef}>
               <PopupMain>
                 <div className="popup-message">
-                  <span className="popup-message-title">Profile removal</span>
-                  <span className="popup-message-main">You're willing to remove profile permanently?</span>
+                  <span className="popup-message-title">删除账户</span>
+                  <span className="popup-message-main">是否永久删除 {props.author.name} 的账户?</span>
                 </div>
                 <hr />
                 <span className="popup-message-bottom">
                   <button className="button-link cancel-profile-removal" onClick={cancelProfileRemoval}>
-                    CANCEL
+                    取消
                   </button>
                   <button className="button-link proceed-profile-removal" onClick={proceedMediaRemoval}>
-                    PROCEED
+                    确定
                   </button>
                 </span>
               </PopupMain>

@@ -1308,7 +1308,7 @@ class CommentDetail(APIView):
         media = self.get_object(friendly_token)
         if isinstance(media, Response):
             return media
-        comments = media.comments.filter().prefetch_related("user")
+        comments = media.comments.filter().order_by('-add_date').prefetch_related("user")
         pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
         paginator = pagination_class()
         page = paginator.paginate_queryset(comments, request)

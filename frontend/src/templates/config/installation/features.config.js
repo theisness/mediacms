@@ -17,9 +17,9 @@ module.exports = {
   media: {
     actions: {
       share: true,
-      report: true,
+      report: false,
       like: true,
-      dislike: true,
+      dislike: false,
       download: true,
       comment: true,
       save: true,

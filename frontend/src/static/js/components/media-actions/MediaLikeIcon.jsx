@@ -51,7 +51,8 @@ export function MediaLikeIcon() {
         <CircleIconButton type="span">
           <MaterialIcon type="thumb_up" />
         </CircleIconButton>
-        <span className="likes-counter">{likesCounter}</span>
+        {/*<span className="likes-counter">{likesCounter}</span>*/}
+        {likesCounter}
       </button>
     </div>
   );

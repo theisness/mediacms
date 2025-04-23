@@ -71,7 +71,7 @@ export function useMediaItem(props) {
       <span className="item-meta">
         {authorComponent()}
         {viewsComponent()}
-        {dateComponent()}
+        {/*{dateComponent()}*/}
       </span>
     );
   }

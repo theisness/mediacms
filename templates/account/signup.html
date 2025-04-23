@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
-{% block headtitle %} | Sign Up{% endblock headtitle %}
+{% block headtitle %} | 注册{% endblock headtitle %}
 
 {% block innercontent %}
-<div class="user-action-form-wrap">
-    <div class="user-action-form-inner">
+    <div class="user-action-form-wrap">
+        <div class="user-action-form-inner">
 
-		<h1>Sign Up</h1>
+            <h1>注册</h1>
 
-		<p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
+            <p>已经有账号？请 <a href="{{ login_url }}">登录</a>。</p>
 
-		<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-			{% csrf_token %}
-			{{ form.as_p }}
-			{% if redirect_field_value %}
-				<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-			  {% endif %}
-			  <button type="submit">Sign Up &raquo;</button>
-		</form>
+            <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                {% endif %}
+                <button type="submit">注册 &raquo;</button>
+            </form>
 
+        </div>
     </div>
-</div>
 {% endblock innercontent %}
 

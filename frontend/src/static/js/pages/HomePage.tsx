@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ApiUrlConsumer, LinksConsumer } from '../utils/contexts/';
 import { PageStore } from '../utils/stores/';
 import { MediaListRow } from '../components/MediaListRow';
@@ -50,6 +50,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [visibleLatest, setVisibleLatest] = useState(false);
   const [visibleFeatured, setVisibleFeatured] = useState(false);
   const [visibleRecommended, setVisibleRecommended] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= window.innerHeight); // 假设768px以下为手机端
 
   const onLoadLatest = (length: number) => {
     setVisibleLatest(0 < length);
@@ -63,6 +64,17 @@ export const HomePage: React.FC<HomePageProps> = ({
   const onLoadRecommended = (length: number) => {
     setVisibleRecommended(0 < length);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <Page id={id}>
@@ -88,22 +100,38 @@ export const HomePage: React.FC<HomePageProps> = ({
                     </MediaListRow>
                   )}
 
-                {PageStore.get('config-enabled').pages.recommended &&
-                  PageStore.get('config-enabled').pages.recommended.enabled && (
-                    <MediaListRow
-                      title={recommended_title}
-                      style={!visibleRecommended ? { display: 'none' } : undefined}
-                      viewAllLink={recommended_view_all_link ? links.recommended : null}
-                    >
-                      <InlineSliderItemListAsync
-                        requestUrl={apiUrl.recommended}
-                        itemsCountCallback={onLoadRecommended}
-                        hideViews={!PageStore.get('config-media-item').displayViews}
-                        hideAuthor={!PageStore.get('config-media-item').displayAuthor}
-                        hideDate={!PageStore.get('config-media-item').displayPublishDate}
-                      />
-                    </MediaListRow>
-                  )}
+                {!isMobile && PageStore.get('config-enabled').pages.recommended &&
+                    PageStore.get('config-enabled').pages.recommended.enabled && (
+                        <MediaListRow
+                            title={recommended_title}
+                            style={!visibleRecommended ? { display: 'none' } : undefined}
+                            viewAllLink={recommended_view_all_link ? links.recommended : null}
+                        >
+                          <InlineSliderItemListAsync
+                              requestUrl={apiUrl.recommended}
+                              itemsCountCallback={onLoadRecommended}
+                              hideViews={!PageStore.get('config-media-item').displayViews}
+                              hideAuthor={!PageStore.get('config-media-item').displayAuthor}
+                              hideDate={!PageStore.get('config-media-item').displayPublishDate}
+                          />
+                        </MediaListRow>
+                    )}
+                {/*{PageStore.get('config-enabled').pages.recommended &&*/}
+                {/*  PageStore.get('config-enabled').pages.recommended.enabled && (*/}
+                {/*    <MediaListRow*/}
+                {/*      title={recommended_title}*/}
+                {/*      style={!visibleRecommended ? { display: 'none' } : undefined}*/}
+                {/*      viewAllLink={recommended_view_all_link ? links.recommended : null}*/}
+                {/*    >*/}
+                {/*      <InlineSliderItemListAsync*/}
+                {/*        requestUrl={apiUrl.recommended}*/}
+                {/*        itemsCountCallback={onLoadRecommended}*/}
+                {/*        hideViews={!PageStore.get('config-media-item').displayViews}*/}
+                {/*        hideAuthor={!PageStore.get('config-media-item').displayAuthor}*/}
+                {/*        hideDate={!PageStore.get('config-media-item').displayPublishDate}*/}
+                {/*      />*/}
+                {/*    </MediaListRow>*/}
+                {/*  )}*/}
 
                 <MediaListRow
                   title={latest_title}

@@ -176,5 +176,5 @@ ProfileMediaPage.propTypes = {
 };
 
 ProfileMediaPage.defaultProps = {
-  title: 'Uploads',
+  title: '已上传的媒体：',
 };

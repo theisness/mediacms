@@ -148,7 +148,7 @@ function CommentForm(props) {
                 inputRef={textareaRef}
                 className="form-textarea"
                 rows="1"
-                placeholder={'Add a ' + commentsText.single + '...'}
+                placeholder={translateString('Add a') + commentsText.single + '...'}
                 value={value}
                 onChange={onChangeWithMention}
                 onFocus={onFocus}
@@ -161,7 +161,7 @@ function CommentForm(props) {
                 ref={textareaRef}
                 className="form-textarea"
                 rows="1"
-                placeholder={'Add a ' + commentsText.single + '...'}
+                placeholder={translateString('Add a') + commentsText.single + '...'}
                 value={value}
                 onChange={onChange}
                 onFocus={onFocus}
@@ -186,9 +186,9 @@ function CommentForm(props) {
             href={loginUrl}
             rel="noffolow"
             className="form-textarea-wrap"
-            title={translateString('Add a ') + commentsText.single + '...'}
+            title={translateString('Add a') + commentsText.single + '...'}
           >
-            <span className="form-textarea">{translateString('Add a ') + commentsText.single + '...'}</span>
+            <span className="form-textarea">{translateString('Add a') + commentsText.single + '...'}</span>
           </a>
           <div className="form-buttons">
             <a href={loginUrl} rel="noffolow" className="disabled">
@@ -242,16 +242,16 @@ function CommentActions(props) {
           <PopupContent contentRef={popupContentRef}>
             <PopupMain>
               <div className="popup-message">
-                <span className="popup-message-title">{commentsText.ucfirstSingle} removal</span>
-                <span className="popup-message-main">You're willing to remove {commentsText.single} permanently?</span>
+                <span className="popup-message-title">删除评论</span>
+                <span className="popup-message-main">确认永久删除评论吗？</span>
               </div>
               <hr />
               <span className="popup-message-bottom">
                 <button className="button-link cancel-comment-removal" onClick={cancelCommentRemoval}>
-                  CANCEL
+                  取消
                 </button>
                 <button className="button-link proceed-comment-removal" onClick={proceedCommentRemoval}>
-                  PROCEED
+                  确认删除
                 </button>
               </span>
             </PopupMain>
@@ -410,7 +410,7 @@ const CommentsListHeader = ({ commentsLength }) => {
               ? commentsLength + ' ' + commentsText.ucfirstPlural
               : commentsLength + ' ' + commentsText.ucfirstSingle
             : MediaPageStore.get('media-data').enable_comments
-            ? translateString('No') + ' ' + commentsText.single + ' ' + translateString('yet')
+            ? translateString('No comments yet')
             : ''}
         </h2>
       ) : null}
@@ -495,13 +495,13 @@ export default function CommentsList(props) {
   function onCommentSubmit(commentId) {
     onCommentsLoad();
     // FIXME: Without delay creates conflict [ Uncaught Error: Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch. ].
-    setTimeout(() => PageActions.addNotification(commentsText.ucfirstSingle + ' added', 'commentSubmit'), 100);
+    setTimeout(() => PageActions.addNotification(translateString('Comments added'), 'commentSubmit'), 100);
   }
 
   function onCommentSubmitFail() {
     // FIXME: Without delay creates conflict [ Uncaught Error: Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch. ].
     setTimeout(
-      () => PageActions.addNotification(commentsText.ucfirstSingle + ' submission failed', 'commentSubmitFail'),
+      () => PageActions.addNotification('评论提交失败', 'commentSubmitFail'),
       100,
     );
   }
@@ -509,13 +509,13 @@ export default function CommentsList(props) {
   function onCommentDelete(commentId) {
     onCommentsLoad();
     // FIXME: Without delay creates conflict [ Uncaught Error: Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch. ].
-    setTimeout(() => PageActions.addNotification(commentsText.ucfirstSingle + ' removed', 'commentDelete'), 100);
+    setTimeout(() => PageActions.addNotification('评论已删除', 'commentDelete'), 100);
   }
 
   function onCommentDeleteFail(commentId) {
     // FIXME: Without delay creates conflict [ Uncaught Error: Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch. ].
     setTimeout(
-      () => PageActions.addNotification(commentsText.ucfirstSingle + ' removal failed', 'commentDeleteFail'),
+      () => PageActions.addNotification('评论删除失败', 'commentDeleteFail'),
       100,
     );
   }
