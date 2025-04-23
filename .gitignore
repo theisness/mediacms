@@ -16,6 +16,6 @@ deploy/docker/local_settings.py
 yt.readme.md
 .idea/
 .github/
-/__pycache__/
+__pycache__/
 static-bak/
 venv/
