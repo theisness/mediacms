@@ -1,10 +1,6 @@
 cli-tool/.env
 frontend/package-lock.json
-media_files/encoded/
-media_files/original/
-media_files/hls/
-media_files/chunks/
-media_files/uploads/
+media_files/
 postgres_data/
 celerybeat-schedule
 logs/
@@ -20,3 +16,6 @@ deploy/docker/local_settings.py
 yt.readme.md
 .idea/
 .github/
+/__pycache__/
+static-bak/
+
