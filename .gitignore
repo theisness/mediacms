@@ -18,4 +18,4 @@ yt.readme.md
 .github/
 /__pycache__/
 static-bak/
-
+venv/
