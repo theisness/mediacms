@@ -19,3 +19,4 @@ yt.readme.md
 __pycache__/
 static-bak/
 venv/
+static/
