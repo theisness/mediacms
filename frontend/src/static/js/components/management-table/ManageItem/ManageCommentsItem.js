@@ -155,6 +155,16 @@ export function ManageCommentsItem(props) {
     setSelected(props.selectedRow);
   }, [props.selectedRow]);
 
+  function setMentions(text) {
+    let sanitizedComment = text.split('@(_').join('<a href="/user/');
+    sanitizedComment = sanitizedComment.split('_)[_').join('">@');
+    return sanitizedComment.split('_]').join('</a>');
+  }
+
+  function parseComment(text) {
+    return { __html: text.replace(/\n/g, `<br />`) };
+  }
+
   return (
     <div className="item manage-item manage-comments-item">
       <div className="mi-checkbox">
@@ -164,7 +174,7 @@ export function ManageCommentsItem(props) {
         <ManageItemCommentAuthor name={props.author_name} url={props.author_url} />
       </div>
       <div className="mi-comment">
-        {void 0 === props.text ? <i className="non-available">N/A</i> : props.text}
+        {void 0 === props.text ? <i className="non-available">N/A</i> : <div dangerouslySetInnerHTML={parseComment(setMentions(props.text))} />}
         {void 0 === props.text || (void 0 === props.media_url && props.hideDeleteAction) ? null : (
           <ManageItemCommentActions
             containerRef={actionsContainerRef}

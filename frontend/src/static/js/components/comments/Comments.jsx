@@ -431,7 +431,7 @@ export default function CommentsList(props) {
     const retrievedComments = [...MediaPageStore.get('media-comments')];
 
     retrievedComments.forEach((comment) => {
-      comment.text = setTimestampAnchors(comment.text);
+      comment.text = setMentions(setTimestampAnchors(comment.text));
     });
 
     displayCommentsRelatedAlert();
@@ -463,7 +463,7 @@ export default function CommentsList(props) {
 
   function setMentions(text) {
     let sanitizedComment = text.split('@(_').join('<a href="/user/');
-    sanitizedComment = sanitizedComment.split('_)[_').join('">');
+    sanitizedComment = sanitizedComment.split('_)[_').join('">@');
     return sanitizedComment.split('_]').join('</a>');
   }
 
