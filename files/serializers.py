@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import Category, Comment, EncodeProfile, Media, Playlist, Tag
 
+
 # TODO: put them in a more DRY way
 
 
@@ -221,18 +222,22 @@ class PlaylistDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Playlist
         read_only_fields = ("add_date", "user")
-        fields = ("title", "add_date", "user_thumbnail_url", "description", "user", "media_count", "url", "thumbnail_url")
+        fields = (
+        "title", "add_date", "user_thumbnail_url", "description", "user", "media_count", "url", "thumbnail_url")
 
 
 class CommentSerializer(serializers.ModelSerializer):
     author_profile = serializers.ReadOnlyField(source="user.get_absolute_url")
     author_name = serializers.ReadOnlyField(source="user.name")
     author_thumbnail_url = serializers.ReadOnlyField(source="user.thumbnail_url")
+    # 新增 children 字段
+    children = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
         read_only_fields = ("add_date", "uid")
         fields = (
+            "id",
             "add_date",
             "text",
             "parent",
@@ -241,4 +246,18 @@ class CommentSerializer(serializers.ModelSerializer):
             "author_name",
             "media_url",
             "uid",
+            "children"
         )
+
+    def get_children(self, obj):
+        # 获取当前嵌套层级，首次调用为 0
+        current_depth = self.context.get("current_depth", 0)
+        max_depth = self.context.get("max_depth", 50)  # 默认最多嵌套 50 层
+
+        if current_depth >= max_depth:
+            return []
+
+        children = obj.children.all().order_by("add_date")
+        context = {**self.context, "current_depth": current_depth + 1}
+
+        return CommentSerializer(children, many=True, context=context).data

@@ -735,7 +735,7 @@ class MediaPageStore extends EventEmitter {
 
         postRequest(
           this.commentsAPIUrl,
-          { text: action.commentText },
+          { text: action.commentText,parent:action.parent_id },
           { headers: { 'X-CSRFToken': csrfToken() } },
           false,
           this.submitCommentResponse,

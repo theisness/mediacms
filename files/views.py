@@ -1308,7 +1308,15 @@ class CommentDetail(APIView):
         media = self.get_object(friendly_token)
         if isinstance(media, Response):
             return media
-        comments = media.comments.filter().order_by('-add_date').prefetch_related("user")
+
+        # 获取所有该媒体下的评论，按添加时间倒序排列
+        comments = (
+            media.comments.filter(parent=None)  # 只获取根评论
+            .order_by("-add_date")
+            .prefetch_related("user", "children__user")  # 预取用户和子评论
+        )
+
+        # comments = media.comments.filter().order_by('-add_date').prefetch_related("user")
         pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
         paginator = pagination_class()
         page = paginator.paginate_queryset(comments, request)

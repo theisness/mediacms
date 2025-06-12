@@ -45,10 +45,11 @@ export function removeMedia() {
   });
 }
 
-export function submitComment(commentText) {
+export function submitComment(obj) {
   Dispatcher.dispatch({
     type: 'SUBMIT_COMMENT',
-    commentText,
+    commentText: obj.val,
+    parent_id: obj.parent_id,
   });
 }
 

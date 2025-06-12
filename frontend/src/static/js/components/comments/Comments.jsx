@@ -6,7 +6,7 @@ import { usePopup } from '../../utils/hooks/';
 import { PageStore, MediaPageStore } from '../../utils/stores/';
 import { PageActions, MediaPageActions } from '../../utils/actions/';
 import { LinksContext, MemberContext, SiteContext } from '../../utils/contexts/';
-import { PopupMain, UserThumbnail } from '../_shared';
+import {CircleIconButton, MaterialIcon, PopupMain, UserThumbnail} from '../_shared';
 import { replaceString } from '../../utils/helpers/';
 
 import './videojs-markers.js';
@@ -73,6 +73,9 @@ function CommentForm(props) {
 
     textareaRef.current.style.height =
       Math.max(20, textareaLineHeight * Math.ceil(contentHeight / contentLineHeight)) + 'px';
+
+    // 强制重新加载评论（可选）
+    MediaPageStore.loadComments();
   }
 
   function onCommentSubmitFail() {
@@ -117,7 +120,12 @@ function CommentForm(props) {
     const val = value.trim();
 
     if ('' !== val) {
-      MediaPageActions.submitComment(val);
+      let obj = {val};
+      // 添加评论回复
+      if( props.comment_type === 'reply'){
+        obj.parent_id = props.reply_comment_id;
+      }
+      MediaPageActions.submitComment(obj);
     }
   }
 
@@ -140,7 +148,7 @@ function CommentForm(props) {
   return !MemberContext._currentValue.is.anonymous ? (
     <div className="comments-form">
       <div className="comments-form-inner">
-        <UserThumbnail />
+        {props.comment_type==='new'?<UserThumbnail />:null}
         <div className="form">
           <div className={'form-textarea-wrap' + (textareaFocused ? ' focused' : '')}>
             {MediaCMS.features.media.actions.comment_mention ? (
@@ -226,16 +234,20 @@ function CommentActions(props) {
   }
 
   return (
-    <div className="comment-actions">
+    <span className="comment-actions">
       {/*<div className="comment-action like-action"><CircleIconButton><MaterialIcon type="thumb_up" /></CircleIconButton><span className="likes-num">145</span></div>*/}
       {/*<div className="comment-action dislike-action"><CircleIconButton><MaterialIcon type="thumb_down" /></CircleIconButton><span className="dislikes-num">19</span></div>*/}
-      {/*<div className="comment-action replay-comment"><button>REPLY</button></div>*/}
+      <span className="comment-action reply-comment">
+        <button onClick={props.onReplyClick}>
+          {props.showReplyForm ? '取消' : '回复'}
+        </button>
+      </span>
 
       {MemberContext._currentValue.can.deleteComment ? (
-        <div className="comment-action remove-comment">
+        <span className="comment-action remove-comment">
           <PopupTrigger contentRef={popupContentRef}>
             <button>
-              {translateString('DELETE')} {commentsText.uppercaseSingle}
+              删除评论
             </button>
           </PopupTrigger>
 
@@ -243,7 +255,7 @@ function CommentActions(props) {
             <PopupMain>
               <div className="popup-message">
                 <span className="popup-message-title">删除评论</span>
-                <span className="popup-message-main">确认永久删除评论吗？</span>
+                <span className="popup-message-main">确认永久删除评论吗？所有该评论的回复也会被删除！</span>
               </div>
               <hr />
               <span className="popup-message-bottom">
@@ -256,9 +268,9 @@ function CommentActions(props) {
               </span>
             </PopupMain>
           </PopupContent>
-        </div>
+        </span>
       ) : null}
-    </div>
+    </span>
   );
 }
 
@@ -296,11 +308,21 @@ function Comment(props) {
     return { __html: text.replace(/\n/g, `<br />`) };
   }
 
-  return (
-    <div className="comment">
+  const [showReplyForm, setShowReplyForm] = useState(false);
+
+  const handleReplyClick = () => {
+    setShowReplyForm(!showReplyForm);
+  };
+
+  // 是否显示评论回复的按钮
+  const [showAllReplies, setShowAllReplies] = useState(false);
+  let MAX_VISIBLE_REPLIES = props.is_sub ? 0 : 2;
+
+  function renderMainComments (){
+    return (
       <div className="comment-inner">
         <a className="comment-author-thumb" href={props.author_link} title={props.author_name}>
-          <img src={props.author_thumb} alt={props.author_name} />
+          <img src={props.author_thumb} alt={props.author_name}/>
         </a>
         <div className="comment-content">
           <div className="comment-meta">
@@ -309,28 +331,118 @@ function Comment(props) {
                 {props.author_name}
               </a>
             </div>
-            <div className="comment-date">{replaceString(format(new Date(props.publish_date)))}</div>
+            <div className="comment-date">{formatDate(props.publish_date)}</div>
           </div>
           <div ref={commentTextRef} className={'comment-text' + (viewMoreContent ? ' show-all' : '')}>
             <div
-              ref={commentTextInnerRef}
-              className="comment-text-inner"
-              dangerouslySetInnerHTML={parseComment(props.text)}
+                ref={commentTextInnerRef}
+                className="comment-text-inner"
+                dangerouslySetInnerHTML={parseComment(props.text)}
             ></div>
           </div>
-          {enabledViewMoreContent ? (
-            <button className="toggle-more" onClick={toggleMore}>
-              {viewMoreContent ? 'Show less' : 'Read more'}
-            </button>
-          ) : null}
-          {MemberContext._currentValue.can.deleteComment ? <CommentActions comment_id={props.comment_id} /> : null}
+          <CommentActions comment_id={props.comment_id} onReplyClick={handleReplyClick}
+                          showReplyForm={showReplyForm}/>
         </div>
-      </div>
+      </div>)
+  }
+  function renderSubComments (){
+    return (
+      <div className="comment-inner">
+        <a className="comment-author-thumb-small" href={props.author_link} title={props.author_name}>
+          <img src={props.author_thumb} alt={props.author_name}/>
+        </a>
+        <div className="comment-content-sub">
+          <div className="comment-meta">
+            <a className="comment-author" href={props.author_link} title={props.author_name}>
+              {props.author_name}
+            </a>
+            <span ref={commentTextRef} className={'comment-text' + (viewMoreContent ? ' show-all' : '')}>
+                <span
+                    ref={commentTextInnerRef}
+                    className="comment-text-inner"
+                    dangerouslySetInnerHTML={parseComment(props.text)}
+                ></span>
+            </span>
+          </div>
+          <div className="comment-meta-bottom">
+            <span className="comment-date">{formatDate(props.publish_date)}</span>
+            <CommentActions comment_id={props.comment_id} onReplyClick={handleReplyClick}
+                            showReplyForm={showReplyForm}/>
+          </div>
+        </div>
+      </div>)
+  }
+
+  function formatDate(date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  }
+  return (
+    <div className="comment">
+      {props.is_sub ? renderSubComments():renderMainComments()}
+      {/* 如果 showReplyForm 为 true，则显示 CommentForm */}
+      {showReplyForm && (
+          <div className="reply-form-container">
+            <CommentForm
+                comment_type="reply"
+                media_id={props.media_id}
+                reply_comment_id={props.id}
+            />
+          </div>
+      )}
+      {/* 渲染子评论（children） */}
+      {Array.isArray(props.children) && props.children.length > 0 && (
+          <div>
+            <div className="replies">
+              {props.children.slice(0, showAllReplies ? undefined : MAX_VISIBLE_REPLIES).map(c => (
+                  <Comment
+                      is_sub={true}
+                      id={c.id}
+                      key={c.uid}
+                      comment_id={c.uid}
+                      media_id={props.media_id}
+                      text={c.text}
+                      author_name={c.author_name}
+                      author_link={c.author_profile}
+                      author_thumb={SiteContext._currentValue.url + '/' + c.author_thumbnail_url.replace(/^\//g, '')}
+                      publish_date={c.add_date}
+                      likes={0}
+                      dislikes={0}
+                      children={c.children || []}
+                  />
+              ))}
+            </div>
+            <div className="replies-more">
+              {/* 显示“展开更多”按钮 */}
+              {!showAllReplies && props.children.length > MAX_VISIBLE_REPLIES && (
+                  <button className="show-more-replies" onClick={() => setShowAllReplies(true)}>
+                    显示下面 {props.children.length - MAX_VISIBLE_REPLIES} 条回复
+                  </button>
+              )}
+              {showAllReplies && props.children.length > MAX_VISIBLE_REPLIES && (
+                  <button className="show-more-replies" onClick={() => setShowAllReplies(false)}>
+                    收起回复
+                  </button>
+              )}
+            </div>
+          </div>
+      )}
+      {enabledViewMoreContent ? (
+          <button className="toggle-more" onClick={toggleMore}>
+            {viewMoreContent ? '显示更少' : '显示更多'}
+          </button>
+      ) : null}
     </div>
   );
 }
 
 Comment.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   comment_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   media_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   text: PropTypes.string,
@@ -340,6 +452,8 @@ Comment.propTypes = {
   publish_date: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   likes: PropTypes.number,
   dislikes: PropTypes.number,
+  children: PropTypes.array, // 回复评论
+  is_sub: PropTypes.bool, // 是否是子评论
 };
 
 Comment.defaultProps = {
@@ -348,6 +462,7 @@ Comment.defaultProps = {
   publish_date: 0,
   likes: 0,
   dislikes: 0,
+  is_sub: false,
 };
 
 function displayCommentsRelatedAlert() {
@@ -554,7 +669,7 @@ export default function CommentsList(props) {
         {displayComments
           ? comments.map((c) => {
               return (
-                <Comment
+                <Comment id={c.id}
                   key={c.uid}
                   comment_id={c.uid}
                   media_id={mediaId}
@@ -565,6 +680,7 @@ export default function CommentsList(props) {
                   publish_date={c.add_date}
                   likes={0}
                   dislikes={0}
+                  children={c.children || []}
                 />
               );
             })
