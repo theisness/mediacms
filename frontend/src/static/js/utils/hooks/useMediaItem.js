@@ -1,6 +1,6 @@
 import React from 'react';
 import { format } from 'timeago.js';
-import { formatInnerLink } from '../helpers/';
+import {formatInnerLink, formatViewsNumber, translateString} from '../helpers/';
 import { PageStore } from '../stores/';
 import {
   MediaItemAuthor,
@@ -72,6 +72,7 @@ export function useMediaItem(props) {
         {authorComponent()}
         {viewsComponent()}
         {/*{dateComponent()}*/}
+        <span className="item-date">{props.comments_num+' 条评论'}</span>
       </span>
     );
   }

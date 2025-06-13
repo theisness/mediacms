@@ -152,6 +152,7 @@ export function listItemProps(props, item, index) {
 
   const stats = {
     views: item.views || null,
+    comments_num: item.comments_num || 0
   };
 
   const hide = {
@@ -286,7 +287,7 @@ export function ListItem(props) {
 
   if (isMediaItem) {
     args.views = props.stats.views;
-
+    args.comments_num = props.stats.comments_num;
     args.author_name = props.author.name;
     args.author_link = props.author.url;
 

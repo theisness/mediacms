@@ -231,6 +231,7 @@ function CommentActions(props) {
   function proceedCommentRemoval() {
     popupContentRef.current.toggle();
     MediaPageActions.deleteComment(props.comment_id);
+    MediaPageStore.loadComments();
   }
 
   return (
@@ -243,7 +244,7 @@ function CommentActions(props) {
         </button>
       </span>
 
-      {MemberContext._currentValue.can.deleteComment ? (
+      {MemberContext._currentValue.username===props.username ? (
         <span className="comment-action remove-comment">
           <PopupTrigger contentRef={popupContentRef}>
             <button>
@@ -340,7 +341,7 @@ function Comment(props) {
                 dangerouslySetInnerHTML={parseComment(props.text)}
             ></div>
           </div>
-          <CommentActions comment_id={props.comment_id} onReplyClick={handleReplyClick}
+          <CommentActions username={props.username} comment_id={props.comment_id} onReplyClick={handleReplyClick}
                           showReplyForm={showReplyForm}/>
         </div>
       </div>)
@@ -366,7 +367,7 @@ function Comment(props) {
           </div>
           <div className="comment-meta-bottom">
             <span className="comment-date">{formatDate(props.publish_date)}</span>
-            <CommentActions comment_id={props.comment_id} onReplyClick={handleReplyClick}
+            <CommentActions username={props.username} comment_id={props.comment_id} onReplyClick={handleReplyClick}
                             showReplyForm={showReplyForm}/>
           </div>
         </div>
@@ -414,6 +415,8 @@ function Comment(props) {
                       likes={0}
                       dislikes={0}
                       children={c.children || []}
+                      user_id={c.user_id}
+                      username={c.username}
                   />
               ))}
             </div>
@@ -454,6 +457,8 @@ Comment.propTypes = {
   dislikes: PropTypes.number,
   children: PropTypes.array, // 回复评论
   is_sub: PropTypes.bool, // 是否是子评论
+  user_id: PropTypes.number, //用户id
+  username:PropTypes.string,//用户名（不是昵称）
 };
 
 Comment.defaultProps = {
@@ -659,10 +664,17 @@ export default function CommentsList(props) {
     };
   }, []);
 
+  // 递归显示评论数量，包含children
+  function countTotalComments(comments) {
+    return comments.reduce((total, comment) => {
+      return total + 1 + (comment.children ? countTotalComments(comment.children) : 0);
+    }, 0);
+  }
+
   return (
     <div className="comments-list">
       <div className="comments-list-inner">
-        <CommentsListHeader commentsLength={comments.length} />
+        <CommentsListHeader commentsLength={countTotalComments(comments)} />
 
         {MediaPageStore.get('media-data').enable_comments ? <CommentForm media_id={mediaId} /> : null}
 
@@ -681,6 +693,8 @@ export default function CommentsList(props) {
                   likes={0}
                   dislikes={0}
                   children={c.children || []}
+                  user_id={c.user_id}
+                  username={c.username}
                 />
               );
             })

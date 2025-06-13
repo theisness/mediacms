@@ -52,6 +52,7 @@ MediaItem.propTypes = {
   playlistActiveItem: PositiveIntegerOrZero,
   inPlaylistView: PropTypes.bool,
   hidePlaylistOrderNumber: PropTypes.bool,
+  comments_num: PropTypes.number, //评论数量
 };
 
 MediaItem.defaultProps = {

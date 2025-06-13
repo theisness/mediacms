@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from .models import Category, Comment, EncodeProfile, Media, Playlist, Tag
 
-
 # TODO: put them in a more DRY way
 
 
@@ -14,6 +13,11 @@ class MediaSerializer(serializers.ModelSerializer):
     thumbnail_url = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     author_thumbnail = serializers.SerializerMethodField()
+    comments_num = serializers.SerializerMethodField()
+    def get_comments_num(self, obj):
+        # 获取当前媒体对象的所有评论
+        comments = list(obj.comments.all())
+        return len(comments)
 
     def get_url(self, obj):
         return self.context["request"].build_absolute_uri(obj.get_absolute_url())
@@ -50,6 +54,7 @@ class MediaSerializer(serializers.ModelSerializer):
             "size",
             "is_reviewed",
             "featured",
+            "comments_num", #评论数量
         )
         fields = (
             "friendly_token",
@@ -77,6 +82,7 @@ class MediaSerializer(serializers.ModelSerializer):
             "featured",
             "user_featured",
             "size",
+            "comments_num",
         )
 
 
@@ -229,6 +235,7 @@ class PlaylistDetailSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     author_profile = serializers.ReadOnlyField(source="user.get_absolute_url")
     author_name = serializers.ReadOnlyField(source="user.name")
+    username = serializers.ReadOnlyField(source="user.username")
     author_thumbnail_url = serializers.ReadOnlyField(source="user.thumbnail_url")
     # 新增 children 字段
     children = serializers.SerializerMethodField()
@@ -246,7 +253,9 @@ class CommentSerializer(serializers.ModelSerializer):
             "author_name",
             "media_url",
             "uid",
-            "children"
+            "children",
+            "user_id",
+            "username"
         )
 
     def get_children(self, obj):
