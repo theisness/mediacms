@@ -503,13 +503,13 @@
   //margin: 4px 5px; // 上下边距 4px
   //margin-top: 4px;
   color: #909090;
-  gap: 15px;
+  //gap: 8px;
 
   .circle-icon-button {
     display: inline-block;
     vertical-align: middle;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   .material-icons {
@@ -530,6 +530,17 @@
   .dislikes-num {
     font-size: 13px;
     line-height: 18px;
+  }
+
+  .like-action {
+    .material-icons {
+      color: #909090; // 默认颜色
+      transition: color 0.2s ease;
+    }
+
+    &.liked .material-icons {
+      color: #009933; // 已点赞时的深色（可自定义）
+    }
   }
 
   .reply-comment,

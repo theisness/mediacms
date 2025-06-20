@@ -223,7 +223,17 @@ const ENABLED_COMMENTS_READ_MORE = false;
 
 function CommentActions(props) {
   const [popupContentRef, PopupContent, PopupTrigger] = usePopup();
+  const [liked, setLiked] = useState(props.liked || false); // 支持 props 初始化
 
+  function handleLikeClick() {
+    if (liked) {
+      MediaPageActions.unlikeComment(props.comment_id); // 取消点赞
+    } else {
+      MediaPageActions.likeComment(props.comment_id); // 添加点赞
+    }
+    setLiked(!liked); // 切换状态
+    MediaPageStore.loadComments(); // 可选：重新加载评论以更新状态
+  }
   function cancelCommentRemoval() {
     popupContentRef.current.toggle();
   }
@@ -234,8 +244,16 @@ function CommentActions(props) {
     MediaPageStore.loadComments();
   }
 
+
   return (
     <span className="comment-actions">
+      {/* 点赞按钮 */}
+      <div className={`comment-action like-action  ${liked ? 'liked' : ''}`}>
+        <CircleIconButton onClick={handleLikeClick}>
+          <MaterialIcon type="thumb_up" />
+        </CircleIconButton>
+        <span className="likes-num">{props.likes || 0}</span>
+      </div>
       {/*<div className="comment-action like-action"><CircleIconButton><MaterialIcon type="thumb_up" /></CircleIconButton><span className="likes-num">145</span></div>*/}
       {/*<div className="comment-action dislike-action"><CircleIconButton><MaterialIcon type="thumb_down" /></CircleIconButton><span className="dislikes-num">19</span></div>*/}
       <span className="comment-action reply-comment">
@@ -321,7 +339,7 @@ function Comment(props) {
 
   function renderMainComments (){
     return (
-      <div className="comment-inner">
+        <div className="comment-inner">
         <a className="comment-author-thumb" href={props.author_link} title={props.author_name}>
           <img src={props.author_thumb} alt={props.author_name}/>
         </a>
@@ -332,7 +350,6 @@ function Comment(props) {
                 {props.author_name}
               </a>
             </div>
-            <div className="comment-date">{formatDate(props.publish_date)}</div>
           </div>
           <div ref={commentTextRef} className={'comment-text' + (viewMoreContent ? ' show-all' : '')}>
             <div
@@ -341,10 +358,41 @@ function Comment(props) {
                 dangerouslySetInnerHTML={parseComment(props.text)}
             ></div>
           </div>
-          <CommentActions username={props.username} comment_id={props.comment_id} onReplyClick={handleReplyClick}
-                          showReplyForm={showReplyForm}/>
+          <div className="comment-meta-bottom">
+            <div className="comment-date">{formatDate(props.publish_date)}</div>
+            <CommentActions username={props.username} comment_id={props.comment_id} likes={props.likes} liked={props.liked}
+                            onReplyClick={handleReplyClick}
+                            showReplyForm={showReplyForm}/>
+          </div>
         </div>
-      </div>)
+          {/*<div className="comment-inner">
+          <a className="comment-author-thumb" href={props.author_link} title={props.author_name}>
+            <img src={props.author_thumb} alt={props.author_name}/>
+          </a>
+          <div className="comment-content">
+            <div className="comment-meta">
+              <a className="comment-author" href={props.author_link} title={props.author_name}>
+                {props.author_name}
+              </a>
+              <span ref={commentTextRef} className={'comment-text' + (viewMoreContent ? ' show-all' : '')}>
+                <span
+                    ref={commentTextInnerRef}
+                    className="comment-text-inner"
+                    dangerouslySetInnerHTML={parseComment(props.text)}
+                ></span>
+            </span>
+            </div>
+            <div className="comment-meta-bottom">
+              <span className="comment-date">{formatDate(props.publish_date)}</span>
+              <CommentActions username={props.username} comment_id={props.comment_id} likes={props.likes} liked={props.liked}
+                              onReplyClick={handleReplyClick}
+                              showReplyForm={showReplyForm}/>
+            </div>
+          </div>
+        </div>*/
+          }
+      </div>
+    )
   }
   function renderSubComments (){
     return (
@@ -367,7 +415,9 @@ function Comment(props) {
           </div>
           <div className="comment-meta-bottom">
             <span className="comment-date">{formatDate(props.publish_date)}</span>
-            <CommentActions username={props.username} comment_id={props.comment_id} onReplyClick={handleReplyClick}
+
+            <CommentActions username={props.username} comment_id={props.comment_id} likes={props.likes} liked={props.liked}
+                            onReplyClick={handleReplyClick}
                             showReplyForm={showReplyForm}/>
           </div>
         </div>
@@ -385,6 +435,7 @@ function Comment(props) {
   }
   return (
     <div className="comment">
+      {/* 渲染本评论，子评论更小，主评论更大 */}
       {props.is_sub ? renderSubComments():renderMainComments()}
       {/* 如果 showReplyForm 为 true，则显示 CommentForm */}
       {showReplyForm && (
@@ -412,7 +463,8 @@ function Comment(props) {
                       author_link={c.author_profile}
                       author_thumb={SiteContext._currentValue.url + '/' + c.author_thumbnail_url.replace(/^\//g, '')}
                       publish_date={c.add_date}
-                      likes={0}
+                      likes={c.likes}
+                      liked={c.liked}
                       dislikes={0}
                       children={c.children || []}
                       user_id={c.user_id}
@@ -453,12 +505,13 @@ Comment.propTypes = {
   author_link: PropTypes.string,
   author_thumb: PropTypes.string,
   publish_date: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  likes: PropTypes.number,
+  likes: PropTypes.number, //点赞数
   dislikes: PropTypes.number,
   children: PropTypes.array, // 回复评论
   is_sub: PropTypes.bool, // 是否是子评论
   user_id: PropTypes.number, //用户id
   username:PropTypes.string,//用户名（不是昵称）
+  liked: PropTypes.bool, //是否已点赞
 };
 
 Comment.defaultProps = {
@@ -468,6 +521,7 @@ Comment.defaultProps = {
   likes: 0,
   dislikes: 0,
   is_sub: false,
+  liked: false,
 };
 
 function displayCommentsRelatedAlert() {
@@ -640,6 +694,15 @@ export default function CommentsList(props) {
     );
   }
 
+  function onCommentLike(commentId) {
+    onCommentsLoad();
+    setTimeout(() => PageActions.addNotification('点赞成功', 'commentLike'), 100);
+  }
+
+  function onCommentLikeFail(commentId) {
+    setTimeout(() => PageActions.addNotification('点赞失败', 'commentLikeFail'), 100);
+  }
+
   useEffect(() => {
     setDisplayComments(
       comments.length &&
@@ -654,6 +717,8 @@ export default function CommentsList(props) {
     MediaPageStore.on('comment_submit_fail', onCommentSubmitFail);
     MediaPageStore.on('comment_delete', onCommentDelete);
     MediaPageStore.on('comment_delete_fail', onCommentDeleteFail);
+    MediaPageStore.on('comment_like', onCommentLike); // 新增
+    MediaPageStore.on('comment_like_fail', onCommentLikeFail); // 新增
 
     return () => {
       MediaPageStore.removeListener('comments_load', onCommentsLoad);
@@ -661,6 +726,8 @@ export default function CommentsList(props) {
       MediaPageStore.removeListener('comment_submit_fail', onCommentSubmitFail);
       MediaPageStore.removeListener('comment_delete', onCommentDelete);
       MediaPageStore.removeListener('comment_delete_fail', onCommentDeleteFail);
+      MediaPageStore.removeListener('comment_like', onCommentLike); // 新增
+      MediaPageStore.removeListener('comment_like_fail', onCommentLikeFail); // 新增
     };
   }, []);
 
@@ -690,7 +757,8 @@ export default function CommentsList(props) {
                   author_link={c.author_profile}
                   author_thumb={SiteContext._currentValue.url + '/' + c.author_thumbnail_url.replace(/^\//g, '')}
                   publish_date={c.add_date}
-                  likes={0}
+                  likes={c.likes}
+                  liked={c.liked}
                   dislikes={0}
                   children={c.children || []}
                   user_id={c.user_id}

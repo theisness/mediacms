@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { exportStore, getRequest, postRequest, putRequest, deleteRequest, csrfToken } from '../helpers';
+import {exportStore, getRequest, postRequest, putRequest, deleteRequest, csrfToken, error} from '../helpers';
 import { config as mediacmsConfig } from '../settings/config.js';
 
 import UrlParse from 'url-parse';
@@ -63,6 +63,7 @@ class MediaPageStore extends EventEmitter {
         deleteMedia: false,
         submitComment: false,
         deleteCommentId: null,
+        likeCommentIds: [],
       },
     };
 
@@ -754,6 +755,43 @@ class MediaPageStore extends EventEmitter {
           false,
           this.removeCommentResponse,
           this.removeCommentFail
+        );
+        break;
+      case 'LIKE_COMMENT':
+        if (MediaPageStoreData[this.id].while.likeCommentIds.includes(action.commentId)) {
+          return;
+        }
+        postRequest(
+            '/api/v1/commentaction/like/' + action.commentId,
+            {},
+            { headers: { 'X-CSRFToken': csrfToken() } },
+            false,
+            response => {
+              if (response && response.status === 204) {
+                this.emit('comment_like', action.commentId);
+                MediaPageStoreData[this.id].while.likeCommentIds.push(action.commentId);
+              }},
+            errResponse=>{
+              this.emit('comment_like_fail', action.commentId);
+            }
+        );
+        break;
+      case 'UNLIKE_COMMENT':
+        deleteRequest(
+            '/api/v1/commentaction/like/' + action.commentId,
+            { headers: { 'X-CSRFToken': csrfToken() } },
+            false,
+            response => {
+              if (response && response.status === 204) {
+                this.emit('comment_unlike', action.commentId);
+                let idx = MediaPageStoreData[this.id].while.likeCommentIds.indexOf(action.commentId);
+                if (idx !== -1) {
+                  MediaPageStoreData[this.id].while.likeCommentIds.splice(idx, 1);
+                }
+              }},
+            errResponse=>{
+              this.emit('comment_unlike_fail', action.commentId);
+            }
         );
         break;
       case 'CREATE_PLAYLIST':

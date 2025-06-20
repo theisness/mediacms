@@ -60,6 +60,20 @@ export function deleteComment(commentId) {
   });
 }
 
+export function likeComment(commentId) {
+  Dispatcher.dispatch({
+    type: 'LIKE_COMMENT',
+    commentId,
+  });
+}
+
+export function unlikeComment(commentId) {
+  Dispatcher.dispatch({
+    type: 'UNLIKE_COMMENT',
+    commentId,
+  });
+}
+
 export function createPlaylist(playlist_data) {
   Dispatcher.dispatch({
     type: 'CREATE_PLAYLIST',

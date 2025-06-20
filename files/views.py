@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
-from actions.models import USER_MEDIA_ACTIONS, MediaAction
+from actions.models import USER_MEDIA_ACTIONS, MediaAction, CommentAction
 from cms.custom_pagination import FastPaginationWithoutCount
 from cms.permissions import (
     IsAuthorizedToAdd,
@@ -808,6 +808,49 @@ class MediaActions(APIView):
                 )
         else:
             return Response({"detail": "no action specified"}, status=status.HTTP_400_BAD_REQUEST)
+
+class CommentActions(APIView):
+    """
+    Retrieve, update or delete a comment action instance.
+    """
+    permission_classes = (permissions.AllowAny,)
+    parser_classes = (JSONParser,)
+
+    def post(self, request, uid):
+        # perform like/dislike/report actions
+        comment = Comment.objects.get(uid=uid)
+        if request.user.is_anonymous:
+            # there is a list of allowed actions for
+            # anonymous users, specified in settings
+            return Response(
+                {"detail": "action allowed on logged in users only"},
+                status=status.HTTP_400_BAD_REQUEST,
+                )
+        if comment.commentactions.filter(user=request.user).exists():
+            return Response({"detail": "already liked"}, status=status.HTTP_400_BAD_REQUEST)
+        ca = CommentAction(comment=comment, action='like', user=request.user,
+                           remote_ip=get_user_or_session(request).get("remote_ip_addr"))
+        ca.save()
+        return Response({"detail": "action received"}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, uid):
+        if request.user.is_anonymous:
+            # there is a list of allowed actions for
+            # anonymous users, specified in settings
+            return Response(
+                {"detail": "action allowed on logged in users only"},
+                status=status.HTTP_400_BAD_REQUEST,
+                )
+        ca = CommentAction.objects.get(comment=Comment.objects.get(uid=uid), user=request.user)
+        ca.delete()
+
+        if not request.user.is_superuser:
+            return Response({"detail": "not allowed"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+                    {"detail": "reset liked"},
+                    status=status.HTTP_201_CREATED,
+                )
 
 
 class MediaSearch(APIView):

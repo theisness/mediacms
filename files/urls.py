@@ -72,6 +72,10 @@ urlpatterns = [
         r"^api/v1/media/(?P<friendly_token>[\w]*)/comments/(?P<uid>[\w-]*)$",
         views.CommentDetail.as_view(),
     ),
+    re_path(
+        r"^api/v1/commentaction/like/(?P<uid>[\w-]*)$",
+        views.CommentActions.as_view(),
+    ),
     re_path(r"^api/v1/playlists$", views.PlaylistList.as_view()),
     re_path(r"^api/v1/playlists/$", views.PlaylistList.as_view()),
     re_path(

@@ -166,6 +166,11 @@ class MediaSearchSerializer(serializers.ModelSerializer):
     def get_api_url(self, obj):
         return self.context["request"].build_absolute_uri(obj.get_absolute_url(api=True))
 
+    comments_num = serializers.SerializerMethodField()
+    def get_comments_num(self, obj):
+        # 获取当前媒体对象的所有评论
+        comments = list(obj.comments.all())
+        return len(comments)
     class Meta:
         model = Media
         fields = (
@@ -183,6 +188,7 @@ class MediaSearchSerializer(serializers.ModelSerializer):
             "media_type",
             "preview_url",
             "categories_info",
+            "comments_num", #评论数量
         )
 
 
@@ -240,6 +246,9 @@ class CommentSerializer(serializers.ModelSerializer):
     # 新增 children 字段
     children = serializers.SerializerMethodField()
 
+    likes = serializers.SerializerMethodField()
+    liked = serializers.SerializerMethodField()
+
     class Meta:
         model = Comment
         read_only_fields = ("add_date", "uid")
@@ -255,8 +264,15 @@ class CommentSerializer(serializers.ModelSerializer):
             "uid",
             "children",
             "user_id",
-            "username"
+            "username",
+            "likes", # 点赞数量
+            "liked", # 是否已经点赞
         )
+
+    def get_liked(self, obj):
+        return obj.commentactions.filter(user=self.context["request"].user, action="like").exists()
+    def get_likes(self, obj):
+        return obj.commentactions.filter(action="like").count()
 
     def get_children(self, obj):
         # 获取当前嵌套层级，首次调用为 0
