@@ -270,7 +270,10 @@ class CommentSerializer(serializers.ModelSerializer):
         )
 
     def get_liked(self, obj):
-        return obj.commentactions.filter(user=self.context["request"].user, action="like").exists()
+        if self.context["request"].user.is_anonymous:
+            return False
+        else:
+            return obj.commentactions.filter(user=self.context["request"].user, action="like").exists()
     def get_likes(self, obj):
         return obj.commentactions.filter(action="like").count()
 
