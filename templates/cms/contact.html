@@ -44,11 +44,11 @@
         {% if success_msg %}
             <h1>{{success_msg}}<h1>
         {% else %}
-            <h1>Contact us</h1>
+            <h1>联系我们</h1>
             <form enctype="multipart/form-data" action="" method="post" class="post-form">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button class="primaryAction" type="submit">Submit</button>
+                <button class="primaryAction" type="submit">提交</button>
             </form>
         {% endif %}
     </div>

@@ -42,9 +42,9 @@ MEDIA_ENCODING_STATUS = (
 # the media state of a Media object
 # this is set by default according to the portal workflow
 MEDIA_STATES = (
-    ("private", "Private"),
-    ("public", "Public"),
-    ("unlisted", "Unlisted"),
+    ("private", "私有"),
+    ("public", "公开"),
+    ("unlisted", "未列出"),
 )
 
 # each uploaded Media gets a media_type hint
@@ -140,14 +140,14 @@ class Media(models.Model):
 
     edit_date = models.DateTimeField(auto_now=True)
 
-    enable_comments = models.BooleanField(default=True, help_text="Whether comments will be allowed for this media")
+    enable_comments = models.BooleanField(default=True, help_text="媒体是否允许评论")
 
     encoding_status = models.CharField(max_length=20, choices=MEDIA_ENCODING_STATUS, default="pending", db_index=True)
 
     featured = models.BooleanField(
         default=False,
         db_index=True,
-        help_text="Whether media is globally featured by a MediaCMS editor",
+        help_text="媒体是否被精选",
     )
 
     friendly_token = models.CharField(blank=True, max_length=12, db_index=True, help_text="Identifier for the Media")
@@ -157,7 +157,7 @@ class Media(models.Model):
     is_reviewed = models.BooleanField(
         default=settings.MEDIA_IS_REVIEWED,
         db_index=True,
-        help_text="Whether media is reviewed, so it can appear on public listings",
+        help_text="媒体是否已审核，过审的媒体可以被搜索和列出",
     )
 
     license = models.ForeignKey("License", on_delete=models.CASCADE, db_index=True, blank=True, null=True)

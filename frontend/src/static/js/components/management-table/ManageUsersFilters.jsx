@@ -7,9 +7,9 @@ import './ManageItemList-filters.scss';
 
 const filters = {
   role: [
-    { id: 'all', title: 'All' },
-    { id: 'editor', title: 'Editor' },
-    { id: 'manager', title: 'Manager' },
+    { id: 'all', title: '所有' },
+    { id: 'editor', title: '创作者' },
+    { id: 'manager', title: '管理员' },
   ],
 };
 
@@ -55,7 +55,7 @@ export function ManageUsersFilters(props) {
     <div ref={containerRef} className={'mi-filters-row' + (isHidden ? ' hidden' : '')}>
       <div ref={innerContainerRef} className="mi-filters-row-inner">
         <div className="mi-filter">
-          <div className="mi-filter-title">ROLE</div>
+          <div className="mi-filter-title">角色</div>
           <div className="mi-filter-options">
             <FilterOptions id={'role'} options={filters.role} selected={role} onSelect={onFilterSelect} />
           </div>

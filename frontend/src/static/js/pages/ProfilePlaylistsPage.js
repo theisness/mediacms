@@ -37,7 +37,7 @@ export class ProfilePlaylistsPage extends ProfileMediaPage {
           <ApiUrlConsumer>
             {(apiUrl) => (
               <MediaListWrapper
-                title={-1 < this.state.playlistsCount ? 'Created playlists' : void 0}
+                title={-1 < this.state.playlistsCount ? '已创建的播放列表' : void 0}
                 className="profile-playlists-content items-list-ver"
               >
                 <LazyLoadItemListAsync

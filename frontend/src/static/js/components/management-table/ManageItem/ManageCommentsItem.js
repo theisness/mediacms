@@ -100,28 +100,28 @@ function ManageItemCommentActions(props) {
     <div ref={props.containerRef} className="actions">
       {void 0 === props.media_url ? null : (
         <span>
-          <a href={props.media_url}>View media</a>
+          <a href={props.media_url}>查看媒体</a>
         </span>
       )}
       {void 0 === props.media_url || props.hideDeleteAction ? null : <span className="seperator">|</span>}
 
       <PopupTrigger contentRef={popupContentRef}>
-        <button title="Delete comment">Delete</button>
+        <button title="删除评论">删除</button>
       </PopupTrigger>
 
       <PopupContent contentRef={popupContentRef} showCallback={onPopupShow} hideCallback={onPopupHide}>
         <PopupMain>
           <div className="popup-message">
-            <span className="popup-message-title">Comment removal</span>
-            <span className="popup-message-main">You're willing to remove comment?</span>
+            <span className="popup-message-title">删除评论</span>
+            <span className="popup-message-main">确认删除此评论吗？该操作将无法撤销。</span>
           </div>
           <hr />
           <span className="popup-message-bottom">
             <button className="button-link cancel-profile-removal" onClick={onCancel}>
-              CANCEL
+              取消
             </button>
             <button className="button-link proceed-profile-removal" onClick={onProceed}>
-              PROCEED
+              确认
             </button>
           </span>
         </PopupMain>

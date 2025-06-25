@@ -147,5 +147,5 @@ ManageMediaPage.propTypes = {
 };
 
 ManageMediaPage.defaultProps = {
-  title: 'Manage media',
+  title: '管理媒体',
 };

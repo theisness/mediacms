@@ -402,7 +402,7 @@ function EditProfileButton(props) {
   }
 
   return (
-    <a href={link} className="edit-profile" title="Edit profile">
+    <a href={link} className="edit-profile" title="编辑账户信息">
       编辑账户信息
     </a>
   );

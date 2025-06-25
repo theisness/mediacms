@@ -111,25 +111,17 @@ export class SearchPage extends Page {
 
     if (null !== this.state.resultsCount) {
       if (!validQuery) {
-        title = 'No results for "' + this.state.searchQuery + '"';
+        title = '搜索 "' + this.state.searchQuery + '" 没有结果';
       } else {
         if (this.state.searchCategories) {
-          title = null === this.state.resultsCount || 0 === this.state.resultsCount ? 'No' : this.state.resultsCount;
-          title += ' ' + translateString('media in category') + ' "' + this.state.searchCategories + '"';
+          title =  '"' + this.state.searchCategories + '" 类别中有 ' + this.state.resultsCount + ' 个媒体' ;
         } else if (this.state.searchTags) {
-          title = null === this.state.resultsCount || 0 === this.state.resultsCount ? 'No' : this.state.resultsCount;
-          title += ' ' + translateString('media in tag') + ' "' + this.state.searchTags + '"';
+          title =  '"' + this.state.searchTags + '" 标签中有 ' + this.state.resultsCount + ' 个媒体' ;
         } else {
-          if (null === this.state.resultsCount || 0 === this.state.resultsCount) {
-            title = translateString('No results for') + ' "' + this.state.searchQuery + '"';
+          if (0 === this.state.resultsCount) {
+            title = '搜索 "' + this.state.searchQuery + '" 没有结果';
           } else {
-            title =
-              this.state.resultsCount +
-              ' result' +
-              (1 < this.state.resultsCount ? 's' : '') +
-              ' for "' +
-              this.state.searchQuery +
-              '"';
+            title = '搜索 "' + this.state.searchQuery + '" 结果有 ' +this.state.resultsCount + ' 个媒体';
           }
         }
       }

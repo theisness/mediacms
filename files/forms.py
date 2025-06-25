@@ -42,12 +42,38 @@ class MediaForm(forms.ModelForm):
             self.fields.pop("reported_times")
             self.fields.pop("is_reviewed")
         self.fields["new_tags"].initial = ", ".join([tag.title for tag in self.instance.tags.all()])
+        self.fields['title'].label = '媒体标题'
+        self.fields['title'].help_text = ''
+        self.fields['description'].label = '描述'
+        self.fields['category'].label = '类别'
+        self.fields['category'].help_text = '可以选择一个或多个类别。'
+        self.fields['new_tags'].label = '标签'
+        self.fields['new_tags'].help_text = '用英文的逗号分割标签。'
+        self.fields['add_date'].label = '添加日期'
+        self.fields['uploaded_poster'].label = '已上传的封面'
+        self.fields['uploaded_poster'].help_text = ''
+        self.fields['state'].label = '是否公开'
+        self.fields['state'].help_text = ''
+        self.fields['enable_comments'].label = '允许评论'
+        self.fields['enable_comments'].help_text = ''
+        self.fields['featured'].label = '是否精选'
+        self.fields['featured'].help_text = ''
+        self.fields['thumbnail_time'].label = '缩略图时间点'
+        self.fields['thumbnail_time'].help_text = '视频使用的缩略图所在时间点。'
+        self.fields['reported_times'].label = '举报次数'
+        self.fields['reported_times'].help_text = ''
+        self.fields['is_reviewed'].label = '是否已审核'
+        self.fields['is_reviewed'].help_text = ''
+        self.fields['allow_download'].label = '允许下载'
+        self.fields['allow_download'].help_text = ''
+
+
 
     def clean_uploaded_poster(self):
         image = self.cleaned_data.get("uploaded_poster", False)
         if image:
             if image.size > 5 * 1024 * 1024:
-                raise forms.ValidationError("Image file too large ( > 5mb )")
+                raise forms.ValidationError("文件过大 ( > 5MB )")
             return image
 
     def save(self, *args, **kwargs):
@@ -92,9 +118,9 @@ class ContactForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         super(ContactForm, self).__init__(*args, **kwargs)
-        self.fields["name"].label = "Your name:"
-        self.fields["from_email"].label = "Your email:"
-        self.fields["message"].label = "Please add your message here and submit:"
+        self.fields["name"].label = "您的姓名："
+        self.fields["from_email"].label = "您的邮箱："
+        self.fields["message"].label = "请填写您的意见并提交："
         self.user = user
         if user.is_authenticated:
             self.fields.pop("name")

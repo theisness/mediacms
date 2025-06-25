@@ -7,34 +7,34 @@ import './ManageItemList-filters.scss';
 
 const filters = {
   state: [
-    { id: 'all', title: 'All' },
-    { id: 'public', title: 'Public' },
-    { id: 'private', title: 'Private' },
-    { id: 'unlisted', title: 'Unlisted' },
+    { id: 'all', title: '全部' },
+    { id: 'public', title: '公开' },
+    { id: 'private', title: '私有' },
+    { id: 'unlisted', title: '未列出' },
   ],
   media_type: [
-    { id: 'all', title: 'All' },
-    { id: 'video', title: 'Video' },
-    { id: 'audio', title: 'Audio' },
-    { id: 'image', title: 'Image' },
+    { id: 'all', title: '全部' },
+    { id: 'video', title: '视频' },
+    { id: 'audio', title: '音频' },
+    { id: 'image', title: '图像' },
     { id: 'pdf', title: 'Pdf' },
   ],
   encoding_status: [
-    { id: 'all', title: 'All' },
-    { id: 'success', title: 'Success' },
-    { id: 'running', title: 'Running' },
-    { id: 'pending', title: 'Pending' },
-    { id: 'fail', title: 'Fail' },
+    { id: 'all', title: '全部' },
+    { id: 'success', title: '成功' },
+    { id: 'running', title: '运行中' },
+    { id: 'pending', title: '等等' },
+    { id: 'fail', title: '失败' },
   ],
   reviewed: [
-    { id: 'all', title: 'All' },
-    { id: 'true', title: 'Yes' },
-    { id: 'false', title: 'No' },
+    { id: 'all', title: '全部' },
+    { id: 'true', title: '已审核' },
+    { id: 'false', title: '未审核' },
   ],
   featured: [
-    { id: 'all', title: 'All' },
-    { id: 'true', title: 'Yes' },
-    { id: 'false', title: 'No' },
+    { id: 'all', title: '全部' },
+    { id: 'true', title: '已精选' },
+    { id: 'false', title: '未精选' },
   ],
 };
 
@@ -108,14 +108,14 @@ export function ManageMediaFilters(props) {
     <div ref={containerRef} className={'mi-filters-row' + (isHidden ? ' hidden' : '')}>
       <div ref={innerContainerRef} className="mi-filters-row-inner">
         <div className="mi-filter">
-          <div className="mi-filter-title">STATE</div>
+          <div className="mi-filter-title">状态</div>
           <div className="mi-filter-options">
             <FilterOptions id={'state'} options={filters.state} selected={state} onSelect={onFilterSelect} />
           </div>
         </div>
 
         <div className="mi-filter">
-          <div className="mi-filter-title">MEDIA TYPE</div>
+          <div className="mi-filter-title">媒体类型</div>
           <div className="mi-filter-options">
             <FilterOptions
               id={'media_type'}
@@ -127,7 +127,7 @@ export function ManageMediaFilters(props) {
         </div>
 
         <div className="mi-filter">
-          <div className="mi-filter-title">ENCODING STATUS</div>
+          <div className="mi-filter-title">编码状态</div>
           <div className="mi-filter-options">
             <FilterOptions
               id={'encoding_status'}
@@ -139,14 +139,14 @@ export function ManageMediaFilters(props) {
         </div>
 
         <div className="mi-filter">
-          <div className="mi-filter-title">REVIEWED</div>
+          <div className="mi-filter-title">审核状态</div>
           <div className="mi-filter-options">
             <FilterOptions id={'reviewed'} options={filters.reviewed} selected={isReviewed} onSelect={onFilterSelect} />
           </div>
         </div>
 
         <div className="mi-filter">
-          <div className="mi-filter-title">FEATURED</div>
+          <div className="mi-filter-title">精选状态</div>
           <div className="mi-filter-options">
             <FilterOptions id={'featured'} options={filters.featured} selected={isFeatured} onSelect={onFilterSelect} />
           </div>

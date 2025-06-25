@@ -13,7 +13,7 @@ interface LatestMediaPageProps {
 
 export const LatestMediaPage: React.FC<LatestMediaPageProps> = ({
   id = 'latest-media',
-  title = translateString('Recent uploads'),
+  title = '最近上传的媒体',
 }) => (
   <Page id={id}>
     <ApiUrlConsumer>

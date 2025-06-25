@@ -128,24 +128,24 @@ function ManageItemMediaActions(props) {
   return (
     <div ref={props.containerRef} className="actions">
       <PopupTrigger contentRef={popupContentRef}>
-        <button title={'Delete' + (void 0 !== props.title ? ' "' + props.title + '"' : '')}>Delete</button>
+        <button title={'删除' + (void 0 !== props.title ? ' "' + props.title + '"' : '')}>删除</button>
       </PopupTrigger>
 
       <PopupContent contentRef={popupContentRef} showCallback={onPopupShow} hideCallback={onPopupHide}>
         <PopupMain>
           <div className="popup-message">
-            <span className="popup-message-title">Media removal</span>
+            <span className="popup-message-title">删除媒体</span>
             <span className="popup-message-main">
-              {"You're willing to remove media" + (void 0 !== props.title ? ' "' + props.title + '"' : '')}?
+              {"您确定删除媒体 " + (void 0 !== props.title ? ' "' + props.title + '"' : '')}？该操作无法恢复。
             </span>
           </div>
           <hr />
           <span className="popup-message-bottom">
             <button className="button-link cancel-profile-removal" onClick={onCancel}>
-              CANCEL
+              取消
             </button>
             <button className="button-link proceed-profile-removal" onClick={onProceed}>
-              PROCEED
+              确认
             </button>
           </span>
         </PopupMain>

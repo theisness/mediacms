@@ -45,13 +45,24 @@ export function ItemTitleLink(props) {
 }
 
 export function UserItemMemberSince(props) {
-  return <time key="member-since">Member for {format(new Date(props.date)).replace(' ago', '')}</time>;
+  const date = new Date(props.date);
+  const now = new Date();
+
+  const years = now.getFullYear() - date.getFullYear();
+  const months = now.getMonth() - date.getMonth();
+  const days = now.getDate() - date.getDate();
+
+  return <time key="member-since">
+    已加入 {years > 0 && `${years} 年 `}
+    {months > 0 && `${months} 月 `}
+    {days > 0 && `${days} 天`}
+  </time>
 }
 
 export function TaxonomyItemMediaCount(props) {
   return (
     <span key="item-media-count" className="item-media-count">
-      {' ' + props.count} media
+      {' ' + props.count} 个媒体
     </span>
   );
 }

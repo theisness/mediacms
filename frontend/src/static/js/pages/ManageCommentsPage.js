@@ -109,5 +109,5 @@ ManageCommentsPage.propTypes = {
 };
 
 ManageCommentsPage.defaultProps = {
-  title: 'Manage comments',
+  title: '管理评论',
 };

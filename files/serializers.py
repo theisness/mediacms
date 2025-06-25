@@ -14,6 +14,14 @@ class MediaSerializer(serializers.ModelSerializer):
     author_profile = serializers.SerializerMethodField()
     author_thumbnail = serializers.SerializerMethodField()
     comments_num = serializers.SerializerMethodField()
+    liked = serializers.SerializerMethodField()
+
+    def get_liked(self, obj):
+        if self.context["request"].user.is_anonymous:
+            return False
+        else:
+            return obj.mediaactions.filter(user=self.context["request"].user, action="like").exists()
+
     def get_comments_num(self, obj):
         # 获取当前媒体对象的所有评论
         comments = list(obj.comments.all())
@@ -55,6 +63,7 @@ class MediaSerializer(serializers.ModelSerializer):
             "is_reviewed",
             "featured",
             "comments_num", #评论数量
+            "liked", #是否已喜欢
         )
         fields = (
             "friendly_token",
@@ -83,13 +92,20 @@ class MediaSerializer(serializers.ModelSerializer):
             "user_featured",
             "size",
             "comments_num",
+            "liked",
         )
 
 
 class SingleMediaSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.username")
     url = serializers.SerializerMethodField()
+    liked = serializers.SerializerMethodField()
 
+    def get_liked(self, obj):
+        if self.context["request"].user.is_anonymous:
+            return False
+        else:
+            return obj.mediaactions.filter(user=self.context["request"].user, action="like").exists()
     def get_url(self, obj):
         return self.context["request"].build_absolute_uri(obj.get_absolute_url())
 
@@ -111,6 +127,7 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "size",
             "video_height",
             "is_reviewed",
+            "liked",
         )
         fields = (
             "url",
@@ -153,6 +170,7 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "add_subtitle_url",
             "allow_download",
             "slideshow_items",
+            "liked",
         )
 
 

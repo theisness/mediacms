@@ -327,6 +327,7 @@ class MediaPageStore extends EventEmitter {
       if (response instanceof Error) {
       } else if (response.data) {
         MediaPageStoreData[this.id].likedMedia = true;
+        MediaPageStoreData[this.id].data.liked = true;
         this.emit('liked_media');
       }
     }
@@ -521,7 +522,7 @@ class MediaPageStore extends EventEmitter {
             : null;
         break;
       case 'user-liked-media':
-        r = MediaPageStoreData[this.id].likedMedia;
+        r = MediaPageStoreData[this.id].data.liked;
         break;
       case 'user-disliked-media':
         r = MediaPageStoreData[this.id].dislikedMedia;

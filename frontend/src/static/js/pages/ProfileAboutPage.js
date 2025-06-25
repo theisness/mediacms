@@ -301,5 +301,5 @@ ProfileAboutPage.propTypes = {
 };
 
 ProfileAboutPage.defaultProps = {
-  title: 'Biography',
+  title: '自我介绍',
 };

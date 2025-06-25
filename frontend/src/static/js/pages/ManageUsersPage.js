@@ -165,5 +165,5 @@ ManageUsersPage.propTypes = {
 };
 
 ManageUsersPage.defaultProps = {
-  title: 'Manage users',
+  title: '管理用户',
 };

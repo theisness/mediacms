@@ -82,8 +82,8 @@ const PAGES = {
   liked: { id: 'liked', title: 'Liked media', component: 'LikedMediaPage' },
   tags: { id: 'tags', title: 'Tags', component: 'TagsPage' },
   categories: { id: 'categories', title: 'Categories', component: 'CategoriesPage' },
-  'manage-media': { id: 'manage-media', title: 'Manage media', component: 'ManageMediaPage' },
-  'manage-users': { id: 'manage-users', title: 'Manage users', component: 'ManageUsersPage' },
+  'manage-media': { id: 'manage-media', title: '管理媒体', component: 'ManageMediaPage' },
+  'manage-users': { id: 'manage-users', title: '管理用户', component: 'ManageUsersPage' },
   'manage-comments': { id: 'manage-comments', title: 'Manage comments', component: 'ManageCommentsPage' },
   'add-media': {
     id: 'add-media',

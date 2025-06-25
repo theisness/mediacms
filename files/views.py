@@ -216,7 +216,7 @@ Sender email: %s\n
                 reply_to=[from_email],
             )
             email.send(fail_silently=True)
-            success_msg = "Message was sent! Thanks for contacting"
+            success_msg = "消息已送达！感谢您的反馈！"
             context["success_msg"] = success_msg
 
     return render(request, "cms/contact.html", context)
@@ -897,18 +897,21 @@ class MediaSearch(APIView):
 
         media = Media.objects.filter(state="public", is_reviewed=True)
 
+        # if query:
+        #     # move this processing to a prepare_query function
+        #     query = clean_query(query)
+        #     q_parts = [q_part.rstrip("y") for q_part in query.split() if q_part not in STOP_WORDS]
+        #     if q_parts:
+        #         query = SearchQuery(q_parts[0] + ":*", search_type="raw")
+        #         for part in q_parts[1:]:
+        #             query &= SearchQuery(part + ":*", search_type="raw")
+        #     else:
+        #         query = None
+        # print('query:', query)
         if query:
-            # move this processing to a prepare_query function
-            query = clean_query(query)
-            q_parts = [q_part.rstrip("y") for q_part in query.split() if q_part not in STOP_WORDS]
-            if q_parts:
-                query = SearchQuery(q_parts[0] + ":*", search_type="raw")
-                for part in q_parts[1:]:
-                    query &= SearchQuery(part + ":*", search_type="raw")
-            else:
-                query = None
-        if query:
-            media = media.filter(search=query)
+            # 过滤标题中含有query的媒体
+            media = media.filter(title__icontains=query)
+            # media = media.filter(search=query)
 
         if tag:
             media = media.filter(tags__title=tag)

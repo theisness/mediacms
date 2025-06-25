@@ -6,24 +6,24 @@ import '../management-table/ManageItemList-filters.scss';
 
 const filters = {
   media_type: [
-    { id: 'all', title: 'All' },
-    { id: 'video', title: 'Video' },
-    { id: 'audio', title: 'Audio' },
-    { id: 'image', title: 'Image' },
+    { id: 'all', title: '所有' },
+    { id: 'video', title: '视频' },
+    { id: 'audio', title: '音频' },
+    { id: 'image', title: '图像' },
     { id: 'pdf', title: 'Pdf' },
   ],
   upload_date: [
-    { id: 'all', title: 'All' },
-    { id: 'today', title: 'Today' },
-    { id: 'this_week', title: 'This week' },
-    { id: 'this_month', title: 'This month' },
-    { id: 'this_year', title: 'This year' },
+    { id: 'all', title: '所有' },
+    { id: 'today', title: '今天' },
+    { id: 'this_week', title: '本周' },
+    { id: 'this_month', title: '本月' },
+    { id: 'this_year', title: '本年' },
   ],
   sort_by: [
-    { id: 'date_added_desc', title: 'Upload date (newest)' },
-    { id: 'date_added_asc', title: 'Upload date (oldest)' },
-    { id: 'most_views', title: 'View count' },
-    { id: 'most_likes', title: 'Like count' },
+    { id: 'date_added_desc', title: '上传日期（降序）' },
+    { id: 'date_added_asc', title: '上传日期（升序）' },
+    { id: 'most_views', title: '观看数量' },
+    { id: 'most_likes', title: '点赞数量' },
   ],
 };
 
@@ -83,7 +83,7 @@ export function SearchResultsFilters(props) {
     <div ref={containerRef} className={'mi-filters-row' + (isHidden ? ' hidden' : '')}>
       <div ref={innerContainerRef} className="mi-filters-row-inner">
         <div className="mi-filter">
-          <div className="mi-filter-title">MEDIA TYPE</div>
+          <div className="mi-filter-title">媒体类型</div>
           <div className="mi-filter-options">
             <FilterOptions
               id={'media_type'}
@@ -95,7 +95,7 @@ export function SearchResultsFilters(props) {
         </div>
 
         <div className="mi-filter">
-          <div className="mi-filter-title">UPLOAD DATE</div>
+          <div className="mi-filter-title">上传日期</div>
           <div className="mi-filter-options">
             <FilterOptions
               id={'upload_date'}
@@ -107,7 +107,7 @@ export function SearchResultsFilters(props) {
         </div>
 
         <div className="mi-filter">
-          <div className="mi-filter-title">SORT BY</div>
+          <div className="mi-filter-title">排序方式</div>
           <div className="mi-filter-options">
             <FilterOptions id={'sort_by'} options={filters.sort_by} selected={sortByFilter} onSelect={onFilterSelect} />
           </div>

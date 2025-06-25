@@ -16,7 +16,7 @@ export function ManageMediaItemHeader(props) {
         onClick={sortByColumn}
         className={'mi-title mi-col-sort' + ('title' === sort ? ('asc' === order ? ' asc' : ' desc') : '')}
       >
-        Title
+        标题
         <div className="mi-col-sort-icons">
           <span>
             <MaterialIcon type="arrow_drop_up" />
@@ -31,7 +31,7 @@ export function ManageMediaItemHeader(props) {
         onClick={sortByColumn}
         className={'mi-added mi-col-sort' + ('add_date' === sort ? ('asc' === order ? ' asc' : ' desc') : '')}
       >
-        Date added
+        添加日期
         <div className="mi-col-sort-icons">
           <span>
             <MaterialIcon type="arrow_drop_up" />
@@ -41,13 +41,13 @@ export function ManageMediaItemHeader(props) {
           </span>
         </div>
       </div>
-      <div className="mi-author">Author</div>
-      <div className="mi-type">Media type</div>
-      <div className="mi-encoding">Encoding status</div>
-      <div className="mi-state">State</div>
-      <div className="mi-reviewed">Reviewed</div>
-      <div className="mi-featured">Featured</div>
-      <div className="mi-reported">Reported</div>
+      <div className="mi-author">作者</div>
+      <div className="mi-type">媒体类型</div>
+      <div className="mi-encoding">编码状态</div>
+      <div className="mi-state">公开状态</div>
+      <div className="mi-reviewed">审核状态</div>
+      <div className="mi-featured">精选状态</div>
+      <div className="mi-reported">举报状态</div>
     </div>
   );
 }

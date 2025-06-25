@@ -9,7 +9,7 @@ interface MembersPageProps {
   title?: string;
 }
 
-export const MembersPage: React.FC<MembersPageProps> = ({ id = 'members', title = 'Members' }) => (
+export const MembersPage: React.FC<MembersPageProps> = ({ id = 'members', title = '成员' }) => (
   <Page id={id}>
     <ApiUrlConsumer>
       {(apiUrl) => (

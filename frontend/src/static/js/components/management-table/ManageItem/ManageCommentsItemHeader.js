@@ -11,13 +11,13 @@ export function ManageCommentsItemHeader(props) {
       <div className="mi-checkbox">
         <input type="checkbox" checked={isSelected} onChange={checkAll} />
       </div>
-      <div className="mi-author">Author</div>
+      <div className="mi-author">作者</div>
       <div
         id="text"
         onClick={sortByColumn}
         className={'mi-comment mi-col-sort' + ('text' === sort ? ('asc' === order ? ' asc' : ' desc') : '')}
       >
-        Comment
+        评论内容
         <div className="mi-col-sort-icons">
           <span>
             <MaterialIcon type="arrow_drop_up" />
@@ -32,7 +32,7 @@ export function ManageCommentsItemHeader(props) {
         onClick={sortByColumn}
         className={'mi-added mi-col-sort' + ('add_date' === sort ? ('asc' === order ? ' asc' : ' desc') : '')}
       >
-        Date added
+        添加日期
         <div className="mi-col-sort-icons">
           <span>
             <MaterialIcon type="arrow_drop_up" />
