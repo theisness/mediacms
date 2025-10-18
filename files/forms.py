@@ -37,7 +37,7 @@ class MediaForm(forms.ModelForm):
         super(MediaForm, self).__init__(*args, **kwargs)
         if self.instance.media_type != "video":
             self.fields.pop("thumbnail_time")
-        if not is_mediacms_editor(user):
+        if not is_mediacms_editor(user) and user.id != self.instance.user.id:
             self.fields.pop("featured")
             self.fields.pop("reported_times")
             self.fields.pop("is_reviewed")
