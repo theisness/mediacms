@@ -28,7 +28,7 @@ function downloadOptions(mediaData, allowDownload) {
                 link: formatInnerLink(encodingsInfo[k][g].url, site.url),
                 linkAttr: {
                   target: '_blank',
-                  download: mediaData.title + '_' + k + '_' + g.toUpperCase(),
+                  download: mediaData.title,
                 },
               };
             }

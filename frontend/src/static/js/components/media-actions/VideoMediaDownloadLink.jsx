@@ -26,7 +26,7 @@ function downloadOptionsList() {
                 link: formatInnerLink(encodings_info[k][g].url, SiteContext._currentValue.url),
                 linkAttr: {
                   target: '_blank',
-                  download: media_data.title + '_' + k + '_' + g.toUpperCase(),
+                  download: media_data.title,
                 },
               };
             }
@@ -36,14 +36,15 @@ function downloadOptionsList() {
     }
   }
 
-  optionsList.original_media_url = {
-    text: 'Original file (' + media_data.size + ')',
-    link: formatInnerLink(media_data.original_media_url, SiteContext._currentValue.url),
-    linkAttr: {
-      target: '_blank',
-      download: media_data.title,
-    },
-  };
+  // 不需要原文件，太大
+  // optionsList.original_media_url = {
+  //   text: '原文件 (' + media_data.size + ')',
+  //   link: formatInnerLink(media_data.original_media_url, SiteContext._currentValue.url),
+  //   linkAttr: {
+  //     target: '_blank',
+  //     download: media_data.title,
+  //   },
+  // };
 
   return Object.values(optionsList);
 }
@@ -72,7 +73,7 @@ export function VideoMediaDownloadLink(props) {
           <CircleIconButton type="span">
             <MaterialIcon type="arrow_downward" />
           </CircleIconButton>
-          <span>{translateString("DOWNLOAD")}</span>
+          <span>下载</span>
         </button>
       </PopupTrigger>
 
