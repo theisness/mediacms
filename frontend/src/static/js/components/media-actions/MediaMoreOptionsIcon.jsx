@@ -38,14 +38,14 @@ function downloadOptions(mediaData, allowDownload) {
     }
   }
 
-  options.original_media_url = {
-    text: 'Original file (' + mediaData.size + ')',
-    link: formatInnerLink(mediaData.original_media_url, site.url),
-    linkAttr: {
-      target: '_blank',
-      download: mediaData.title,
-    },
-  };
+  // options.original_media_url = {
+  //   text: '原文件 (' + mediaData.size + ')',
+  //   link: formatInnerLink(mediaData.original_media_url, site.url),
+  //   linkAttr: {
+  //     target: '_blank',
+  //     download: mediaData.title,
+  //   },
+  // };
 
   return Object.values(options);
 }
@@ -64,7 +64,7 @@ function optionsItems(userCan, mediaData, allowDownload, downloadLink, mediaRepo
         items.push({
           itemType: 'link',
           link: downloadLink,
-          text: 'Download',
+          text: '下载',
           icon: 'arrow_downward',
           itemAttr: {
             className: 'visible-only-in-small',
@@ -78,7 +78,7 @@ function optionsItems(userCan, mediaData, allowDownload, downloadLink, mediaRepo
     } else {
       items.push({
         itemType: 'open-subpage',
-        text: 'Download',
+        text: '下载',
         icon: 'arrow_downward',
         itemAttr: {
           className: 'visible-only-in-small',
