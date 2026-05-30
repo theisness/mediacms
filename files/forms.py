@@ -15,6 +15,14 @@ class MediaForm(forms.ModelForm):
         model = Media
         fields = (
             "title",
+            "film_code",
+            "premiere_date",
+            "premiere_location",
+            "chief_instructor",
+            "cast",
+            "director",
+            "editor",
+            "filming_location",
             "category",
             "new_tags",
             "add_date",
@@ -66,6 +74,15 @@ class MediaForm(forms.ModelForm):
         self.fields['is_reviewed'].help_text = ''
         self.fields['allow_download'].label = '允许下载'
         self.fields['allow_download'].help_text = ''
+        # 道场影片自定义元数据字段
+        self.fields['film_code'].label = '片号'
+        self.fields['premiere_date'].label = '首发时间'
+        self.fields['premiere_location'].label = '首发地'
+        self.fields['chief_instructor'].label = '总指导'
+        self.fields['cast'].label = '主演/主创'
+        self.fields['director'].label = '导演'
+        self.fields['editor'].label = '剪辑制作者'
+        self.fields['filming_location'].label = '取景地'
 
 
 
