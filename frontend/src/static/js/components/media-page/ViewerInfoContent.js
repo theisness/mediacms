@@ -219,6 +219,22 @@ export default function ViewerInfoContent(props) {
               {isContentVisible ? 'SHOW LESS' : 'SHOW MORE'}
             </button>
           ) : null}
+          {(() => {
+            const md = MediaPageStore.get('media-data') || {};
+            const FILM_FIELDS = [
+              ['film_code', '片号'],
+              ['premiere_date', '首发时间'],
+              ['premiere_location', '首发地'],
+              ['chief_instructor', '总指导'],
+              ['cast', '主演/主创'],
+              ['director', '导演'],
+              ['editor', '剪辑制作者'],
+              ['filming_location', '取景地'],
+            ];
+            return FILM_FIELDS.filter(([k]) => md[k]).map(([k, label]) => (
+              <MediaMetaField key={k} value={md[k]} title={label} id={'film-' + k.replace(/_/g, '-')} />
+            ));
+          })()}
           {tagsContent.length ? (
             <MediaMetaField
               value={tagsContent}

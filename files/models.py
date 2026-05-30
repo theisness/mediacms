@@ -285,6 +285,24 @@ class Media(models.Model):
 
     views = models.IntegerField(db_index=True, default=1)
 
+    # --- 道场影片自定义元数据字段 (施家远布) ---
+    film_code = models.CharField(max_length=20, blank=True, db_index=True, help_text="片号，如 Z20 / G49 / F1")
+
+    premiere_date = models.DateField(blank=True, null=True, help_text="首发时间（影片最早首发的日期，可能早于上传影院时间）")
+
+    premiere_location = models.CharField(max_length=200, blank=True, help_text="首发地（如 知乎 / 影院 / 某视频号）")
+
+    chief_instructor = models.CharField(max_length=100, blank=True, help_text="总指导")
+
+    cast = models.TextField(blank=True, help_text="主演 / 主创（以影片中名单整理）")
+
+    director = models.CharField(max_length=200, blank=True, help_text="导演")
+
+    editor = models.CharField(max_length=200, blank=True, help_text="剪辑制作者")
+
+    filming_location = models.CharField(max_length=200, blank=True, help_text="取景地")
+    # --- end 自定义字段 ---
+
     # keep track if media file has changed, on saves
     __original_media_file = None
     __original_thumbnail_time = None
