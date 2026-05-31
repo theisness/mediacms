@@ -24,6 +24,22 @@ ZERO_WIDTH = dict.fromkeys(
 CODE_RE = re.compile(r"^([FCGZJ])\s*0*(\d+)")
 TEXT_FIELDS = ["premiere_location", "chief_instructor", "cast", "director", "editor", "filming_location"]
 
+# 预告/官宣类记录无片号、且影院标题含《》和编号前缀，子串启发式匹配不到。
+# 显式别名：表格 raw_name -> 影院标题里能唯一定位该片的子串。
+# (突破鬼打墙预告 / 60游学记预告 未上传影院，故意不在此表，保持未匹配。)
+TITLE_ALIASES = {
+    "千年寻密预告": "千年寻密》预告片",
+    "千年寻密预告-静怡去寺庙版本": "静怡",
+    "大唐绝密预告": "大唐绝密》预告片",
+    "首映礼预告": "大唐绝密首映礼",
+    "无法剽窃的专利是智慧预告": "无法剽窃的专利是智慧》预告",
+    "来世之密预告": "来世之密》预告",
+    "螃蟹出逃记预告": "螃蟹出逃记》预告片",
+    "集福十五载下集预告": "集福十五载》（下）预告",
+    "周年之变预告": "周年之变》预告",
+    "锦梓官宣宣传片": "锦梓官宣",
+}
+
 
 def clean(s):
     return (s or "").translate(ZERO_WIDTH).strip()
@@ -59,11 +75,16 @@ class Command(BaseCommand):
 
         for rec in records:
             code = rec.get("film_code") or ""
+            raw = clean(rec.get("raw_name", ""))
             target = None
             if code and by_code.get(code):
                 target = by_code[code][0]
+            elif raw in TITLE_ALIASES:
+                cands = [m for m in videos if TITLE_ALIASES[raw] in clean(m.title)]
+                if cands:
+                    target = cands[0]
             else:
-                core = re.sub(r"^[FCGZJ]\s*0*\d+\s*", "", clean(rec.get("raw_name", "")))
+                core = re.sub(r"^[FCGZJ]\s*0*\d+\s*", "", raw)
                 core = re.sub(r"[／/（(《].*$", "", core).strip()
                 if len(core) >= 2:
                     cands = [m for m in videos if core in clean(m.title)]
