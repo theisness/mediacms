@@ -123,6 +123,7 @@ export default function ViewerInfoContent(props) {
 
   const [hasSummary, setHasSummary] = useState('' !== summary);
   const [isContentVisible, setIsContentVisible] = useState('' == summary);
+  const [filmInfoOpen, setFilmInfoOpen] = useState(false);
 
   function proceedMediaRemoval() {
     MediaPageActions.removeMedia();
@@ -231,9 +232,24 @@ export default function ViewerInfoContent(props) {
               ['editor', '剪辑制作者'],
               ['filming_location', '取景地'],
             ];
-            return FILM_FIELDS.filter(([k]) => md[k]).map(([k, label]) => (
-              <MediaMetaField key={k} value={md[k]} title={label} id={'film-' + k.replace(/_/g, '-')} />
-            ));
+            const fields = FILM_FIELDS.filter(([k]) => md[k]);
+            if (!fields.length) return null;
+            return (
+              <div className={'media-film-info' + (filmInfoOpen ? ' open' : '')}>
+                <button
+                  className="load-more film-info-toggle"
+                  onClick={() => setFilmInfoOpen((v) => !v)}
+                  aria-expanded={filmInfoOpen}
+                >
+                  {filmInfoOpen ? '收起简介信息 ▲' : '展开简介信息 ▼'}
+                </button>
+                {filmInfoOpen
+                  ? fields.map(([k, label]) => (
+                      <MediaMetaField key={k} value={md[k]} title={label} id={'film-' + k.replace(/_/g, '-')} />
+                    ))
+                  : null}
+              </div>
+            );
           })()}
           {tagsContent.length ? (
             <MediaMetaField
