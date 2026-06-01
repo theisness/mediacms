@@ -79,6 +79,11 @@ class MediaForm(forms.ModelForm):
         # 道场影片自定义元数据字段
         self.fields['film_code'].label = '片号'
         self.fields['premiere_date'].label = '首发时间'
+        # 首发时间用 HTML5 日期选择器（而非自由文本框）
+        self.fields['premiere_date'].widget = forms.DateInput(
+            attrs={'type': 'date'}, format='%Y-%m-%d'
+        )
+        self.fields['premiere_date'].input_formats = ['%Y-%m-%d']
         self.fields['premiere_location'].label = '首发地'
         self.fields['chief_instructor'].label = '总指导'
         self.fields['cast'].label = '主演/主创'
