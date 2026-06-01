@@ -24,6 +24,7 @@ class MediaForm(forms.ModelForm):
             "editor",
             "filming_location",
             "is_in_film_list",
+            "film_list_category",
             "category",
             "new_tags",
             "add_date",
@@ -86,6 +87,8 @@ class MediaForm(forms.ModelForm):
         self.fields['filming_location'].label = '取景地'
         self.fields['is_in_film_list'].label = '加入影片清单'
         self.fields['is_in_film_list'].help_text = '勾选则纳入「道场影片记录清单」与社区清单；老照片、沙滩车、个人作品等非道场资产请取消勾选。'
+        self.fields['film_list_category'].label = '清单分类'
+        self.fields['film_list_category'].help_text = '老师的分类：视频(法义/常识/故事)、预告(电影预告/记录片预告)、电影(真人电影/记录片)。'
 
 
 
