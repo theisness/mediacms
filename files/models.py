@@ -115,6 +115,24 @@ def category_thumb_path(instance, filename):
     return settings.MEDIA_UPLOAD_DIR + "categories/{0}".format(file_name)
 
 
+class FilmListCategory(models.Model):
+    """影片清单分类（老师的分类）。大类/小类与排序全部存库，不写死在代码。
+    title=小类(如 法义 / 真人电影 / 电影预告)，major=大类(如 视频 / 预告 / 电影)。"""
+
+    title = models.CharField(max_length=50, unique=True, help_text="小类名，如 法义 / 真人电影")
+    major = models.CharField(max_length=50, db_index=True, help_text="大类名，如 视频 / 预告 / 电影")
+    major_order = models.IntegerField(default=0, help_text="大类排序（楼层顺序）")
+    order = models.IntegerField(default=0, help_text="小类在大类内的排序")
+
+    class Meta:
+        ordering = ["major_order", "order"]
+        verbose_name = "影片清单分类"
+        verbose_name_plural = "影片清单分类"
+
+    def __str__(self):
+        return f"{self.major} / {self.title}"
+
+
 class Media(models.Model):
     """The most important model for MediaCMS"""
 
@@ -301,6 +319,16 @@ class Media(models.Model):
     editor = models.CharField(max_length=200, blank=True, help_text="剪辑制作者")
 
     filming_location = models.CharField(max_length=200, blank=True, help_text="取景地")
+
+    is_in_film_list = models.BooleanField(
+        default=True, db_index=True,
+        help_text="是否加入影片清单（在道场影片记录清单/社区清单中展示；老照片、沙滩车等非道场资产应取消勾选）",
+    )
+    film_list_category = models.ForeignKey(
+        "FilmListCategory", on_delete=models.SET_NULL, null=True, blank=True,
+        related_name="media",
+        help_text="影片清单分类（大类/小类见 FilmListCategory 表，由数据维护，不写死在代码）",
+    )
     # --- end 自定义字段 ---
 
     # keep track if media file has changed, on saves

@@ -100,6 +100,13 @@ class SingleMediaSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.username")
     url = serializers.SerializerMethodField()
     liked = serializers.SerializerMethodField()
+    film_list_category = serializers.SerializerMethodField()
+
+    def get_film_list_category(self, obj):
+        c = obj.film_list_category
+        if not c:
+            return None
+        return {"title": c.title, "major": c.major, "major_order": c.major_order, "order": c.order}
 
     def get_liked(self, obj):
         if self.context["request"].user.is_anonymous:
@@ -143,6 +150,8 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "director",
             "editor",
             "filming_location",
+            "is_in_film_list",
+            "film_list_category",
             "edit_date",
             "media_type",
             "state",
