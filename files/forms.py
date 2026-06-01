@@ -23,6 +23,7 @@ class MediaForm(forms.ModelForm):
             "director",
             "editor",
             "filming_location",
+            "is_in_film_list",
             "category",
             "new_tags",
             "add_date",
@@ -83,6 +84,8 @@ class MediaForm(forms.ModelForm):
         self.fields['director'].label = '导演'
         self.fields['editor'].label = '剪辑制作者'
         self.fields['filming_location'].label = '取景地'
+        self.fields['is_in_film_list'].label = '加入影片清单'
+        self.fields['is_in_film_list'].help_text = '勾选则纳入「道场影片记录清单」与社区清单；老照片、沙滩车、个人作品等非道场资产请取消勾选。'
 
 
 

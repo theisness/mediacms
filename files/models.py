@@ -301,6 +301,11 @@ class Media(models.Model):
     editor = models.CharField(max_length=200, blank=True, help_text="剪辑制作者")
 
     filming_location = models.CharField(max_length=200, blank=True, help_text="取景地")
+
+    is_in_film_list = models.BooleanField(
+        default=True, db_index=True,
+        help_text="是否加入影片清单（在道场影片记录清单/社区清单中展示；老照片、沙滩车等非道场资产应取消勾选）",
+    )
     # --- end 自定义字段 ---
 
     # keep track if media file has changed, on saves

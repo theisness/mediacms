@@ -143,6 +143,7 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "director",
             "editor",
             "filming_location",
+            "is_in_film_list",
             "edit_date",
             "media_type",
             "state",
