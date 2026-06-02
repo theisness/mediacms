@@ -109,14 +109,14 @@ def collect_films():
             "filming_location": clean(m.filming_location),
             "major": c.major, "minor": c.title,
             "major_order": c.major_order, "minor_order": c.order,
-            "edit_date": m.edit_date,
         })
     return films
 
 
 def recent_block(films, limit=5):
-    """最近更新的若干部：按 edit_date 倒序，片名(超链接) + 首发时间。"""
-    recent = sorted(films, key=lambda f: f.get("edit_date") or datetime.datetime.min,
+    """最近更新的若干部：按首发时间(premiere_date)倒序，片名(超链接) + 首发时间。
+    无首发时间的排最后。"""
+    recent = sorted(films, key=lambda f: f.get("premiere_date") or "",
                     reverse=True)[:limit]
     out = [f"## 最近更新（最新 {len(recent)} 部）", "", "| 片名 | 首发时间 |", "|---|---|"]
     for f in recent:
