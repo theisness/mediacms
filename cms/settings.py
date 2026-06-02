@@ -440,6 +440,18 @@ if os.environ.get("TESTING"):
     CELERY_TASK_ALWAYS_EAGER = True
 
 
+# --- 道场影片清单自动推送到 Discourse (施家远布) ---
+# 影片在影院里新增/编辑/删除后，自动重建并更新 blog.ssbx.site 的清单帖。
+# 默认关闭；真实值(密钥/楼层 post id)放 local_settings.py，不进 repo。
+FILMLIST_AUTOPUSH = False
+FILMLIST_PUSH_DEBOUNCE = 45  # 秒；合并窗口内多次保存只推一次
+FILMLIST_SITE_BASE = "https://ssbx.site"  # 片名超链接指向的影院地址
+FILMLIST_DISCOURSE_URL = ""
+FILMLIST_DISCOURSE_API_KEY = ""
+FILMLIST_DISCOURSE_API_USERNAME = ""
+FILMLIST_POST_IDS = []  # 如 [1655, 1656, 1657, 1658]，顺序＝楼层顺序
+
+
 try:
     # keep a local_settings.py file for local overrides
     from .local_settings import *  # noqa

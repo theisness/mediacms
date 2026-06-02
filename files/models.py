@@ -1710,3 +1710,29 @@ def encoding_file_delete(sender, instance, **kwargs):
             instance.media.post_encode_actions(encoding=instance, action="delete")
     # delete local chunks, and remote chunks + media file. Only when the
     # last encoding of a media is complete
+
+
+# --- 道场影片清单自动推送到 Discourse (施家远布) ---
+# 影片新增/编辑/删除后，去抖合并触发 push_filmlist 任务重建并更新 blog 清单帖。
+# 仅在 settings.FILMLIST_AUTOPUSH 开启时生效（默认关闭，本地/上游不受影响）。
+def schedule_filmlist_autopush():
+    if not getattr(settings, "FILMLIST_AUTOPUSH", False):
+        return
+    from django.core.cache import cache
+
+    debounce = int(getattr(settings, "FILMLIST_PUSH_DEBOUNCE", 45))
+    # 合并去抖：去抖窗口内多次保存只排一个推送任务（cache.add 作互斥锁）
+    if cache.add("filmlist_push_pending", "1", debounce):
+        from files.tasks import push_filmlist
+
+        push_filmlist.apply_async(countdown=debounce)
+
+
+@receiver(post_save, sender=Media)
+def filmlist_autopush_on_save(sender, instance, created, **kwargs):
+    schedule_filmlist_autopush()
+
+
+@receiver(post_delete, sender=Media)
+def filmlist_autopush_on_delete(sender, instance, **kwargs):
+    schedule_filmlist_autopush()

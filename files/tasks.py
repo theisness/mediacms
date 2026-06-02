@@ -800,3 +800,22 @@ def remove_media_file(media_file=None):
 # (and check for their encdings, and delete them as well, along with
 # all chunks)
 # 3 beat task, remove chunks
+
+
+@task(name="push_filmlist", queue="short_tasks")
+def push_filmlist(force=False):
+    """构建道场影片清单并推送/更新到 Discourse。由 Media 保存/删除信号去抖触发，
+    也可手动 `manage.py push_filmlist` 调用。配置缺失或未开启时静默跳过。"""
+    if not getattr(settings, "FILMLIST_AUTOPUSH", False):
+        return None
+    cache.delete("filmlist_push_pending")
+    from files.filmlist_export import build_filmlist_posts, push_filmlist_posts
+
+    try:
+        posts = build_filmlist_posts()
+        results = push_filmlist_posts(posts, skip_unchanged=not force)
+    except Exception as exc:  # noqa: BLE001 — 推送失败不应影响影院本身
+        logger.warning("push_filmlist failed: %s", exc)
+        return None
+    logger.info("push_filmlist: %s", results)
+    return results
