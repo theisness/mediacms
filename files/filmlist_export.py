@@ -42,6 +42,13 @@ DEFAULT_COLS = COLS["视频"]
 CODE_RE = re.compile(r"^([FCGZJ])\s*0*(\d+)")
 CN_NUM = "一二三四五六七八九十"
 
+# 东八区（北京时间 / CST），footer 时间戳与「年度更新」年份都用它
+CST = datetime.timezone(datetime.timedelta(hours=8))
+
+
+def now_cst():
+    return datetime.datetime.now(CST)
+
 
 def fmt_dur(sec):
     try:
@@ -62,10 +69,12 @@ def clean_name(title):
 
 
 def sortkey(f):
+    # 置顶的片排在所属小类表最前（pin=0），其余 pin=1；组内沿用原排序（片号优先，否则按首发时间）。
+    pin = 0 if f.get("pinned") else 1
     m = CODE_RE.match(f["name"])
     if m:
-        return (0, m.group(1), int(m.group(2)))
-    return (1, f.get("premiere_date") or "")
+        return (pin, 0, m.group(1), int(m.group(2)))
+    return (pin, 1, f.get("premiere_date") or "", 0)
 
 
 def cell(v):
@@ -109,17 +118,21 @@ def collect_films():
             "filming_location": clean(m.filming_location),
             "major": c.major, "minor": c.title,
             "major_order": c.major_order, "minor_order": c.order,
+            "pinned": bool(m.film_list_pinned),
         })
     return films
 
 
-def recent_block(films, limit=5):
-    """最近更新的若干部：按首发时间(premiere_date)倒序，片名(超链接) + 首发时间。
-    无首发时间的排最后。"""
-    recent = sorted(films, key=lambda f: f.get("premiere_date") or "",
-                    reverse=True)[:limit]
-    out = [f"## 最近更新（最新 {len(recent)} 部）", "", "| 片名 | 首发时间 |", "|---|---|"]
-    for f in recent:
+def annual_block(films, year=None):
+    """年度更新：当年(东八区)首发的全部影片，按首发时间(premiere_date)倒序，
+    片名(超链接) + 首发时间。year 缺省取东八区当前年份。"""
+    if year is None:
+        year = now_cst().year
+    ys = str(year)
+    cur = [f for f in films if (f.get("premiere_date") or "")[:4] == ys]
+    cur.sort(key=lambda f: f.get("premiere_date") or "", reverse=True)
+    out = [f"## {year} 年度更新（{len(cur)} 部）", "", "| 片名 | 首发时间 |", "|---|---|"]
+    for f in cur:
         nm = cell(f.get("name"))
         u = f.get("url")
         link = f"[{nm}]({u})" if (nm and u) else nm
@@ -131,7 +144,7 @@ def recent_block(films, limit=5):
 def build_filmlist_posts(films=None, gen_ts=None):
     """构建 4 个楼层的 markdown（每个大类一楼 + 总合计楼）。films 缺省从 DB 读。
 
-    总合计楼开头追加「最近更新（最新 5 部）」清单。
+    总合计楼开头追加「{当年} 年度更新」清单（当年东八区首发的全部影片）。
     """
     if films is None:
         films = collect_films()
@@ -171,11 +184,11 @@ def build_filmlist_posts(films=None, gen_ts=None):
             tot.append(f"| {major if j == 0 else ''} | {minor} | {n} | {sub if j == 0 else ''} |")
     tot.append(f"| **总计** |  |  | **{gtotal}** |")
     tot.append("")
-    ts = gen_ts or datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    tot.append(f"<sub>本帖由[莲花影院]({site_base()})实时导出，生成于 {ts}。</sub>")
+    ts = gen_ts or now_cst().strftime("%Y-%m-%d %H:%M")
+    tot.append(f"<sub>本帖由[莲花影院]({site_base()})实时导出，生成于 {ts}（北京时间 CST）。</sub>")
 
-    # 最近更新清单放在总合计楼开头
-    posts.append(recent_block(films) + "\n\n" + "\n".join(tot))
+    # 年度更新清单放在总合计楼开头
+    posts.append(annual_block(films) + "\n\n" + "\n".join(tot))
     return posts
 
 

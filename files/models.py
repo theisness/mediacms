@@ -329,6 +329,10 @@ class Media(models.Model):
         related_name="media",
         help_text="影片清单分类（大类/小类见 FilmListCategory 表，由数据维护，不写死在代码）",
     )
+    film_list_pinned = models.BooleanField(
+        default=False, db_index=True,
+        help_text="影片清单置顶（勾选则在所属小类表中置于首位，如频道介绍片）",
+    )
     # --- end 自定义字段 ---
 
     # keep track if media file has changed, on saves

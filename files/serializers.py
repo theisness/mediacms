@@ -152,6 +152,7 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "filming_location",
             "is_in_film_list",
             "film_list_category",
+            "film_list_pinned",
             "edit_date",
             "media_type",
             "state",
