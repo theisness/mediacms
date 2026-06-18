@@ -192,6 +192,17 @@ def build_filmlist_posts(films=None, gen_ts=None):
     return posts
 
 
+# footer 里的「生成于 <时间戳>（北京时间 CST）」——比对「内容是否变化」时要抹掉它，
+# 否则每次生成时间戳都变，最后一楼永远被判定为「有变化」而反复 PUT 刷新。
+_FOOTER_TS_RE = re.compile(r"(生成于 )[^（]*(（北京时间 CST）)")
+
+
+def strip_footer_ts(raw):
+    """把 footer 的生成时间戳替换成占位符，用于「表格是否真正变化」的比对。
+    没有 footer 的楼层（非总合计楼）原样返回，不受影响。"""
+    return _FOOTER_TS_RE.sub(r"\1__TS__\2", raw or "")
+
+
 # ---------------- Discourse 推送 ----------------
 def _curl_json(method, url, key, user, data=None):
     # 用 curl：Discourse 的 Api-Username 是中文(念晨)，urllib/requests 强制 latin-1 头会报错。
@@ -228,7 +239,8 @@ def push_filmlist_posts(posts, *, skip_unchanged=True):
         if skip_unchanged:
             try:
                 cur = _curl_json("GET", f"{url}/posts/{pid}.json", key, user)
-                if (cur.get("raw") or "") == raw:
+                # 抹掉 footer 时间戳后比对：只有表格内容真正变化才更新（时间戳本身不算变化）。
+                if strip_footer_ts(cur.get("raw") or "") == strip_footer_ts(raw):
                     results.append((pid, "unchanged"))
                     continue
             except Exception:
