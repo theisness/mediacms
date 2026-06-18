@@ -403,6 +403,10 @@ def produce_sprite_from_video(friendly_token):
                     )
         except Exception as e:
             print(e)
+
+    # sprite is the last original-derived artifact; if encoding already
+    # finished, the original can now be dropped (no-op unless configured)
+    media.delete_original_media_file()
     return True
 
 

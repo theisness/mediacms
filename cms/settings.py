@@ -451,6 +451,14 @@ FILMLIST_DISCOURSE_API_KEY = ""
 FILMLIST_DISCOURSE_API_USERNAME = ""
 FILMLIST_POST_IDS = []  # 如 [1655, 1656, 1657, 1658]，顺序＝楼层顺序
 
+# if True, delete the original uploaded file after a video is fully
+# transcoded (all encodings + HLS + sprite are produced), to reclaim disk.
+# WARNING: irreversible — re-encoding from the original is no longer possible
+# afterwards. Only touches fully transcoded videos; audio/image and
+# DO_NOT_TRANSCODE_VIDEO mode are never affected (original is served).
+# Placed before the local_settings import so it can be overridden there.
+DELETE_ORIGINAL_MEDIA_FILE_AFTER_ENCODE = True
+
 
 try:
     # keep a local_settings.py file for local overrides
