@@ -487,6 +487,13 @@ if GLOBAL_LOGIN_REQUIRED:
 # if True, only show original, don't perform any action on videos
 DO_NOT_TRANSCODE_VIDEO = False
 
+# if True, delete the original uploaded file after a video is fully
+# transcoded (all encodings + HLS + sprite are produced), to reclaim disk.
+# WARNING: irreversible — re-encoding from the original is no longer
+# possible afterwards. Only touches fully transcoded videos; audio/image
+# and DO_NOT_TRANSCODE_VIDEO mode are never affected (original is served).
+DELETE_ORIGINAL_MEDIA_FILE_AFTER_ENCODE = True
+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # the following is related to local development using docker

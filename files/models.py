@@ -712,6 +712,56 @@ class Media(models.Model):
 
         return True
 
+    def delete_original_media_file(self):
+        """Delete the original uploaded file once it is no longer needed.
+
+        After a video is fully transcoded (all encodings + HLS + sprite
+        produced) the original source is only useful for re-encoding. When
+        settings.DELETE_ORIGINAL_MEDIA_FILE_AFTER_ENCODE is enabled we remove
+        it from disk to reclaim space.
+
+        This is irreversible: re-encoding from the original is no longer
+        possible. Only fully transcoded videos are touched; for audio/image
+        (and DO_NOT_TRANSCODE_VIDEO mode) the original is what gets served, so
+        it is never removed.
+
+        Called from several asynchronous completion points (the last encoding
+        and the sprite task), so it re-reads fresh state and is a no-op until
+        every precondition is met and after the file is already gone.
+        """
+        if not getattr(settings, "DELETE_ORIGINAL_MEDIA_FILE_AFTER_ENCODE", False):
+            return False
+
+        media = Media.objects.filter(pk=self.pk).first()
+        if media is None:
+            return False
+
+        # only for transcoded videos: for other types the original is served
+        if media.media_type != "video" or settings.DO_NOT_TRANSCODE_VIDEO:
+            return False
+
+        if not media.media_file:
+            return False
+
+        # all encoding tasks must have finished with a usable result
+        if media.encoding_status != "success":
+            return False
+        if media.encodings.filter(status__in=["running", "pending"]).exists():
+            return False
+
+        # playback (HLS) and the scrubbing sprite are both derived from the
+        # original, so wait until they exist before dropping it
+        if not media.hls_file or not media.sprites:
+            return False
+
+        original_path = media.media_file.path
+        if not original_path or not os.path.exists(original_path):
+            return False
+
+        helpers.rm_file(original_path)
+        logger.info("deleted original media file %s for %s after encoding", original_path, media.friendly_token)
+        return True
+
     @property
     def encodings_info(self, full=False):
         """Property used on serializers"""
@@ -799,10 +849,9 @@ class Media(models.Model):
     def original_media_url(self):
         """Property used on serializers"""
 
-        if settings.SHOW_ORIGINAL_MEDIA:
+        if settings.SHOW_ORIGINAL_MEDIA and self.media_file and os.path.exists(self.media_file.path):
             return helpers.url_from_path(self.media_file.path)
-        else:
-            return None
+        return None
 
     @property
     def thumbnail_url(self):
@@ -1699,6 +1748,9 @@ def encoding_file_save(sender, instance, created, **kwargs):
         encodings = set([encoding.status for encoding in Encoding.objects.filter(media=instance.media)])
         if ("running" in encodings) or ("pending" in encodings):
             return
+
+        # all encodings finished: drop the original file if configured
+        instance.media.delete_original_media_file()
 
 
 @receiver(post_delete, sender=Encoding)
