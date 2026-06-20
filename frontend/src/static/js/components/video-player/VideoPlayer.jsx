@@ -139,6 +139,27 @@ export function VideoPlayer(props) {
       }
     }
 
+    // 带触摸屏的桌面/笔记本上 videojs.TOUCH_ENABLED 为 true，会让播放器走移动端逻辑：
+    // 进度条 hover 缩略图预览组件被 `!TOUCH_ENABLED` 门控而根本不初始化，且出现触摸覆盖层灰蒙。
+    // 对「能用鼠标 hover」的设备(any-hover:hover)在建播放器前关掉该标志，按桌面初始化（恢复 hover 预览）。
+    // 纯触摸手机/平板(any-hover:none)不命中，保留原触摸 UI。
+    const _vjs = typeof window !== 'undefined' && window.videojs ? window.videojs : typeof videojs !== 'undefined' ? videojs : null;
+    if (
+      _vjs &&
+      _vjs.TOUCH_ENABLED &&
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(any-hover: hover)').matches
+    ) {
+      // 播放器的预览图门控读 videojs.TOUCH_ENABLED（可写普通属性）；置 false 即让其按桌面初始化。
+      // 注意：videojs.browser.TOUCH_ENABLED 是只读，赋值会抛异常中断 initPlayer，绝不要碰它。try/catch 兜底。
+      try {
+        _vjs.TOUCH_ENABLED = false;
+      } catch (e) {
+        /* 个别构建里可能是只读属性，忽略即可 */
+      }
+    }
+
     player = new MediaPlayer(
       videoElemRef.current,
       {
