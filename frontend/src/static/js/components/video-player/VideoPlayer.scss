@@ -1103,3 +1103,20 @@ button.share-video-btn {
     }
   }
 }
+
+// 带触摸屏的桌面/笔记本上，video.js 把设备判为触摸（加 vjs-touch-enabled），于是：
+//  (1) 触摸覆盖层 .vjs-touch-controls 的 rgba(0,0,0,.6) 背景把整帧压暗成灰蒙，拖动进度条时挡住画面；
+//  (2) 进度条 hover 缩略图预览被 `.vjs-touch-enabled .vjs-preview-thumb{display:none}` 隐藏。
+// 对「能用鼠标 hover」的设备(any-hover:hover，含带鼠标的触屏笔记本)恢复桌面交互；
+// 纯触摸手机/平板(any-hover:none)完全不受影响，保留原触摸 UI。
+@media (any-hover: hover) {
+  .video-js.vjs-mediacms.vjs-enabled-touch-controls.vjs-touch-enabled {
+    .vjs-touch-controls {
+      background-color: transparent !important; // 去掉灰蒙(保留中央按钮)
+    }
+
+    .vjs-preview-thumb {
+      display: block !important; // 恢复进度条 hover 缩略图预览
+    }
+  }
+}

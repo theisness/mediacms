@@ -397,10 +397,16 @@ def produce_sprite_from_video(friendly_token):
             if os.path.exists(output_name) and get_file_type(output_name) == "image":
                 with open(output_name, "rb") as f:
                     myfile = File(f)
+                    # save=False + targeted update: this task holds a Media
+                    # snapshot read before ffmpeg ran (minutes ago), so a full
+                    # save() here would write back stale title/encoding_status/
+                    # hls_file and silently undo edits made in the meantime
                     media.sprites.save(
                         content=myfile,
                         name=get_file_name(media.media_file.path) + "sprites.jpg",
+                        save=False,
                     )
+                    Media.objects.filter(pk=media.pk).update(sprites=media.sprites.name)
         except Exception as e:
             print(e)
 
