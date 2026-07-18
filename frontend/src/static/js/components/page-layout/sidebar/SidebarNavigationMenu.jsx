@@ -7,7 +7,7 @@ import { NavigationMenuList } from '../../_shared';
 import { translateString } from '../../../utils/helpers/';
 
 export function SidebarNavigationMenu() {
-  const { userCan, isAnonymous, pages: userPages } = useUser();
+  const { userCan, isAnonymous, isAdmin, pages: userPages } = useUser();
 
   const links = useContext(LinksContext);
   const sidebar = useContext(SidebarContext);
@@ -102,7 +102,11 @@ export function SidebarNavigationMenu() {
       });
     }
 
-    if (PageStore.get('config-enabled').pages.members && PageStore.get('config-enabled').pages.members.enabled) {
+    if (
+      isAdmin &&
+      PageStore.get('config-enabled').pages.members &&
+      PageStore.get('config-enabled').pages.members.enabled
+    ) {
       items.push({
         link: links.members,
         icon: 'people',

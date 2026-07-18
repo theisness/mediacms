@@ -2,7 +2,7 @@ module.exports = {
   home: {
     sections: {
       latest: {
-        title: 'Latest',
+        title: '最新上传',
       },
     },
   },

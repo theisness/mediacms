@@ -6,7 +6,7 @@ import './WelcomeHero.scss';
 
 export const WelcomeHero = () => {
   const scrollToContent = () => {
-    const content = document.querySelector('.media-multi-list-wrapper');
+    const content = document.querySelector('.media-list-wrapper');
     if (content) {
       content.scrollIntoView({ behavior: 'smooth' });
     }

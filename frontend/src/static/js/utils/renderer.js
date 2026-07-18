@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { installTranslations } from './translations/zh-CN';
 import { ThemeProvider, applyInitialTheme } from './contexts/ThemeContext';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { UserProvider } from './contexts/UserContext';
 import './spaNav'; // 自动启用 PJAX 无刷新导航
+
+// 先安装中文默认文案，再渲染，避免英文闪现
+installTranslations();
 
 // 在 React 首次渲染前应用主题，避免闪白/闪错主题
 applyInitialTheme();

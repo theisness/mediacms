@@ -1,7 +1,7 @@
 module.exports = {
   devEnv: 'true' === process.env.WEBPACK_DEV_SERVER,
   id: process.env.MEDIACMS_ID || 'mediacms-frontend',
-  title: process.env.MEDIACMS_TITLE || 'MediaCMS Demo',
+  title: process.env.MEDIACMS_TITLE || '莲花影院',
   url: process.env.MEDIACMS_URL || 'UNDEFINED_URL',
   api: process.env.MEDIACMS_API || 'UNDEFINED_API',
   theme: {
@@ -22,32 +22,32 @@ module.exports = {
   },
   pages: {
     latest: {
-      title: 'Recent uploads',
+      title: '最新上传',
     },
     featured: {
-      title: 'Featured',
+      title: '精选影片',
     },
     recommended: {
-      title: 'Recommended',
+      title: '推荐',
     },
     members: {
-      title: 'Members',
+      title: '成员',
     },
   },
   userPages: {
     liked: {
-      title: 'Liked media',
+      title: '喜欢的影片',
     },
     history: {
-      title: 'History',
+      title: '历史记录',
     },
   },
   taxonomies: {
     tags: {
-      title: 'Tags',
+      title: '标签',
     },
     categories: {
-      title: 'Categories',
+      title: '分类',
     },
   },
 };
