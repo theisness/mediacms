@@ -30,6 +30,13 @@ body * {
   border-bottom: 1px solid var(--lotus-border);
   box-shadow: 0 1px 0 var(--lotus-border);
   height: var(--lotus-header-height);
+
+  &.welcome-banner-active {
+    background: linear-gradient(180deg, rgba(8, 13, 29, 0.72) 0%, rgba(8, 13, 29, 0.28) 100%);
+    border-bottom-color: rgba(201, 168, 106, 0.2);
+    box-shadow: none;
+    backdrop-filter: blur(6px);
+  }
 }
 
 .page-header-left .logo {

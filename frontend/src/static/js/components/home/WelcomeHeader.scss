@@ -1,11 +1,14 @@
 .welcome-header-banner {
   position: relative;
-  // 顶栏是 fixed；利用 PageMain 已预留的 header 高度把横幅移到顶栏下方，
-  // 不改变文档流高度，避免横幅被遮住或在内容前产生额外空白。
-  top: var(--header-height, 56px);
+  // 背景从 viewport 顶部延伸到紧凑 hero 底部，fixed page-header 透明叠在图片上。
+  // 负 margin 抵消新增的 header 高度，保持后续页面内容位置不变。
+  top: 0;
   z-index: 1;
   width: 100%;
-  height: 120px;
+  height: calc(120px + var(--header-height, 56px));
+  margin-bottom: calc(0px - var(--header-height, 56px));
+  padding-top: var(--header-height, 56px);
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,7 +50,7 @@
 .welcome-header-banner-scroll {
   position: absolute;
   right: 1rem;
-  top: 50%;
+  top: calc(var(--header-height, 56px) + 60px);
   transform: translateY(-50%);
   z-index: 2;
   display: flex;
@@ -75,7 +78,11 @@
 
 @media screen and (max-width: 639px) {
   .welcome-header-banner {
-    height: 88px;
+    height: calc(88px + var(--header-height, 56px));
+  }
+
+  .welcome-header-banner-scroll {
+    top: calc(var(--header-height, 56px) + 44px);
   }
 
   .welcome-header-banner-title {

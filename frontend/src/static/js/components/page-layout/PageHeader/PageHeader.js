@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageStore } from '../../../utils/stores/';
 import { useUser, useLayout } from '../../../utils/hooks/';
 import { addClassname, hasSeenWelcome } from '../../../utils/helpers/';
@@ -60,7 +60,9 @@ function MediaUploader() {
 export function PageHeader(props) {
   const { isAnonymous } = useUser();
   const { visibleMobileSearch } = useLayout();
-  const isHomePath = typeof window !== 'undefined' && ['/', '/index.html'].includes(window.location.pathname);
+  // 首次进入时保持 false，避免 HomePage 的大欢迎页与紧凑横幅同时出现；
+  // 之后的新页面加载保持 true，PJAX 导航期间也能持续使用同一条 hero 背景。
+  const [showWelcomeHeader] = useState(() => hasSeenWelcome());
 
   useEffect(() => {
     Alerts();
@@ -74,14 +76,17 @@ export function PageHeader(props) {
     <>
       <header
         className={
-          'page-header' + (visibleMobileSearch ? ' mobile-search-field' : '') + (isAnonymous ? ' anonymous-user' : '')
+          'page-header' +
+          (visibleMobileSearch ? ' mobile-search-field' : '') +
+          (isAnonymous ? ' anonymous-user' : '') +
+          (showWelcomeHeader ? ' welcome-banner-active' : '')
         }
       >
         <HeaderLeft />
         <SearchField />
         <HeaderRight />
       </header>
-      {hasSeenWelcome() && !isHomePath && <WelcomeHeader />}
+      {showWelcomeHeader && <WelcomeHeader />}
     </>
   );
 }
