@@ -1,3 +1,8 @@
-<svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
-    <text x="20" y="60" font-family="Arial, sans-serif" font-size="40" fill="#000000">莲花影院</text>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 83C35 72 22 60 25 45c12 2 21 10 25 24 4-14 13-22 25-24 3 15-10 27-25 38Z"/>
+    <path d="M50 69C39 58 36 43 50 25c14 18 11 33 0 44Z"/>
+    <path d="M20 78c18 5 42 5 60 0"/>
+    <path d="M30 87h40"/>
+  </g>
 </svg>

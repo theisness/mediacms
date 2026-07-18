@@ -260,8 +260,9 @@ export function navigate(url, pushState = true) {
       const parser = new DOMParser();
       const newDoc = parser.parseFromString(html, 'text/html');
 
-      // 提取新 head 中的脚本（按原始顺序，过滤掉已加载的）
-      const headScripts = Array.from(newDoc.querySelectorAll('head script[src]'))
+      // 页面入口脚本位于 body 的 bottomimports，不在 head；按原始顺序收集全部外链脚本。
+      // 公共脚本由 loadScript 去重，最后一个页面脚本始终重新执行。
+      const pageScripts = Array.from(newDoc.querySelectorAll('script[src]'))
         .map((s) => s.getAttribute('src'))
         .filter(Boolean);
 
@@ -276,8 +277,8 @@ export function navigate(url, pushState = true) {
 
         // 公共 chunk 只加载一次；页面入口脚本始终重新执行，
         // 这样返回已访问过的页面时内容区仍会重新渲染，且不会重复执行入口。
-        const entrySrc = headScripts[headScripts.length - 1];
-        const sharedScripts = entrySrc ? headScripts.slice(0, -1) : headScripts;
+        const entrySrc = pageScripts[pageScripts.length - 1];
+        const sharedScripts = entrySrc ? pageScripts.slice(0, -1) : pageScripts;
         return loadScriptsInOrder(sharedScripts)
           .then(() => (entrySrc ? executeScript(entrySrc) : Promise.resolve()))
           .then(() => {
