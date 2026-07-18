@@ -21,7 +21,9 @@ module.exports = {
       },
     ],
     belowNavMenu: null,
-    footer: '莲花影院 · 清净视听',
+    footer:
+      'Powered by <a href="https://ssbx.site" title="莲花影院" target="_blank">莲花影院</a><br>' +
+      '<a href="https://beian.miit.gov.cn/" title="赣ICP备2025053972号-3" target="_blank">赣ICP备2025053972号-3</a>',
   },
   uploader: {
     belowUploadArea: '',
