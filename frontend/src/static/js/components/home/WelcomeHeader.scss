@@ -1,5 +1,9 @@
 .welcome-header-banner {
   position: relative;
+  // 顶栏是 fixed；利用 PageMain 已预留的 header 高度把横幅移到顶栏下方，
+  // 不改变文档流高度，避免横幅被遮住或在内容前产生额外空白。
+  top: var(--header-height, 56px);
+  z-index: 1;
   width: 100%;
   height: 120px;
   display: flex;
@@ -13,7 +17,8 @@
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center 30%;
+  // 横幅比例很宽，取莲池、佛像与放映机所在的视觉中段，避免只剩天空/胶片轮。
+  background-position: center 60%;
   opacity: 0.45;
 }
 
