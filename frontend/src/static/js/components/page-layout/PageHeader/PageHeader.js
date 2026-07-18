@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { PageStore } from '../../../utils/stores/';
 import { useUser, useLayout } from '../../../utils/hooks/';
-import { addClassname } from '../../../utils/helpers/';
+import { addClassname, hasSeenWelcome } from '../../../utils/helpers/';
 import { SearchField } from './SearchField';
 import { HeaderRight } from './HeaderRight';
 import { HeaderLeft } from './HeaderLeft';
+import { WelcomeHeader } from '../../home/WelcomeHeader';
 
 import '../../../../css/styles.scss';
 import './PageHeader.scss';
@@ -69,14 +70,17 @@ export function PageHeader(props) {
   }, []);
 
   return (
-    <header
-      className={
-        'page-header' + (visibleMobileSearch ? ' mobile-search-field' : '') + (isAnonymous ? ' anonymous-user' : '')
-      }
-    >
-      <HeaderLeft />
-      <SearchField />
-      <HeaderRight />
-    </header>
+    <>
+      <header
+        className={
+          'page-header' + (visibleMobileSearch ? ' mobile-search-field' : '') + (isAnonymous ? ' anonymous-user' : '')
+        }
+      >
+        <HeaderLeft />
+        <SearchField />
+        <HeaderRight />
+      </header>
+      {hasSeenWelcome() && <WelcomeHeader />}
+    </>
   );
 }

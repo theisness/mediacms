@@ -226,7 +226,10 @@ body * {
   }
 
   .theme-label {
-    white-space: nowrap;
+    white-space: normal;
+    font-size: 10px;
+    line-height: 1.25;
+    text-align: center;
   }
 }
 
@@ -301,7 +304,7 @@ button[type="submit"],
 .button-link {
   background-color: var(--lotus-gold);
   border-color: var(--lotus-gold);
-  color: var(--lotus-bg-deep);
+  color: #1a1a1a;
 
   &:hover {
     background-color: var(--lotus-gold-light);

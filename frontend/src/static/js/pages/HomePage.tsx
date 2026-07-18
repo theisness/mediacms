@@ -6,8 +6,9 @@ import { MediaMultiListWrapper } from '../components/MediaMultiListWrapper';
 import { ItemListAsync } from '../components/item-list/ItemListAsync.jsx';
 import { InlineSliderItemListAsync } from '../components/item-list/InlineSliderItemListAsync.jsx';
 import { WelcomeHero } from '../components/home/WelcomeHero';
+import { WelcomeHeader } from '../components/home/WelcomeHeader';
 import { Page } from './Page';
-import { translateString } from '../utils/helpers/';
+import { translateString, hasSeenWelcome, markWelcomeSeen } from '../utils/helpers/';
 
 const EmptyMedia: React.FC = ({}) => {
   return (
@@ -51,7 +52,14 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [visibleLatest, setVisibleLatest] = useState(false);
   const [visibleFeatured, setVisibleFeatured] = useState(false);
   const [visibleRecommended, setVisibleRecommended] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= window.innerHeight); // 假设768px以下为手机端
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= window.innerHeight);
+  const [seenWelcome, setSeenWelcome] = useState(hasSeenWelcome());
+
+  useEffect(() => {
+    if (!seenWelcome) {
+      markWelcomeSeen();
+    }
+  }, [seenWelcome]);
 
   const onLoadLatest = (length: number) => {
     setVisibleLatest(0 < length);
@@ -79,7 +87,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   return (
     <Page id={id}>
-      <WelcomeHero />
+      {!seenWelcome && <WelcomeHero />}
       <LinksConsumer>
         {(links) => (
           <ApiUrlConsumer>
