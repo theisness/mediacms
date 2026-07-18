@@ -2,7 +2,8 @@
 @import './lotus-tokens.scss';
 @import './includes/_variables.scss';
 @import './includes/_variables_dimensions.scss';
-// @import './config/index.scss'; // 旧 light/dark 主题由 lotus-tokens 接管
+// 主题色由 lotus-tokens 接管；config/index 仍提供媒体列表尺寸、断点和通用 CSS 变量。
+@import './config/index.scss';
 @import './includes/_theme_color.scss';
 @import '~normalize.css/normalize.css';
 

@@ -10,8 +10,8 @@ import { BrowserCache } from '../../utils/classes/';
 import './MessageBox.scss';
 
 const CACHE_TTL_SECONDS = 60;
+const TAB_RECENT = 'recent';
 const TAB_FEATURED = 'featured';
-const TAB_HOT = 'hot';
 
 function truncate(str, len = 42) {
   if (!str) return '';
@@ -20,7 +20,7 @@ function truncate(str, len = 42) {
 
 function parseMediaUrl(mediaUrl) {
   try {
-    const url = new URL(mediaUrl);
+    const url = new URL(mediaUrl, window.location.origin);
     const parts = url.pathname.split('/').filter(Boolean);
     // MediaCMS 媒体详情路径通常为 /v/{friendly_token} 或 /w/{friendly_token}
     const token = parts.length > 1 ? parts[parts.length - 1] : null;
@@ -38,8 +38,8 @@ function MessageList({ items, emptyText }) {
   return (
     <ul className="message-list">
       {items.map((item) => {
-        const { pathname, token } = parseMediaUrl(item.media_url);
-        const commentAnchor = token ? `#comment-${item.uid}` : '';
+        const { pathname } = parseMediaUrl(item.media_url);
+        const commentAnchor = item.uid ? `#comment-${item.uid}` : '';
         return (
           <li key={item.uid} className="message-item">
             <a href={`${pathname}${commentAnchor}`} className="message-link">
@@ -67,9 +67,9 @@ function MessageList({ items, emptyText }) {
 export function MessageBox() {
   const { isAnonymous } = useUser();
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState(TAB_FEATURED);
+  const [activeTab, setActiveTab] = useState(TAB_RECENT);
+  const [recent, setRecent] = useState([]);
   const [featured, setFeatured] = useState([]);
-  const [hot, setHot] = useState([]);
   const [loading, setLoading] = useState(false);
   const boxRef = useRef(null);
   const cacheRef = useRef(null);
@@ -86,7 +86,7 @@ export function MessageBox() {
     const cached = cacheRef.current.get(cacheKey);
     if (cached && Array.isArray(cached)) {
       if (activeTab === TAB_FEATURED) setFeatured(cached);
-      else setHot(cached);
+      else setRecent(cached);
       return;
     }
 
@@ -101,7 +101,7 @@ export function MessageBox() {
     const url =
       activeTab === TAB_FEATURED
         ? `${commentsUrl}?is_featured=true&page_size=5`
-        : `${commentsUrl}?ordering=-likes&page_size=5`;
+      : `${commentsUrl}?ordering=-add_date&page_size=5`;
 
     getRequest(
       url,
@@ -109,8 +109,9 @@ export function MessageBox() {
       (res) => {
         const results = res && res.data && res.data.results ? res.data.results : [];
         cacheRef.current.set(cacheKey, results);
-        if (activeTab === TAB_FEATURED) setFeatured(results);
-        else setHot(results);
+        const visibleResults = results.slice(0, 5);
+        if (activeTab === TAB_FEATURED) setFeatured(visibleResults);
+        else setRecent(visibleResults);
         setLoading(false);
       },
       () => {
@@ -136,7 +137,7 @@ export function MessageBox() {
     return null;
   }
 
-  const unreadCount = featured.length + hot.length > 0 ? featured.length + hot.length : 0;
+  const unreadCount = recent.length + featured.length > 0 ? recent.length + featured.length : 0;
 
   return (
     <ApiUrlConsumer>
@@ -160,17 +161,17 @@ export function MessageBox() {
               <div className="message-box-tabs">
                 <button
                   type="button"
+                  className={activeTab === TAB_RECENT ? 'active' : ''}
+                  onClick={() => setActiveTab(TAB_RECENT)}
+                >
+                  最新评论
+                </button>
+                <button
+                  type="button"
                   className={activeTab === TAB_FEATURED ? 'active' : ''}
                   onClick={() => setActiveTab(TAB_FEATURED)}
                 >
                   精选评论
-                </button>
-                <button
-                  type="button"
-                  className={activeTab === TAB_HOT ? 'active' : ''}
-                  onClick={() => setActiveTab(TAB_HOT)}
-                >
-                  热门评论
                 </button>
               </div>
               <PopupMain>
@@ -180,9 +181,9 @@ export function MessageBox() {
                   </div>
                 ) : (
                   <MessageList
-                    items={activeTab === TAB_FEATURED ? featured : hot}
+                    items={activeTab === TAB_FEATURED ? featured : recent}
                     emptyText={
-                      activeTab === TAB_FEATURED ? '暂无精选评论' : '暂无热门评论'
+                      activeTab === TAB_FEATURED ? '暂无精选评论' : '暂无最新评论'
                     }
                   />
                 )}

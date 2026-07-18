@@ -60,6 +60,7 @@ function MediaUploader() {
 export function PageHeader(props) {
   const { isAnonymous } = useUser();
   const { visibleMobileSearch } = useLayout();
+  const isHomePath = typeof window !== 'undefined' && ['/', '/index.html'].includes(window.location.pathname);
 
   useEffect(() => {
     Alerts();
@@ -80,7 +81,7 @@ export function PageHeader(props) {
         <SearchField />
         <HeaderRight />
       </header>
-      {hasSeenWelcome() && <WelcomeHeader />}
+      {hasSeenWelcome() && !isHomePath && <WelcomeHeader />}
     </>
   );
 }

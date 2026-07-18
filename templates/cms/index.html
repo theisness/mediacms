@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block topimports %}
+<link href="{% static "css/index.css" %}" rel="preload" as="style">
+<link href="{% static "css/index.css" %}" rel="stylesheet">
+{% endblock topimports %}
+
 {% block headermeta %}
 
 <link rel="canonical" href="{{FRONTEND_HOST}}{{media_object.get_absolute_url}}">

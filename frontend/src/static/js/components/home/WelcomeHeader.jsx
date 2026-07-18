@@ -24,7 +24,7 @@ export function WelcomeHeader() {
     <section className="welcome-header-banner">
       <div
         className="welcome-header-banner-bg"
-        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero.png')" }}
+        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero.webp')" }}
       />
       <div className="welcome-header-banner-content">
         <span className="welcome-header-banner-title">莲花影院</span>

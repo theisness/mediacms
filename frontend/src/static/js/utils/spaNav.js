@@ -274,13 +274,13 @@ export function navigate(url, pushState = true) {
       return updateStylesheets(newDoc).then(() => {
         swapPageContent(newDoc);
 
-        // 按顺序加载新页面所需脚本，页面入口会渲染 #page-*
-        return loadScriptsInOrder(headScripts).then(() => {
-          // 页面入口脚本（head 中最后一个 src）需要始终重新执行，
-          // 否则返回已访问过的页面时内容区不会被重新渲染。
-          const entrySrc = headScripts[headScripts.length - 1];
-          return entrySrc ? executeScript(entrySrc) : Promise.resolve();
-        }).then(() => {
+        // 公共 chunk 只加载一次；页面入口脚本始终重新执行，
+        // 这样返回已访问过的页面时内容区仍会重新渲染，且不会重复执行入口。
+        const entrySrc = headScripts[headScripts.length - 1];
+        const sharedScripts = entrySrc ? headScripts.slice(0, -1) : headScripts;
+        return loadScriptsInOrder(sharedScripts)
+          .then(() => (entrySrc ? executeScript(entrySrc) : Promise.resolve()))
+          .then(() => {
           if (pushState) {
             window.history.pushState({ lotusPjax: true, url: targetUrl.href }, '', targetUrl.href);
           }
@@ -297,11 +297,13 @@ export function navigate(url, pushState = true) {
 
           hideTransition();
           isNavigating = false;
-        });
+          });
       });
     })
     .catch((err) => {
       console.warn('[PJAX] Navigation failed, falling back to full load:', err);
+      hideTransition();
+      isNavigating = false;
       window.location.assign(targetUrl.href);
     });
 }

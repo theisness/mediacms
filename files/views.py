@@ -1322,7 +1322,9 @@ class CommentList(APIView):
         allowed_orderings = {"add_date", "-add_date", "likes", "-likes"}
         if ordering_param in allowed_orderings:
             if ordering_param in ("likes", "-likes"):
-                comments = comments.annotate(likes_count=Count("commentactions")).order_by(
+                comments = comments.annotate(
+                    likes_count=Count("commentactions", filter=Q(commentactions__action="like"))
+                ).order_by(
                     ordering_param.replace("likes", "likes_count")
                 )
             else:

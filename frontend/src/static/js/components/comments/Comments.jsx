@@ -434,7 +434,7 @@ function Comment(props) {
     return `${year}-${month}-${day} ${hours}:${minutes}`;
   }
   return (
-    <div className="comment">
+    <div className="comment" id={props.comment_id ? `comment-${props.comment_id}` : undefined}>
       {/* 渲染本评论，子评论更小，主评论更大 */}
       {props.is_sub ? renderSubComments():renderMainComments()}
       {/* 如果 showReplyForm 为 true，则显示 CommentForm */}
@@ -710,6 +710,17 @@ export default function CommentsList(props) {
         (MediaPageStore.get('media-data').enable_comments || MemberContext._currentValue.can.editMedia),
     );
   }, [comments]);
+
+  // 消息盒子跳转到 /v/{token}#comment-{uid} 时，评论是异步加载的；
+  // 等列表挂载后再滚动一次，确保锚点在真实 DOM 中生效。
+  useEffect(() => {
+    if (!displayComments || !window.location.hash) return;
+    const anchorId = decodeURIComponent(window.location.hash.slice(1));
+    const anchor = document.getElementById(anchorId);
+    if (anchor) {
+      requestAnimationFrame(() => anchor.scrollIntoView({ block: 'center' }));
+    }
+  }, [comments, displayComments]);
 
   useEffect(() => {
     MediaPageStore.on('comments_load', onCommentsLoad);

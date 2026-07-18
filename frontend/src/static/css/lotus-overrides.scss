@@ -3,6 +3,11 @@
 // ============================================================
 
 // ---- 通用过渡 ----
+html,
+body {
+  overflow-x: hidden;
+}
+
 body,
 body * {
   transition-property: background-color, border-color, color, box-shadow;
