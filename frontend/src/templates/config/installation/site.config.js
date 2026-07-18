@@ -13,11 +13,11 @@ module.exports = {
   logo: {
     lightMode: {
       svg: '',
-      img: './static/images/logo_light.png',
+      img: './static/images/lotus-brand/logo_lotus_paper.png',
     },
     darkMode: {
       svg: '',
-      img: './static/images/logo_dark.png',
+      img: './static/images/lotus-brand/logo_lotus.png',
     },
   },
   pages: {

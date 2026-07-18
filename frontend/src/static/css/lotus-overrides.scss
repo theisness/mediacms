@@ -1,0 +1,479 @@
+// ============================================================
+// 莲花影院全局样式覆盖
+// ============================================================
+
+// ---- 通用过渡 ----
+body,
+body * {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: var(--lotus-transition);
+}
+
+// ---- 页面级 ----
+.page-main {
+  background-color: var(--body-bg-color);
+}
+
+.page-main-inner {
+  background-color: var(--body-bg-color);
+  min-height: calc(100vh - var(--lotus-header-height));
+}
+
+// ---- 头部 ----
+.page-header {
+  background-color: var(--header-bg-color);
+  border-bottom: 1px solid var(--lotus-border);
+  box-shadow: 0 1px 0 var(--lotus-border);
+  height: var(--lotus-header-height);
+}
+
+.page-header-left .logo {
+  img {
+    max-height: 36px;
+    width: auto;
+  }
+}
+
+.page-header-right {
+  .circle-icon-button {
+    color: var(--header-circle-button-color);
+    background-color: transparent;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: var(--nav-menu-item-hover-bg-color);
+      color: var(--lotus-gold-light);
+    }
+  }
+
+  .sign-in,
+  .register-link {
+    border-radius: var(--lotus-button-radius);
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    transition: all var(--lotus-transition);
+  }
+
+  .sign-in {
+    color: var(--lotus-gold);
+    border: 1px solid var(--lotus-gold);
+    background-color: transparent;
+
+    &:hover {
+      background-color: var(--lotus-gold);
+      color: var(--lotus-bg-deep);
+    }
+  }
+
+  .register-link {
+    color: var(--lotus-bg-deep);
+    background-color: var(--lotus-gold);
+    border: 1px solid var(--lotus-gold);
+
+    &:hover {
+      background-color: var(--lotus-gold-light);
+      border-color: var(--lotus-gold-light);
+    }
+  }
+}
+
+// ---- 搜索框 ----
+.search-field {
+  background-color: var(--search-field-input-bg-color);
+  border: 1px solid var(--search-field-input-border-color);
+  border-radius: var(--lotus-button-radius);
+  overflow: hidden;
+
+  input {
+    color: var(--search-field-input-text-color);
+    background-color: transparent;
+
+    &::placeholder {
+      color: var(--lotus-text-muted);
+    }
+  }
+
+  .search-field-submit {
+    color: var(--search-field-submit-text-color);
+    background-color: var(--search-field-submit-bg-color);
+    border-color: var(--search-field-submit-border-color);
+    border-radius: 0 var(--lotus-button-radius) var(--lotus-button-radius) 0;
+
+    &:hover {
+      background-color: var(--search-field-submit-hover-bg-color);
+      border-color: var(--search-field-submit-hover-border-color);
+    }
+  }
+}
+
+// ---- 侧边栏 ----
+.page-sidebar {
+  background-color: var(--sidebar-bg-color);
+  border-right: 1px solid var(--lotus-border);
+  width: var(--lotus-sidebar-width);
+
+  @media screen and (max-width: 1219px) {
+    box-shadow: 4px 0 24px var(--lotus-shadow);
+  }
+}
+
+.page-sidebar-inner {
+  padding: 0.75rem 0;
+}
+
+.nav-menu {
+  padding: 0.5rem 0;
+
+  + .nav-menu {
+    border-top: 1px solid var(--sidebar-nav-border-color);
+  }
+
+  nav ul {
+    padding: 0 0.75rem;
+  }
+
+  li {
+    margin: 0.25rem 0;
+    border-radius: 8px;
+
+    a,
+    button {
+      color: var(--sidebar-nav-item-text-color);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all var(--lotus-transition);
+
+      .material-icons,
+      i.material-icons {
+        color: var(--sidebar-nav-item-icon-color);
+        transition: color var(--lotus-transition);
+      }
+
+      &:hover {
+        background-color: var(--nav-menu-item-hover-bg-color);
+        color: var(--lotus-gold-light);
+
+        .material-icons,
+        i.material-icons {
+          color: var(--lotus-gold);
+        }
+      }
+    }
+
+    &.active {
+      background-color: var(--nav-menu-active-item-bg-color);
+
+      a,
+      button {
+        color: var(--lotus-gold-light);
+
+        .material-icons,
+        i.material-icons {
+          color: var(--lotus-gold);
+        }
+      }
+    }
+  }
+}
+
+// ---- 主题切换器 ----
+.sidebar-theme-switcher {
+  padding: 0.75rem;
+
+  .sidebar-theme-switcher-inner {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--lotus-bg-deep);
+    border-radius: 12px;
+    border: 1px solid var(--lotus-border);
+  }
+
+  .theme-option {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.25rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background-color: transparent;
+    color: var(--lotus-text-muted);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all var(--lotus-transition);
+
+    &:hover {
+      background-color: var(--nav-menu-item-hover-bg-color);
+      color: var(--lotus-text);
+    }
+
+    &.active {
+      border-color: var(--lotus-gold);
+      background-color: var(--nav-menu-active-item-bg-color);
+      color: var(--lotus-gold-light);
+    }
+  }
+
+  .theme-swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--lotus-border-strong);
+  }
+
+  .theme-label {
+    white-space: nowrap;
+  }
+}
+
+// ---- 媒体卡片 ----
+.item {
+  background-color: var(--item-bg-color);
+  border-radius: var(--lotus-card-radius);
+  overflow: hidden;
+  border: 1px solid var(--lotus-border);
+  transition: transform var(--lotus-transition), box-shadow var(--lotus-transition), border-color var(--lotus-transition);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px var(--lotus-shadow);
+    border-color: var(--lotus-border-strong);
+  }
+
+  .item-thumb {
+    background-color: var(--item-thumb-bg-color);
+    border-radius: var(--lotus-card-radius) var(--lotus-card-radius) 0 0;
+  }
+
+  .item-content {
+    padding: 0.75rem;
+  }
+
+  .item-title {
+    color: var(--item-title-text-color);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .item-meta {
+    color: var(--item-meta-text-color);
+    font-size: 12px;
+    margin-top: 0.375rem;
+  }
+}
+
+// ---- 媒体列表行标题 ----
+.media-list-row {
+  border-bottom: 1px solid var(--media-list-row-border-color);
+
+  .media-list-header {
+    h2,
+    .media-list-title {
+      color: var(--lotus-text);
+      font-family: 'Source Han Serif CN', 'Noto Serif SC', serif;
+      font-weight: 600;
+    }
+
+    .view-all {
+      color: var(--lotus-gold);
+      font-weight: 500;
+
+      &:hover {
+        color: var(--lotus-gold-light);
+      }
+    }
+  }
+}
+
+// ---- 按钮 ----
+.button-link,
+button[type="submit"],
+.primaryAction,
+.secondaryAction {
+  border-radius: var(--lotus-button-radius);
+  transition: all var(--lotus-transition);
+}
+
+.button-link {
+  background-color: var(--lotus-gold);
+  border-color: var(--lotus-gold);
+  color: var(--lotus-bg-deep);
+
+  &:hover {
+    background-color: var(--lotus-gold-light);
+    border-color: var(--lotus-gold-light);
+  }
+}
+
+// ---- 弹层 ----
+.popup {
+  background-color: var(--popup-bg-color);
+  border: 1px solid var(--lotus-border);
+  border-radius: var(--lotus-card-radius);
+  box-shadow: 0 16px 48px var(--lotus-shadow);
+
+  .popup-top {
+    background-color: var(--popup-top-bg-color);
+    color: var(--popup-top-text-color);
+    border-radius: var(--lotus-card-radius) var(--lotus-card-radius) 0 0;
+  }
+}
+
+// ---- 用户菜单 ----
+.user-menu-top-link {
+  color: var(--lotus-text);
+
+  .username {
+    color: var(--lotus-gold-light);
+  }
+
+  &:hover {
+    color: var(--lotus-text);
+  }
+}
+
+// ---- 评论 ----
+.comments-form {
+  background-color: var(--item-bg-color);
+  border: 1px solid var(--lotus-border);
+  border-radius: var(--lotus-card-radius);
+  padding: 1rem;
+
+  .form-textarea-wrap {
+    border-color: var(--comments-textarea-wrapper-border-color);
+    border-radius: 8px;
+
+    &.focused {
+      border-color: var(--lotus-gold);
+      box-shadow: 0 0 0 2px rgba(201, 168, 106, 0.15);
+    }
+  }
+}
+
+.comment {
+  border-bottom: 1px solid var(--comments-list-inner-border-color);
+
+  .comment-author {
+    color: var(--comment-author-text-color);
+    font-weight: 500;
+  }
+
+  .comment-date {
+    color: var(--comment-date-text-color);
+  }
+
+  .comment-text {
+    color: var(--comment-text-color);
+  }
+}
+
+// ---- 用户表单 ----
+.user-action-form-inner {
+  border-radius: var(--lotus-card-radius);
+  border: 1px solid var(--lotus-border);
+  box-shadow: 0 12px 40px var(--lotus-shadow);
+
+  h1 {
+    color: var(--lotus-gold-light);
+    font-family: 'Source Han Serif CN', 'Noto Serif SC', serif;
+  }
+
+  input,
+  textarea,
+  select {
+    border-radius: 8px;
+    border-color: var(--input-border-color);
+    background-color: var(--input-bg-color);
+    color: var(--input-color);
+
+    &:focus {
+      border-color: var(--lotus-gold);
+      box-shadow: 0 0 0 2px rgba(201, 168, 106, 0.15);
+    }
+  }
+}
+
+// ---- 移动端侧边栏覆盖层 ----
+.page-sidebar-content-overlay {
+  background-color: var(--lotus-overlay);
+}
+
+// ---- Material 图标颜色兜底 ----
+.material-icons,
+i.material-icons {
+  color: inherit;
+}
+
+// ---- 滚动条 ----
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--lotus-bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--lotus-border-strong);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--lotus-gold-dim);
+  }
+}
+
+// ---- 加载动画 ----
+.spinner-loader {
+  color: var(--spinner-loader-color);
+}
+
+// ---- 空状态 ----
+.empty-media {
+  .welcome-title {
+    color: var(--lotus-gold-light);
+    font-family: 'Source Han Serif CN', 'Noto Serif SC', serif;
+  }
+
+  .start-uploading {
+    color: var(--lotus-text-muted);
+  }
+}
+
+// ---- PJAX 过渡遮罩 ----
+#lotus-pjax-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--lotus-bg-deep);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+
+  &.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lotus-pjax-spinner {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--lotus-border);
+    border-top-color: var(--lotus-gold);
+    animation: lotus-spin 0.9s linear infinite;
+  }
+}
+
+@keyframes lotus-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

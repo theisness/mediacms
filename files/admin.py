@@ -14,7 +14,9 @@ from .models import (
 
 class CommentAdmin(admin.ModelAdmin):
     search_fields = ["text"]
-    list_display = ["text", "add_date", "user", "media"]
+    list_display = ["text", "add_date", "user", "media", "is_featured"]
+    list_filter = ["is_featured"]
+    list_editable = ["is_featured"]
     ordering = ("-add_date",)
     readonly_fields = ("user", "media", "parent")
 

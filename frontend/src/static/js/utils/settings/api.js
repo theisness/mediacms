@@ -31,6 +31,7 @@ export function init(base_url, endpoints) {
     recommended: endpoints.media + '?show=recommended',
     playlists: endpoints.playlists,
     users: endpoints.members,
+    comments: endpoints.comments,
     user: {
       liked: endpoints.liked,
       history: endpoints.history,

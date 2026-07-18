@@ -1492,6 +1492,8 @@ class Comment(MPTTModel):
 
     uid = models.UUIDField(unique=True, default=uuid.uuid4)
 
+    is_featured = models.BooleanField(default=False, verbose_name="精选")
+
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, db_index=True)
 
     class MPTTMeta:

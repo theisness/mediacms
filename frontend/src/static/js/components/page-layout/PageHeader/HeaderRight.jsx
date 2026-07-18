@@ -4,6 +4,7 @@ import { PageStore } from '../../../utils/stores/';
 import { HeaderConsumer, MemberConsumer, LinksConsumer } from '../../../utils/contexts/';
 import { CircleIconButton, MaterialIcon, NavigationContentApp, NavigationMenuList, PopupTop, PopupMain, UserThumbnail } from '../../_shared';
 import { HeaderThemeSwitcher } from './HeaderThemeSwitcher';
+import { MessageBox } from '../../notifications/MessageBox';
 import { translateString } from '../../../utils/helpers/';
 
 function headerPopupPages(user, popupNavItems, hasHeaderThemeSwitcher) {
@@ -141,6 +142,8 @@ export function HeaderRight(props) {
                     </div>
 
                     <UploadMediaButton user={user} links={links} />
+
+                    {!user.is.anonymous && <MessageBox />}
 
                     <div
                       className={

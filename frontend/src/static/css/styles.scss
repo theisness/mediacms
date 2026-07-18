@@ -1,7 +1,8 @@
 // @import '~compass-mixins';
+@import './lotus-tokens.scss';
 @import './includes/_variables.scss';
 @import './includes/_variables_dimensions.scss';
-@import './config/index.scss';
+// @import './config/index.scss'; // 旧 light/dark 主题由 lotus-tokens 接管
 @import './includes/_theme_color.scss';
 @import '~normalize.css/normalize.css';
 
@@ -35,6 +36,7 @@ body {
 
 @import './includes/typography/_typography.scss';
 @import './includes/form_controls/_form_controls.scss';
+@import './lotus-overrides.scss';
 
 a {
   color: var(--theme-color, var(--default-theme-color));

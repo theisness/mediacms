@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchQuery
 from django.core.mail import EmailMessage
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from drf_yasg import openapi as openapi
@@ -1302,7 +1302,7 @@ class CommentList(APIView):
     def get(self, request, format=None):
         pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
         paginator = pagination_class()
-        comments = Comment.objects.filter(media__state="public").order_by("-add_date")
+        comments = Comment.objects.filter(media__state="public")
         comments = comments.prefetch_related("user")
         comments = comments.prefetch_related("media")
         params = self.request.query_params
@@ -1311,6 +1311,24 @@ class CommentList(APIView):
             user_queryset = User.objects.all()
             user = get_object_or_404(user_queryset, username=author_param)
             comments = comments.filter(user=user)
+
+        is_featured_param = params.get("is_featured", "").strip().lower()
+        if is_featured_param in ("true", "1"):
+            comments = comments.filter(is_featured=True)
+        elif is_featured_param in ("false", "0"):
+            comments = comments.filter(is_featured=False)
+
+        ordering_param = params.get("ordering", "").strip()
+        allowed_orderings = {"add_date", "-add_date", "likes", "-likes"}
+        if ordering_param in allowed_orderings:
+            if ordering_param in ("likes", "-likes"):
+                comments = comments.annotate(likes_count=Count("commentactions")).order_by(
+                    ordering_param.replace("likes", "likes_count")
+                )
+            else:
+                comments = comments.order_by(ordering_param)
+        else:
+            comments = comments.order_by("-add_date")
 
         page = paginator.paginate_queryset(comments, request)
 

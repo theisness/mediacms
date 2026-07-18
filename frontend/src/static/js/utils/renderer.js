@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { ThemeProvider, applyInitialTheme } from './contexts/ThemeContext';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { UserProvider } from './contexts/UserContext';
+import './spaNav'; // 自动启用 PJAX 无刷新导航
+
+// 在 React 首次渲染前应用主题，避免闪白/闪错主题
+applyInitialTheme();
 
 const AppProviders = ({ children }) => (
   <LayoutProvider>
@@ -14,12 +18,25 @@ const AppProviders = ({ children }) => (
 
 import { PageHeader, PageSidebar } from '../components/page-layout';
 
+const mountedRoots = {
+  header: false,
+  sidebar: false,
+};
+
 export function renderPage(idSelector, PageComponent) {
   const appHeader = document.getElementById('app-header');
   const appSidebar = document.getElementById('app-sidebar');
   const appContent = idSelector ? document.getElementById(idSelector) : undefined;
 
+  // SPA 导航时，header/sidebar 已经挂载，只重新渲染内容区，避免闪烁
   if (appContent && PageComponent) {
+    if (!mountedRoots.header && appHeader) {
+      mountedRoots.header = true;
+    }
+    if (!mountedRoots.sidebar && appSidebar) {
+      mountedRoots.sidebar = true;
+    }
+
     ReactDOM.render(
       <AppProviders>
         {appHeader ? ReactDOM.createPortal(<PageHeader />, appHeader) : null}
@@ -36,6 +53,8 @@ export function renderPage(idSelector, PageComponent) {
       </AppProviders>,
       appSidebar
     );
+    mountedRoots.header = true;
+    mountedRoots.sidebar = true;
   } else if (appHeader) {
     ReactDOM.render(
       <LayoutProvider>
@@ -47,6 +66,7 @@ export function renderPage(idSelector, PageComponent) {
       </LayoutProvider>,
       appSidebar
     );
+    mountedRoots.header = true;
   } else if (appSidebar) {
     ReactDOM.render(
       <AppProviders>
@@ -54,6 +74,7 @@ export function renderPage(idSelector, PageComponent) {
       </AppProviders>,
       appSidebar
     );
+    mountedRoots.sidebar = true;
   }
 }
 
@@ -63,4 +84,17 @@ export function renderEmbedPage(idSelector, PageComponent) {
   if (appContent && PageComponent) {
     ReactDOM.render(<PageComponent />, appContent);
   }
+}
+
+export function isHeaderMounted() {
+  return mountedRoots.header;
+}
+
+export function isSidebarMounted() {
+  return mountedRoots.sidebar;
+}
+
+export function resetMountedRoots() {
+  mountedRoots.header = false;
+  mountedRoots.sidebar = false;
 }

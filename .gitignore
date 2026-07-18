@@ -14,9 +14,10 @@ static/drf-yasg
 cms/local_settings.py
 deploy/docker/local_settings.py
 yt.readme.md
+__pycache__/
+*.pyc
 .idea/
 .github/
-__pycache__/
 static-bak/
 venv/
-static/
+/static/

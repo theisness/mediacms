@@ -5,6 +5,7 @@ import { MediaListRow } from '../components/MediaListRow';
 import { MediaMultiListWrapper } from '../components/MediaMultiListWrapper';
 import { ItemListAsync } from '../components/item-list/ItemListAsync.jsx';
 import { InlineSliderItemListAsync } from '../components/item-list/InlineSliderItemListAsync.jsx';
+import { WelcomeHero } from '../components/home/WelcomeHero';
 import { Page } from './Page';
 import { translateString } from '../utils/helpers/';
 
@@ -13,10 +14,10 @@ const EmptyMedia: React.FC = ({}) => {
     <LinksConsumer>
       {(links) => (
         <div className="empty-media">
-          <div className="welcome-title">Welcome to MediaCMS!</div>
-          <div className="start-uploading">Start uploading media and sharing your work!</div>
-          <a href={links.user.addMedia} title="Upload media" className="button-link">
-            <i className="material-icons" data-icon="video_call"></i>UPLOAD MEDIA
+          <div className="welcome-title">莲池静候佳作</div>
+          <div className="start-uploading">尚无公开影片，成为第一位播种者吧。</div>
+          <a href={links.user.addMedia} title="上传影片" className="button-link">
+            <i className="material-icons" data-icon="video_call"></i>上传影片
           </a>
         </div>
       )}
@@ -78,6 +79,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   return (
     <Page id={id}>
+      <WelcomeHero />
       <LinksConsumer>
         {(links) => (
           <ApiUrlConsumer>
