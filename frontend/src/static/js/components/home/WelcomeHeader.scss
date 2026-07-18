@@ -14,20 +14,48 @@
   justify-content: center;
   overflow: hidden;
   background-color: var(--lotus-bg-deep);
+
+  // 顶部连续遮罩保证导航可读，向下自然淡出，不在 header 底部产生分界线。
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 104px;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(6, 11, 26, 0.68) 0%,
+      rgba(6, 11, 26, 0.34) 52%,
+      rgba(6, 11, 26, 0) 100%
+    );
+  }
+
+  // 横幅底部渐隐进页面底色，避免 hero 与内容区突然硬切。
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 42px;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(18, 23, 42, 0) 0%, var(--body-bg-color) 100%);
+  }
 }
 
 .welcome-header-banner-bg {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background-size: cover;
-  // 横幅比例很宽，取莲池、佛像与放映机所在的视觉中段，避免只剩天空/胶片轮。
-  background-position: center 60%;
-  opacity: 0.45;
+  // 把佛陀头部下移到 header 安全区外，同时保留莲池与放映机。
+  background-position: center 42%;
+  opacity: 0.56;
 }
 
 .welcome-header-banner-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,7 +80,7 @@
   right: 1rem;
   top: calc(var(--header-height, 56px) + 60px);
   transform: translateY(-50%);
-  z-index: 2;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;

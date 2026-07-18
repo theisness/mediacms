@@ -32,10 +32,16 @@ body * {
   height: var(--lotus-header-height);
 
   &.welcome-banner-active {
-    background: linear-gradient(180deg, rgba(8, 13, 29, 0.72) 0%, rgba(8, 13, 29, 0.28) 100%);
-    border-bottom-color: rgba(201, 168, 106, 0.2);
+    // 参考 Bilibili：header 本身透明覆盖在 banner 上，明暗遮罩交给整张 hero，
+    // 避免 backdrop blur / 独立底色在 56px 处形成一条硬边。
+    background: transparent;
+    border-bottom-color: transparent;
     box-shadow: none;
-    backdrop-filter: blur(6px);
+    backdrop-filter: none;
+
+    &::after {
+      display: none;
+    }
   }
 }
 
