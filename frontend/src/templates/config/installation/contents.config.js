@@ -22,7 +22,7 @@ module.exports = {
     ],
     belowNavMenu: null,
     footer:
-      '莲花影院 · 以影像传递智慧与安宁<br>' +
+      '莲花影院 · 一花一世界，一影一菩提<br>' +
       '<a href="https://beian.miit.gov.cn/" title="赣ICP备2025053972号-3" target="_blank">赣ICP备2025053972号-3</a>',
   },
   uploader: {

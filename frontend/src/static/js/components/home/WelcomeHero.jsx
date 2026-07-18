@@ -6,6 +6,15 @@ import './WelcomeHero.scss';
 
 export const WelcomeHero = () => {
   const scrollToContent = () => {
+    const isAbout =
+      typeof window !== 'undefined' &&
+      (window.location.pathname === '/about.html' || window.location.pathname === '/about');
+
+    if (isAbout) {
+      window.location.href = './index.html';
+      return;
+    }
+
     const content = document.querySelector('.media-list-wrapper');
     if (content) {
       content.scrollIntoView({ behavior: 'smooth' });

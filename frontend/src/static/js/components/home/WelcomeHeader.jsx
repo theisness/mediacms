@@ -1,6 +1,5 @@
 import React from 'react';
-import { useLocation } from '../../../utils/hooks/'; // not existing? We can avoid.
-import { MaterialIcon } from '../../_shared';
+import { MaterialIcon } from '../_shared';
 
 import './WelcomeHeader.scss';
 
@@ -23,7 +22,10 @@ export function WelcomeHeader() {
 
   return (
     <section className="welcome-header-banner">
-      <div className="welcome-header-banner-bg" />
+      <div
+        className="welcome-header-banner-bg"
+        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero.png')" }}
+      />
       <div className="welcome-header-banner-content">
         <span className="welcome-header-banner-title">莲花影院</span>
         <span className="welcome-header-banner-subtitle">清净视听，以影像传递智慧与安宁</span>
