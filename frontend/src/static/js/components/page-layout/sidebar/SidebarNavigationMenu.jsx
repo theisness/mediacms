@@ -37,15 +37,6 @@ export function SidebarNavigationMenu() {
   function MainMenuFirstSection() {
     const items = [];
 
-    if (!sidebar.hideHomeLink) {
-      items.push({
-        link: links.home,
-        icon: 'home',
-        text: translateString('Home'),
-        className: 'nav-item-home',
-      });
-    }
-
     if (PageStore.get('config-enabled').pages.featured && PageStore.get('config-enabled').pages.featured.enabled) {
       items.push({
         link: links.featured,

@@ -50,6 +50,21 @@ body * {
     max-height: 36px;
     width: auto;
   }
+
+  &.header-home-link a {
+    color: var(--lotus-gold-light);
+    font-family: 'Source Han Serif CN', 'Noto Serif SC', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: var(--header-height, 56px);
+    text-decoration: none;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+
+    &:hover {
+      color: var(--lotus-gold);
+    }
+  }
 }
 
 .page-header-right {
