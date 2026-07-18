@@ -5,23 +5,23 @@ module.exports = {
   sidebar: {
     navMenuItems: [
       {
-        text: 'About',
+        text: '关于',
         link: './about.html',
         icon: 'contact_support',
       },
       {
-        text: 'Terms',
+        text: '条款',
         link: './terms.html',
         icon: 'description',
       },
       {
-        text: 'Contact',
+        text: '联系',
         link: './contact.html',
         icon: 'alternate_email',
       },
     ],
     belowNavMenu: null,
-    footer: 'Powered by <a href="//demo.mediacms.io" title="mediacms.io" target="_blank">mediacms.io</a>',
+    footer: '莲花影院 · 清净视听',
   },
   uploader: {
     belowUploadArea: '',
@@ -29,10 +29,10 @@ module.exports = {
   },
   notifications: {
     messages: {
-      addToLiked: 'Added to liked media',
-      removeFromLiked: 'Removed from liked media',
-      addToDisliked: 'Added to disliked media',
-      removeFromDisliked: 'Removed from disliked media',
+      addToLiked: '已加入喜欢的影片',
+      removeFromLiked: '已从喜欢的影片移除',
+      addToDisliked: '已加入不喜欢的影片',
+      removeFromDisliked: '已从不喜欢的影片移除',
     },
   },
 };
