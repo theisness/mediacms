@@ -104,6 +104,9 @@ class PageStore extends EventEmitter {
       case 'config-contents':
         r = mediacms_config.contents;
         break;
+      case 'config-api':
+        r = mediacms_config.api;
+        break;
       case 'config-enabled':
         r = mediacms_config.enabled;
         break;
