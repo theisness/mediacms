@@ -132,14 +132,16 @@ body * {
   height: var(--header-height, 56px);
   margin-left: 0.25rem;
 
-  a {
+  // .page-header 前缀提高优先级：PageHeader.scss 里同名规则的 font-size:14px 在产物中更靠后。
+  .page-header & a,
+  & a {
     display: inline-flex;
     align-items: center;
     height: 34px;
     padding: 0 0.7rem;
     border-radius: 999px;
     color: var(--lotus-text-muted);
-    font-size: 0.95rem;
+    font-size: 1rem;
     text-decoration: none;
     white-space: nowrap;
     transition: all var(--lotus-transition);
