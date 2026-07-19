@@ -48,8 +48,8 @@
   inset: 0;
   z-index: 0;
   background-size: cover;
-  // 把佛陀头部下移到 header 安全区外，同时保留莲池与放映机。
-  background-position: center 76%;
+  // 取景位置：佛陀头部在图中约 43-48% 高度处，46% 让佛头完整落在横幅可视窗内。
+  background-position: center 46%;
   opacity: 0.56;
 }
 
