@@ -611,18 +611,6 @@ i.material-icons {
   filter: drop-shadow(0 4px 16px var(--lotus-shadow));
 }
 
-.lotus-about-mark-paper {
-  display: none;
-}
-
-:root[data-theme='paper'] .lotus-about-mark-dark {
-  display: none;
-}
-
-:root[data-theme='paper'] .lotus-about-mark-paper {
-  display: block;
-}
-
 .lotus-about-title {
   margin: 0;
   font-size: 2rem;
