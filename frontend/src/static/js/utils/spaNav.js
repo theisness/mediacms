@@ -25,6 +25,18 @@ const BLACKLIST = [
 ];
 
 let isNavigating = false;
+// 导航进行中又来了新请求（典型：连续快速点后退，两个 popstate 连发）时，
+// 不能直接丢弃——地址栏已被浏览器改掉，丢弃会造成 URL 与内容错位；排队到当前导航结束后执行。
+let pendingNav = null;
+
+function finishNavigation() {
+  isNavigating = false;
+  if (pendingNav) {
+    const next = pendingNav;
+    pendingNav = null;
+    navigate(next.url, next.pushState);
+  }
+}
 
 function isBlacklisted(url) {
   const pathname = url.pathname.replace(/\/$/, '') || '/';
@@ -235,7 +247,10 @@ function restoreTheme() {
 }
 
 export function navigate(url, pushState = true) {
-  if (isNavigating) return;
+  if (isNavigating) {
+    pendingNav = { url, pushState };
+    return;
+  }
   isNavigating = true;
 
   const targetUrl = url instanceof URL ? url : new URL(url, window.location.href);
@@ -270,6 +285,12 @@ export function navigate(url, pushState = true) {
 
       updateMeta(newDoc);
 
+      // 必须先更新地址栏再执行页面入口脚本：搜索页等入口在初始化时读取
+      // window.location 的查询参数，若 pushState 靠后，入口会拿到上一页的 URL。
+      if (pushState) {
+        window.history.pushState({ lotusPjax: true, url: targetUrl.href }, '', targetUrl.href);
+      }
+
       // 先同步配置，再加载脚本；页面入口会依赖 window.MediaCMS
       evalMediaCmsConfig(newDoc);
 
@@ -284,10 +305,6 @@ export function navigate(url, pushState = true) {
         return loadScriptsInOrder(sharedScripts)
           .then(() => (entrySrc ? executeScript(entrySrc) : Promise.resolve()))
           .then(() => {
-          if (pushState) {
-            window.history.pushState({ lotusPjax: true, url: targetUrl.href }, '', targetUrl.href);
-          }
-
           restoreTheme();
           updateActiveNavigation(targetUrl.pathname);
 
@@ -302,7 +319,7 @@ export function navigate(url, pushState = true) {
           window.dispatchEvent(new CustomEvent('lotus:navigation-complete', { detail: { url: targetUrl.href } }));
 
           hideTransition();
-          isNavigating = false;
+          finishNavigation();
           });
       });
     })
@@ -310,6 +327,7 @@ export function navigate(url, pushState = true) {
       console.warn('[PJAX] Navigation failed, falling back to full load:', err);
       hideTransition();
       isNavigating = false;
+      pendingNav = null;
       window.location.assign(targetUrl.href);
     });
 }
@@ -341,12 +359,23 @@ function onLinkClick(ev) {
 function onPopState(ev) {
   if (ev.state && ev.state.lotusPjax && ev.state.url) {
     navigate(ev.state.url, false);
+    return;
   }
+  // 整页加载产生的初始 history 条目没有 lotusPjax state；后退回到它时
+  // 浏览器只改地址栏不动内容，必须兜底导航，否则 URL 与页面错位。
+  navigate(window.location.href, false);
 }
 
 export function initSpaNav() {
   if (window.__lotusPjaxInit) return;
   window.__lotusPjaxInit = true;
+
+  // 给当前（整页加载的）history 条目补上 PJAX 标记，让后退能正确还原内容。
+  try {
+    window.history.replaceState({ lotusPjax: true, url: window.location.href }, '', window.location.href);
+  } catch (e) {
+    /* ignore */
+  }
 
   document.addEventListener('click', onLinkClick);
   window.addEventListener('popstate', onPopState);

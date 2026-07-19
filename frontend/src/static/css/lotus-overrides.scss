@@ -84,6 +84,33 @@ body * {
   }
 }
 
+// 宣纸白主题：横幅上的导航文字弃用大半径「发光」模糊，改金色主题色 + 干净下落阴影。
+:root[data-theme='paper'] .page-header.welcome-banner-active:not(.is-scrolled) {
+  .header-primary-nav a,
+  .page-header-right .circle-icon-button {
+    color: var(--lotus-gold-dim);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85), 0 2px 4px rgba(44, 36, 25, 0.28);
+  }
+
+  .header-primary-nav a:hover,
+  .header-primary-nav a.active {
+    color: var(--lotus-gold);
+  }
+}
+
+// 宣纸白主题：注册实心按钮里 --lotus-bg-deep 是近白色，压在金底上看不清 → 深金底 + 白字。
+:root[data-theme='paper'] .page-header .register-link {
+  color: #ffffff;
+  background-color: var(--lotus-gold-dim);
+  border-color: var(--lotus-gold-dim);
+
+  &:hover {
+    background-color: var(--lotus-gold);
+    border-color: var(--lotus-gold);
+    color: #ffffff;
+  }
+}
+
 .page-header-left .logo {
   img {
     display: block;
@@ -696,4 +723,30 @@ i.material-icons {
 .lotus-about-card-desc {
   font-size: 0.8rem;
   color: var(--lotus-text-sub);
+}
+
+// ---- 视频卡片 → 全屏封面播放转场 ----
+.lotus-media-transition-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background-color: #000;
+  opacity: 0;
+  transition: opacity 0.42s ease;
+}
+
+body.lotus-media-transition-active .lotus-media-transition-backdrop {
+  opacity: 1;
+}
+
+.lotus-media-transition-poster {
+  position: fixed;
+  z-index: 9999;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  transition: all 0.52s cubic-bezier(0.22, 0.8, 0.26, 1);
+  will-change: top, left, width, height;
 }

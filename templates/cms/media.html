@@ -124,6 +124,88 @@
 {% block topimports %}
 <link href="{% static "css/media.css" %}" rel="preload" as="style">
 <link href="{% static "css/media.css" %}" rel="stylesheet">
+<script>
+/* 播放转场落地侧：列表页点击卡片时把封面放大铺满全屏并写入 sessionStorage，
+   这里在首帧前接管——继续全屏显示封面盖住整页刷新，等播放器就绪自动播放，
+   再把封面收进播放器区域淡出，观感上是「封面放大 → 直接开播」。 */
+(function () {
+  var raw = null;
+  try {
+    raw = sessionStorage.getItem('lotusMediaTransition');
+    sessionStorage.removeItem('lotusMediaTransition');
+  } catch (e) { return; }
+  if (!raw) return;
+  var state;
+  try { state = JSON.parse(raw); } catch (e) { return; }
+  if (!state || !state.poster || !state.ts || Date.now() - state.ts > 15000) return;
+
+  var overlay = document.createElement('div');
+  overlay.id = 'lotus-media-landing-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;' +
+    'background-color:#000;background-image:url("' + state.poster.replace(/"/g, '%22') + '");' +
+    'background-size:cover;background-position:center;background-repeat:no-repeat;' +
+    'transition:opacity .45s ease,top .55s cubic-bezier(.22,.8,.26,1),left .55s cubic-bezier(.22,.8,.26,1),' +
+    'width .55s cubic-bezier(.22,.8,.26,1),height .55s cubic-bezier(.22,.8,.26,1);';
+  document.documentElement.appendChild(overlay);
+
+  function finish(collapseRect) {
+    if (!overlay) return;
+    var el = overlay;
+    overlay = null;
+    if (collapseRect) {
+      el.style.top = collapseRect.top + 'px';
+      el.style.left = collapseRect.left + 'px';
+      el.style.width = collapseRect.width + 'px';
+      el.style.height = collapseRect.height + 'px';
+      setTimeout(function () {
+        el.style.opacity = '0';
+        setTimeout(function () { el.remove(); }, 500);
+      }, 380);
+    } else {
+      el.style.opacity = '0';
+      setTimeout(function () { el.remove(); }, 500);
+    }
+  }
+
+  var started = Date.now();
+  function poll() {
+    if (!overlay) return;
+    var video = document.querySelector('#page-media video');
+    if (video) {
+      var playPromise = null;
+      try { playPromise = video.play(); } catch (e) { /* ignore */ }
+      var done = false;
+      var onPlaying = function () {
+        if (done) return;
+        done = true;
+        var host = video.closest('.video-js') || video;
+        finish(host.getBoundingClientRect());
+      };
+      video.addEventListener('playing', onPlaying, { once: true });
+      if (playPromise && playPromise.catch) {
+        playPromise.catch(function () {
+          /* 浏览器拒绝自动播放：直接淡出遮罩，露出带播放键的播放器 */
+          if (!done) { done = true; finish(null); }
+        });
+      }
+      /* 已在播放（play() 立即成功但 playing 事件早于监听）兜底 */
+      setTimeout(function () {
+        if (!done && !video.paused) onPlaying();
+      }, 600);
+      /* 最终兜底：3.5s 内没进入播放也淡出，不能困住用户 */
+      setTimeout(function () { if (!done) { done = true; finish(null); } }, 3500);
+      return;
+    }
+    if (Date.now() - started > 8000) { finish(null); return; }
+    setTimeout(poll, 80);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', poll);
+  } else {
+    poll();
+  }
+})();
+</script>
 {%endblock topimports %}
 
 {% block content %}<div id="page-media"></div>{% endblock content %}

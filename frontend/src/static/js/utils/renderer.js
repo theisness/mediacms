@@ -5,6 +5,7 @@ import { ThemeProvider, applyInitialTheme } from './contexts/ThemeContext';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { UserProvider } from './contexts/UserContext';
 import './spaNav'; // 自动启用 PJAX 无刷新导航
+import './mediaTransition'; // 视频卡片 → 全屏封面播放转场
 
 // 先安装中文默认文案，再渲染，避免英文闪现
 installTranslations();

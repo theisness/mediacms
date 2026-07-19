@@ -66,13 +66,16 @@ class SearchFieldStore extends EventEmitter {
   }
 
   get(type) {
+    // 单例存活于共享 chunk，PJAX 导航不会重建实例；查询参数必须按当前
+    // window.location 实时解析，否则搜索页在无刷新导航后拿到旧 URL 的空参数。
+    const urlvars = getUrlVars();
     switch (type) {
       case 'search-query':
-        return SearchFieldStoreData[this.id].searchQuery;
+        return urlvars['q'] ? decodeURIComponent(urlvars['q']).replace(/\+/g, ' ') : '';
       case 'search-categories':
-        return SearchFieldStoreData[this.id].categoriesQuery;
+        return urlvars['c'] ? decodeURIComponent(urlvars['c']).replace(/\+/g, ' ') : '';
       case 'search-tags':
-        return SearchFieldStoreData[this.id].tagsQuery;
+        return urlvars['t'] ? decodeURIComponent(urlvars['t']).replace(/\+/g, ' ') : '';
     }
     return null;
   }

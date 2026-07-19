@@ -73,6 +73,7 @@ ssh_run "set -e
   cp -a '$DEPLOY_APP/templates/components/footer.html' '$REMOTE_BACKUP/templates/components/'
   cp -a '$DEPLOY_APP/templates/config/installation/site.html' '$REMOTE_BACKUP/templates/config/installation/'
   cp -a '$DEPLOY_APP/templates/cms/add-media.html' '$REMOTE_BACKUP/templates/cms/'
+  cp -a '$DEPLOY_APP/templates/cms/media.html' '$REMOTE_BACKUP/templates/cms/'
   install -d -m 700 '$REMOTE_BACKUP/files'
   cp -a '$DEPLOY_APP/files/models.py' '$DEPLOY_APP/files/views.py' '$DEPLOY_APP/files/admin.py' '$DEPLOY_APP/files/urls.py' '$REMOTE_BACKUP/files/'
   cp -a '$DEPLOY_APP/files/migrations' '$REMOTE_BACKUP/files/'
@@ -98,6 +99,7 @@ echo "[deploy] 5/6 同步模板"
   templates/cms/add-media.html \
   templates/cms/about.html \
   templates/cms/popular-media.html \
+  templates/cms/media.html \
   "$DEPLOY_HOST:$DEPLOY_APP/")
 
 echo "[deploy] 5b/6 同步后端代码并迁移数据库"

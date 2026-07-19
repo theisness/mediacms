@@ -40,11 +40,13 @@ export function WelcomeHeader() {
         aria-hidden="true"
       />
       <div className="welcome-header-banner-content">
-        <img
-          className="welcome-header-banner-wordmark"
-          src="/static/images/lotus-brand/lotus-wordmark-chatgpt.png"
-          alt="莲花影院"
-        />
+        <a className="welcome-header-banner-home-link" href="/" title="回到首页">
+          <img
+            className="welcome-header-banner-wordmark"
+            src="/static/images/lotus-brand/lotus-wordmark-chatgpt.png"
+            alt="莲花影院"
+          />
+        </a>
       </div>
       <button
         type="button"
