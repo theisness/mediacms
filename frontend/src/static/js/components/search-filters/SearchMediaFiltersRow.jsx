@@ -169,7 +169,7 @@ const typeFilters = [
   },
   {
     id: 'pdf',
-    label: 'Pdf',
+    label: 'PDF',
   },
 ];
 

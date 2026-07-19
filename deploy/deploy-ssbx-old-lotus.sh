@@ -70,6 +70,7 @@ ssh_run "set -e
     [ -f "\$f" ] && cp -a "\$f" '$REMOTE_BACKUP/static-root/'
   done
   cp -a '$DEPLOY_APP/templates/base.html' '$REMOTE_BACKUP/templates/'
+  cp -a '$DEPLOY_APP/templates/root.html' '$REMOTE_BACKUP/templates/'
   cp -a '$DEPLOY_APP/templates/components/footer.html' '$REMOTE_BACKUP/templates/components/'
   cp -a '$DEPLOY_APP/templates/config/installation/site.html' '$REMOTE_BACKUP/templates/config/installation/'
   cp -a '$DEPLOY_APP/templates/cms/add-media.html' '$REMOTE_BACKUP/templates/cms/'
@@ -94,6 +95,7 @@ rsync -rlpt --checksum --exclude='*/' -e "ssh -o ProxyCommand=none" \
 echo "[deploy] 5/6 同步模板"
 (cd "$ROOT_DIR" && rsync -rlpt --checksum --relative -e "ssh -o ProxyCommand=none" \
   templates/base.html \
+  templates/root.html \
   templates/components/footer.html \
   templates/config/installation/site.html \
   templates/cms/add-media.html \

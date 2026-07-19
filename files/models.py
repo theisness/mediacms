@@ -336,9 +336,10 @@ class Media(models.Model):
         verbose_name="Upload image",
         help_text="This image will characterize the media",
         upload_to=original_thumbnail_file_path,
-        processors=[ResizeToFit(width=720, height=None)],
+        # 720 宽会把用户上传的高清封面压糊（播放页/转场都是全屏尺寸在用），放宽到 1920。
+        processors=[ResizeToFit(width=1920, height=None, upscale=False)],
         format="JPEG",
-        options={"quality": 85},
+        options={"quality": 92},
         blank=True,
         max_length=500,
     )

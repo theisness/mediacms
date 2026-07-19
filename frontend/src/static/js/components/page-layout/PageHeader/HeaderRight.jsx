@@ -141,7 +141,7 @@ export function HeaderRight(props) {
                 <div className="page-header-right">
                   <div>
                     <div className="mobile-search-toggle">
-                      <CircleIconButton onClick={toggleMobileSearch} aria-label="Search">
+                      <CircleIconButton onClick={toggleMobileSearch} aria-label="搜索">
                         <MaterialIcon type="search" />
                       </CircleIconButton>
                     </div>
@@ -158,7 +158,7 @@ export function HeaderRight(props) {
                     >
                       <PopupTrigger contentRef={popupContentRef}>
                         {user.is.anonymous ? (
-                          <CircleIconButton aria-label="Settings">
+                          <CircleIconButton aria-label="设置">
                             <MaterialIcon type="more_vert" />
                           </CircleIconButton>
                         ) : (

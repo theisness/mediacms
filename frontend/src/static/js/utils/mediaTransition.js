@@ -9,6 +9,9 @@
 const STORAGE_KEY = 'lotusMediaTransition';
 const ANIMATION_MS = 520;
 const NAVIGATE_AT_MS = 420;
+// 高清 poster 最多再等这么久：等到了再跳转，落地页能直接用缓存里的高清图，
+// 不会出现「全屏后闪黑一下」（那是落地遮罩在等一张没缓存的图）。
+const NAVIGATE_DEADLINE_MS = 950;
 
 let transitioning = false;
 
@@ -94,29 +97,31 @@ function startTransition(link, posterInfo) {
   const href = new URL(link.getAttribute('href'), window.location.href).href;
   const posterUrl = posterInfo.url;
   const rect = posterInfo.el.getBoundingClientRect();
-  const state = { poster: posterUrl, ts: Date.now() };
+  // fallback 始终是已缓存的卡片缩略图；hi 只有在真正加载完成后才写入，
+  // 落地页把两张叠层显示，任何时刻都有一张能立即绘制的图，不会闪黑。
+  const state = { poster: posterUrl, fallback: posterUrl, ts: Date.now() };
 
   const { poster } = buildOverlay(rect, posterUrl);
 
-  // 并行抓高清 poster：加载完成即无缝换图（同一元素换 background，无闪烁），
-  // 并写进交接状态供落地页沿用。
-  fetchHiResPoster(mediaToken(href), (hiResUrl) => {
-    state.poster = hiResUrl;
+  const saveState = () => {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (e) {
       /* ignore */
     }
+  };
+  saveState();
+
+  let hiResReady = false;
+  // 并行抓高清 poster：加载完成即无缝换图（叠层 background，下层缩略图兜底）。
+  fetchHiResPoster(mediaToken(href), (hiResUrl) => {
+    hiResReady = true;
+    state.poster = hiResUrl;
+    saveState();
     if (poster.isConnected) {
       poster.style.backgroundImage = "url('" + hiResUrl + "'), url('" + posterUrl + "')";
     }
   });
-
-  try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    /* ignore */
-  }
 
   // 双 rAF 确保初始几何先被绘制，再触发到全屏的过渡。
   requestAnimationFrame(() => {
@@ -130,10 +135,16 @@ function startTransition(link, posterInfo) {
     });
   });
 
-  // 动画尚未完全结束就发起跳转：卸载与网络时间藏进最后 100ms + 落地页遮罩里。
-  setTimeout(() => {
-    window.location.assign(href);
-  }, NAVIGATE_AT_MS);
+  // 高清图已就绪就在动画尾段跳转；没就绪则小步轮询，最迟 NAVIGATE_DEADLINE_MS 必跳。
+  const begun = Date.now();
+  const maybeNavigate = () => {
+    if (hiResReady || Date.now() - begun >= NAVIGATE_DEADLINE_MS) {
+      window.location.assign(href);
+    } else {
+      setTimeout(maybeNavigate, 60);
+    }
+  };
+  setTimeout(maybeNavigate, NAVIGATE_AT_MS);
 
   // 兜底：若跳转被极端阻塞，动画结束后仍保持全屏遮罩等待浏览器完成导航。
   setTimeout(() => {

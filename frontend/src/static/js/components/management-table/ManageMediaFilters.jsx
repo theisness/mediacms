@@ -17,7 +17,7 @@ const filters = {
     { id: 'video', title: '视频' },
     { id: 'audio', title: '音频' },
     { id: 'image', title: '图像' },
-    { id: 'pdf', title: 'Pdf' },
+    { id: 'pdf', title: 'PDF' },
   ],
   encoding_status: [
     { id: 'all', title: '全部' },

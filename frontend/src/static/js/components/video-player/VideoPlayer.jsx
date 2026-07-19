@@ -4,6 +4,7 @@ import urlParse from 'url-parse';
 
 import MediaPlayer from 'mediacms-player/dist/mediacms-player.js';
 import 'mediacms-player/dist/mediacms-player.css';
+import vjsZhCN from 'video.js/dist/lang/zh-CN.json';
 
 import './VideoPlayer.scss';
 
@@ -157,6 +158,17 @@ export function VideoPlayer(props) {
         _vjs.TOUCH_ENABLED = false;
       } catch (e) {
         /* 个别构建里可能是只读属性，忽略即可 */
+      }
+    }
+
+    // 播放器 UI 中文化：注册 video.js 官方 zh-CN 语言包并设为全局默认语言，
+    // 之后创建的播放器（含 vendor MediaPlayer 内部的 videojs）都用中文控件文案。
+    if (_vjs) {
+      try {
+        _vjs.addLanguage('zh-CN', vjsZhCN);
+        _vjs.options.language = 'zh-CN';
+      } catch (e) {
+        /* 语言包注册失败不阻断播放器创建 */
       }
     }
 

@@ -259,7 +259,10 @@ body * {
     }
   }
 
-  .register-link {
+  // .button-link 前缀提高优先级：PageHeader.scss 的 `.button-link.register-link`
+  // 在产物里更靠后，会把字色打成 --brand-color（金色）→ 金字金底看不见。
+  .register-link,
+  .button-link.register-link {
     color: var(--lotus-bg-deep);
     background-color: var(--lotus-gold);
     border: 1px solid var(--lotus-gold);
@@ -268,6 +271,11 @@ body * {
       background-color: var(--lotus-gold-light);
       border-color: var(--lotus-gold-light);
     }
+  }
+
+  .sign-in,
+  .button-link.sign-in {
+    color: var(--lotus-gold);
   }
 }
 

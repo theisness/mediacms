@@ -68,6 +68,11 @@ export const ZH_TRANSLATIONS = {
   Language: '语言',
   Category: '分类',
   Tag: '标签',
+  AUTOPLAY: '自动连播',
+  Settings: '设置',
+  'RSS feeds': 'RSS 订阅',
+  Filter: '筛选',
+  'More videos': '更多影片',
 };
 
 export function installTranslations() {
@@ -75,3 +80,7 @@ export function installTranslations() {
     window.TRANSLATION = { ...(window.TRANSLATION || {}), ...ZH_TRANSLATIONS };
   }
 }
+
+// 模块被 import 即安装：部分模块（如 HeaderContext）在模块顶层就调用
+// translateString 生成菜单项，晚于 import 求值的显式 installTranslations() 调用救不了它们。
+installTranslations();

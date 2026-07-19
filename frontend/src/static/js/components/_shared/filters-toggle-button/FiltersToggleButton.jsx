@@ -14,7 +14,7 @@ export function FiltersToggleButton(props) {
 
   return (
     <div className="mi-filters-toggle">
-      <button className={isActive ? 'active' : ''} aria-label="Filter" onClick={onClick}>
+      <button className={isActive ? 'active' : ''} aria-label="筛选" onClick={onClick}>
         <MaterialIcon type="filter_list" />
         <span className="filter-button-label">
           <span className="filter-button-label-text">过滤显示</span>

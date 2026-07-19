@@ -139,10 +139,14 @@
   try { state = JSON.parse(raw); } catch (e) { return; }
   if (!state || !state.poster || !state.ts || Date.now() - state.ts > 15000) return;
 
+  /* 高清图 + 已缓存的缩略图叠层：高清若未入缓存，下层缩略图立即绘制，杜绝闪黑 */
+  var esc = function (u) { return 'url("' + String(u).replace(/"/g, '%22') + '")'; };
+  var layers = esc(state.poster);
+  if (state.fallback && state.fallback !== state.poster) layers += ',' + esc(state.fallback);
   var overlay = document.createElement('div');
   overlay.id = 'lotus-media-landing-overlay';
   overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;' +
-    'background-color:#000;background-image:url("' + state.poster.replace(/"/g, '%22') + '");' +
+    'background-color:#000;background-image:' + layers + ';' +
     'background-size:cover;background-position:center;background-repeat:no-repeat;' +
     'transition:opacity .45s ease,top .55s cubic-bezier(.22,.8,.26,1),left .55s cubic-bezier(.22,.8,.26,1),' +
     'width .55s cubic-bezier(.22,.8,.26,1),height .55s cubic-bezier(.22,.8,.26,1);';
