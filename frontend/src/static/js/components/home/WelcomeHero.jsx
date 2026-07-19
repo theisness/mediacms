@@ -28,7 +28,7 @@ export const WelcomeHero = () => {
         <section className="welcome-hero">
           <img
             className="welcome-hero-bg welcome-hero-bg-dark"
-            src="/static/images/lotus-brand/welcome-hero-chatgpt.webp"
+            src="/static/images/lotus-brand/welcome-hero.webp"
             alt="莲花影院"
             loading="eager"
           />

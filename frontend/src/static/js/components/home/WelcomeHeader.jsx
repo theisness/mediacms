@@ -24,7 +24,7 @@ export function WelcomeHeader() {
     <section className="welcome-header-banner">
       <div
         className="welcome-header-banner-bg welcome-header-banner-bg-dark"
-        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero-chatgpt.webp')" }}
+        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero.webp')" }}
       />
       <div
         className="welcome-header-banner-bg welcome-header-banner-bg-paper"
