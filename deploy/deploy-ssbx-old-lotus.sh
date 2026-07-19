@@ -88,6 +88,8 @@ rsync -rlpt --checksum -e "ssh -o ProxyCommand=none" \
   "$ROOT_DIR/static/css/" "$DEPLOY_HOST:$DEPLOY_APP/static/css/"
 rsync -rlpt --checksum -e "ssh -o ProxyCommand=none" \
   "$ROOT_DIR/static/images/lotus-brand/" "$DEPLOY_HOST:$DEPLOY_APP/static/images/lotus-brand/"
+rsync -rlpt --checksum -e "ssh -o ProxyCommand=none" \
+  "$ROOT_DIR/static/favicons/" "$DEPLOY_HOST:$DEPLOY_APP/static/favicons/"
 # Webpack 会把 CSS 背景图抽到 static 根目录的哈希文件；不单独同步会导致 hero 只有布局、没有图像。
 rsync -rlpt --checksum --exclude='*/' -e "ssh -o ProxyCommand=none" \
   "$ROOT_DIR/static/" "$DEPLOY_HOST:$DEPLOY_APP/static/"
@@ -102,6 +104,9 @@ echo "[deploy] 5/6 同步模板"
   templates/cms/about.html \
   templates/cms/popular-media.html \
   templates/cms/media.html \
+  templates/cms/index.html \
+  templates/common/head-links.html \
+  templates/config/installation/contents.html \
   "$DEPLOY_HOST:$DEPLOY_APP/")
 
 echo "[deploy] 5b/6 同步后端代码并迁移数据库"
@@ -110,10 +115,11 @@ echo "[deploy] 5b/6 同步后端代码并迁移数据库"
   files/views.py \
   files/admin.py \
   files/urls.py \
+  files/migrations/0009_comment_is_featured.py \
   files/migrations/0010_homebanner.py \
   "$DEPLOY_HOST:$DEPLOY_APP/")
 ssh_run "set -e
-  chown www-data:www-data '$DEPLOY_APP/files/models.py' '$DEPLOY_APP/files/views.py' '$DEPLOY_APP/files/admin.py' '$DEPLOY_APP/files/urls.py' '$DEPLOY_APP/files/migrations/0010_homebanner.py'
+  chown www-data:www-data '$DEPLOY_APP/files/models.py' '$DEPLOY_APP/files/views.py' '$DEPLOY_APP/files/admin.py' '$DEPLOY_APP/files/urls.py' '$DEPLOY_APP/files/migrations/0009_comment_is_featured.py' '$DEPLOY_APP/files/migrations/0010_homebanner.py'
   cd '$DEPLOY_APP'
   source /home/mediacms.io/bin/activate 2>/dev/null || true
   python manage.py migrate files
