@@ -1,0 +1,102 @@
+.category-strip {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.25rem;
+  max-width: 1428px;
+  margin: 0 auto;
+}
+
+.category-strip-tile {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem 0.55rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid var(--lotus-border);
+  background-color: var(--lotus-bg-panel);
+  text-decoration: none;
+  transition: all var(--lotus-transition, 0.2s ease);
+
+  &:hover {
+    border-color: var(--lotus-border-strong);
+    background-color: var(--lotus-bg-elevated);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px var(--lotus-shadow);
+  }
+}
+
+.category-strip-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  background-color: var(--lotus-gold);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.category-strip-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.category-strip-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--lotus-text);
+}
+
+.category-strip-count {
+  font-size: 0.72rem;
+  color: var(--lotus-text-sub);
+}
+
+.category-strip-tile-hot {
+  border-color: var(--lotus-border-strong);
+  background: linear-gradient(135deg, rgba(201, 168, 106, 0.16), rgba(201, 168, 106, 0.04));
+
+  .category-strip-icon {
+    background-color: var(--lotus-gold-light);
+  }
+
+  .category-strip-title {
+    color: var(--lotus-gold-light);
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(201, 168, 106, 0.26), rgba(201, 168, 106, 0.08));
+  }
+}
+
+@media screen and (max-width: 639px) {
+  .category-strip {
+    gap: 0.5rem;
+    padding: 0.75rem 0.75rem 0.25rem;
+  }
+
+  .category-strip-tile {
+    padding: 0.45rem 0.7rem 0.45rem 0.6rem;
+    border-radius: 10px;
+  }
+
+  .category-strip-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .category-strip-title {
+    font-size: 0.85rem;
+  }
+
+  .category-strip-count {
+    display: none;
+  }
+}

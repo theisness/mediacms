@@ -115,6 +115,54 @@ def category_thumb_path(instance, filename):
     return settings.MEDIA_UPLOAD_DIR + "categories/{0}".format(file_name)
 
 
+def home_banner_file_path(instance, filename):
+    """Helper function to place home banner files"""
+
+    return settings.MEDIA_UPLOAD_DIR + "homebanner/{0}".format(filename)
+
+
+class HomeBanner(models.Model):
+    """首页欢迎横幅配置（单例）。
+    管理员可在 Django admin 更换亮/暗两张横幅图，并调整各自的纵向取景百分比；
+    留空则前端回落内置的莲池 hero 图。
+    """
+
+    banner_dark = models.ImageField(
+        upload_to=home_banner_file_path,
+        blank=True,
+        verbose_name="暗色主题横幅图",
+        help_text="深靛/玄夜主题使用的横幅图，留空用内置莲池夜景",
+    )
+    banner_light = models.ImageField(
+        upload_to=home_banner_file_path,
+        blank=True,
+        verbose_name="亮色主题横幅图",
+        help_text="宣纸白主题使用的横幅图，留空用内置晨光莲池",
+    )
+    dark_position = models.PositiveSmallIntegerField(
+        default=46,
+        verbose_name="暗色图取景位置",
+        help_text="纵向取景百分比 0-100：0 显示图片顶部，100 显示底部",
+    )
+    light_position = models.PositiveSmallIntegerField(
+        default=76,
+        verbose_name="亮色图取景位置",
+        help_text="纵向取景百分比 0-100：0 显示图片顶部，100 显示底部",
+    )
+
+    class Meta:
+        verbose_name = "首页横幅"
+        verbose_name_plural = "首页横幅"
+
+    def __str__(self):
+        return "首页横幅配置"
+
+    def save(self, *args, **kwargs):
+        self.dark_position = min(self.dark_position, 100)
+        self.light_position = min(self.light_position, 100)
+        super().save(*args, **kwargs)
+
+
 class FilmListCategory(models.Model):
     """影片清单分类（老师的分类）。大类/小类与排序全部存库，不写死在代码。
     title=小类(如 法义 / 真人电影 / 电影预告)，major=大类(如 视频 / 预告 / 电影)。"""

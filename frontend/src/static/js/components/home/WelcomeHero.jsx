@@ -2,10 +2,12 @@ import React from 'react';
 import { LinksConsumer } from '../../utils/contexts/';
 import { PageStore } from '../../utils/stores/';
 import { MaterialIcon } from '../_shared';
+import { useBannerConfig } from '../../utils/bannerConfig';
 
 import './WelcomeHero.scss';
 
 export const WelcomeHero = () => {
+  const banner = useBannerConfig();
   const scrollToContent = () => {
     const isAbout =
       typeof window !== 'undefined' &&
@@ -28,13 +30,15 @@ export const WelcomeHero = () => {
         <section className="welcome-hero">
           <img
             className="welcome-hero-bg welcome-hero-bg-dark"
-            src="/static/images/lotus-brand/welcome-hero.webp"
+            src={banner.banner_dark || '/static/images/lotus-brand/welcome-hero.webp'}
+            style={null !== banner.dark_position ? { objectPosition: `center ${banner.dark_position}%` } : undefined}
             alt="莲花影院"
             loading="eager"
           />
           <img
             className="welcome-hero-bg welcome-hero-bg-paper"
-            src="/static/images/lotus-brand/welcome-hero-paper-chatgpt-v2.webp"
+            src={banner.banner_light || '/static/images/lotus-brand/welcome-hero-paper-chatgpt-v2.webp'}
+            style={null !== banner.light_position ? { objectPosition: `center ${banner.light_position}%` } : undefined}
             alt=""
             aria-hidden="true"
             loading="eager"

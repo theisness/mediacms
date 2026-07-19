@@ -73,6 +73,10 @@ ssh_run "set -e
   cp -a '$DEPLOY_APP/templates/components/footer.html' '$REMOTE_BACKUP/templates/components/'
   cp -a '$DEPLOY_APP/templates/config/installation/site.html' '$REMOTE_BACKUP/templates/config/installation/'
   cp -a '$DEPLOY_APP/templates/cms/add-media.html' '$REMOTE_BACKUP/templates/cms/'
+  install -d -m 700 '$REMOTE_BACKUP/files'
+  cp -a '$DEPLOY_APP/files/models.py' '$DEPLOY_APP/files/views.py' '$DEPLOY_APP/files/admin.py' '$DEPLOY_APP/files/urls.py' '$REMOTE_BACKUP/files/'
+  cp -a '$DEPLOY_APP/files/migrations' '$REMOTE_BACKUP/files/'
+  [ -f '$DEPLOY_APP/templates/cms/about.html' ] && cp -a '$DEPLOY_APP/templates/cms/about.html' '$REMOTE_BACKUP/templates/cms/'
   echo backup=$REMOTE_BACKUP"
 
 echo "[deploy] 4/6 同步静态资源"
@@ -92,7 +96,24 @@ echo "[deploy] 5/6 同步模板"
   templates/components/footer.html \
   templates/config/installation/site.html \
   templates/cms/add-media.html \
+  templates/cms/about.html \
+  templates/cms/popular-media.html \
   "$DEPLOY_HOST:$DEPLOY_APP/")
+
+echo "[deploy] 5b/6 同步后端代码并迁移数据库"
+(cd "$ROOT_DIR" && rsync -rlpt --checksum --relative -e "ssh -o ProxyCommand=none" \
+  files/models.py \
+  files/views.py \
+  files/admin.py \
+  files/urls.py \
+  files/migrations/0010_homebanner.py \
+  "$DEPLOY_HOST:$DEPLOY_APP/")
+ssh_run "set -e
+  chown www-data:www-data '$DEPLOY_APP/files/models.py' '$DEPLOY_APP/files/views.py' '$DEPLOY_APP/files/admin.py' '$DEPLOY_APP/files/urls.py' '$DEPLOY_APP/files/migrations/0010_homebanner.py'
+  cd '$DEPLOY_APP'
+  source /home/mediacms.io/bin/activate 2>/dev/null || true
+  python manage.py migrate files
+  echo migrate=ok"
 
 echo "[deploy] 6/6 修正属主并重启服务"
 ssh_run "set -e

@@ -33,7 +33,7 @@ urlpatterns = [
         views.view_playlist,
         name="get_playlist",
     ),
-    re_path(r"^popular$", views.recommended_media),
+    re_path(r"^popular$", views.popular_media),
     re_path(r"^recommended$", views.recommended_media),
     path("rss/", IndexRSSFeed()),
     re_path("^rss/search", SearchRSSFeed()),
@@ -62,6 +62,7 @@ urlpatterns = [
         views.MediaActions.as_view(),
     ),
     re_path(r"^api/v1/categories$", views.CategoryList.as_view()),
+    re_path(r"^api/v1/home_banner$", views.HomeBannerView.as_view()),
     re_path(r"^api/v1/tags$", views.TagList.as_view()),
     re_path(r"^api/v1/comments$", views.CommentList.as_view()),
     re_path(

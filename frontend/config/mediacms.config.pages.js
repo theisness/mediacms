@@ -77,6 +77,7 @@ const PAGES = {
   latest: { id: 'latest', title: 'Recent uploads', component: 'LatestMediaPage' },
   featured: { id: 'featured', title: 'Featured', component: 'FeaturedMediaPage' },
   recommended: { id: 'recommended', title: 'Recommended', component: 'RecommendedMediaPage' },
+  popular: { id: 'popular', title: '热门影片', component: 'PopularMediaPage' },
   members: { id: 'members', title: 'Members', component: 'MembersPage' },
   history: { id: 'history', title: 'History', component: 'HistoryPage' },
   liked: { id: 'liked', title: 'Liked media', component: 'LikedMediaPage' },

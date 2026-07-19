@@ -1,9 +1,11 @@
 import React from 'react';
 import { MaterialIcon } from '../_shared';
+import { useBannerConfig } from '../../utils/bannerConfig';
 
 import './WelcomeHeader.scss';
 
 export function WelcomeHeader() {
+  const banner = useBannerConfig();
   function handleScroll() {
     const isAbout =
       typeof window !== 'undefined' &&
@@ -24,11 +26,17 @@ export function WelcomeHeader() {
     <section className="welcome-header-banner">
       <div
         className="welcome-header-banner-bg welcome-header-banner-bg-dark"
-        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero.webp')" }}
+        style={{
+          backgroundImage: `url('${banner.banner_dark || '/static/images/lotus-brand/welcome-hero.webp'}')`,
+          ...(null !== banner.dark_position ? { backgroundPosition: `center ${banner.dark_position}%` } : {}),
+        }}
       />
       <div
         className="welcome-header-banner-bg welcome-header-banner-bg-paper"
-        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero-paper-chatgpt-v2.webp')" }}
+        style={{
+          backgroundImage: `url('${banner.banner_light || '/static/images/lotus-brand/welcome-hero-paper-chatgpt-v2.webp'}')`,
+          ...(null !== banner.light_position ? { backgroundPosition: `center ${banner.light_position}%` } : {}),
+        }}
         aria-hidden="true"
       />
       <div className="welcome-header-banner-content">

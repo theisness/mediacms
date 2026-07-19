@@ -7,6 +7,7 @@ import { ItemListAsync } from '../components/item-list/ItemListAsync.jsx';
 import { InlineSliderItemListAsync } from '../components/item-list/InlineSliderItemListAsync.jsx';
 import { WelcomeHero } from '../components/home/WelcomeHero';
 import { WelcomeHeader } from '../components/home/WelcomeHeader';
+import { CategoryStrip } from '../components/home/CategoryStrip';
 import { Page } from './Page';
 import { translateString, hasSeenWelcome, markWelcomeSeen } from '../utils/helpers/';
 
@@ -88,6 +89,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   return (
     <Page id={id}>
       {!seenWelcome && <WelcomeHero />}
+      <CategoryStrip />
       <LinksConsumer>
         {(links) => (
           <ApiUrlConsumer>

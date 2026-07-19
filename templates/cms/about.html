@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block headtitle %}About - {{PORTAL_NAME}}{% endblock headtitle %}
+{% block headtitle %}关于我们 - {{PORTAL_NAME}}{% endblock headtitle %}
 
 {% block headermeta %}
 {% load custom_filters %}
-<meta property="og:title" content="About - {{PORTAL_NAME}}">
+<meta property="og:title" content="关于我们 - {{PORTAL_NAME}}">
 <meta property="og:type" content="website">
-<meta property="og:description" content="">
+<meta property="og:description" content="莲花影院——观一花一世界，赏一影一菩提">
 
 <meta name="twitter:card" content="summary">
 
@@ -39,19 +39,36 @@
 {% endblock headermeta %}
 
 {% block innercontent %}
-{% get_current_language as LANGUAGE_CODE %}
 
-<div class="custom-page-wrapper">
-	<h2>{{ "About" | custom_translate:LANGUAGE_CODE}}</h2>
-	<hr/>
+<div class="custom-page-wrapper lotus-about">
+	<section class="lotus-about-hero">
+		<img class="lotus-about-mark lotus-about-mark-dark" src="/static/images/lotus-brand/logo_lotus.png" alt="莲花影院" />
+		<img class="lotus-about-mark lotus-about-mark-paper" src="/static/images/lotus-brand/logo_lotus_paper.png" alt="" aria-hidden="true" />
+		<h1 class="lotus-about-title">莲花影院</h1>
+		<p class="lotus-about-motto">观一花一世界 · 赏一影一菩提</p>
+		<span class="lotus-about-divider" aria-hidden="true"></span>
+	</section>
 
-{#    <h1><a href="https://ssbx.site">菩提路上</a> </h1>#}
-<h3 style="text-align: center; color: red;">这是一家突破你想象的影院，里面的影片不仅仅是娱乐休闲，更能激发善根，</h3>
-<h2 style="text-align: center; color: blue;">带你走进更广阔的视野，接触到不一样的三观情怀。</h2>
-<h1 style="text-align: center;">是的，必定如此。</h1>
+	<section class="lotus-about-body">
+		<p class="lotus-about-lead">这是一家突破你想象的影院。</p>
+		<p>这里的影片不仅仅是娱乐休闲，更能激发善根；带你走进更广阔的视野，接触到不一样的三观情怀。</p>
+		<p class="lotus-about-affirm">是的，必定如此。</p>
+	</section>
 
-
-
+	<section class="lotus-about-cards">
+		<a class="lotus-about-card" href="/featured">
+			<span class="lotus-about-card-title">精选影片</span>
+			<span class="lotus-about-card-desc">编者甄选，值得静心观赏</span>
+		</a>
+		<a class="lotus-about-card" href="/popular">
+			<span class="lotus-about-card-title">热门影片</span>
+			<span class="lotus-about-card-desc">大家都在看什么</span>
+		</a>
+		<a class="lotus-about-card" href="/latest">
+			<span class="lotus-about-card-title">最新上传</span>
+			<span class="lotus-about-card-desc">莲池新绽的花</span>
+		</a>
+	</section>
 </div>
 
 {% endblock %}

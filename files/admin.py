@@ -5,11 +5,24 @@ from .models import (
     Comment,
     EncodeProfile,
     Encoding,
+    HomeBanner,
     Language,
     Media,
     Subtitle,
     Tag,
 )
+
+
+class HomeBannerAdmin(admin.ModelAdmin):
+    """首页横幅配置：只允许一条记录（单例）"""
+
+    list_display = ["__str__", "banner_dark", "dark_position", "banner_light", "light_position"]
+
+    def has_add_permission(self, request):
+        return not HomeBanner.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return True
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -97,6 +110,7 @@ class EncodingAdmin(admin.ModelAdmin):
 
 
 admin.site.register(EncodeProfile, EncodeProfileAdmin)
+admin.site.register(HomeBanner, HomeBannerAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Media, MediaAdmin)
 admin.site.register(Encoding, EncodingAdmin)

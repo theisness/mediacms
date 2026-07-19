@@ -51,6 +51,7 @@ from .models import (
     Comment,
     EncodeProfile,
     Encoding,
+    HomeBanner,
     Media,
     Playlist,
     PlaylistMedia,
@@ -354,6 +355,13 @@ def recommended_media(request):
     return render(request, "cms/recommended-media.html", context)
 
 
+def popular_media(request):
+    """List popular (most viewed) media view"""
+
+    context = {}
+    return render(request, "cms/popular-media.html", context)
+
+
 def search(request):
     """Search view"""
 
@@ -487,6 +495,9 @@ class MediaList(APIView):
 
             if show_param == "featured":
                 media = Media.objects.filter(basic_query, featured=True)
+            elif show_param == "popular":
+                # 热门：按播放量排序
+                media = Media.objects.filter(basic_query).order_by("-views")
             else:
                 media = Media.objects.filter(basic_query).order_by("-add_date")
 
@@ -1475,6 +1486,34 @@ class UserActions(APIView):
         page = paginator.paginate_queryset(media, request)
         serializer = MediaSerializer(page, many=True, context={"request": request})
         return paginator.get_paginated_response(serializer.data)
+
+
+class HomeBannerView(APIView):
+    """首页横幅配置：返回管理员上传的亮/暗横幅图与取景位置，未配置的字段为 null"""
+
+    @swagger_auto_schema(
+        manual_parameters=[],
+        tags=['HomeBanner'],
+        operation_summary='Home banner config',
+        operation_description='Returns admin-configured home banner images and focal positions',
+    )
+    def get(self, request, format=None):
+        banner = HomeBanner.objects.first()
+        ret = {
+            "banner_dark": None,
+            "banner_light": None,
+            "dark_position": None,
+            "light_position": None,
+        }
+        if banner:
+            # 取景位置总是生效（也可用于微调内置默认图），图片字段留空则前端回落内置图
+            ret["dark_position"] = banner.dark_position
+            ret["light_position"] = banner.light_position
+            if banner.banner_dark:
+                ret["banner_dark"] = banner.banner_dark.url
+            if banner.banner_light:
+                ret["banner_light"] = banner.banner_light.url
+        return Response(ret)
 
 
 class CategoryList(APIView):

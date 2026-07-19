@@ -11,6 +11,7 @@ export * from './ManageUsersPage';
 export * from './MediaPage';
 export * from './MembersPage';
 export * from './PlaylistPage';
+export * from './PopularMediaPage';
 export * from './ProfileAboutPage';
 export * from './ProfileMediaPage';
 export * from './ProfilePlaylistsPage';

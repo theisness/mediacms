@@ -587,3 +587,125 @@ i.material-icons {
     transform: rotate(360deg);
   }
 }
+
+/* ---------- 关于页（/about） ---------- */
+.lotus-about {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+  text-align: center;
+  color: var(--lotus-text);
+}
+
+.lotus-about-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.lotus-about-mark {
+  width: 84px;
+  height: auto;
+  filter: drop-shadow(0 4px 16px var(--lotus-shadow));
+}
+
+.lotus-about-mark-paper {
+  display: none;
+}
+
+:root[data-theme='paper'] .lotus-about-mark-dark {
+  display: none;
+}
+
+:root[data-theme='paper'] .lotus-about-mark-paper {
+  display: block;
+}
+
+.lotus-about-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: var(--lotus-gold);
+}
+
+.lotus-about-motto {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  color: var(--lotus-text-muted);
+}
+
+.lotus-about-divider {
+  display: block;
+  width: 120px;
+  height: 1px;
+  margin-top: 0.9rem;
+  background: linear-gradient(90deg, transparent, var(--lotus-gold), transparent);
+}
+
+.lotus-about-body {
+  font-size: 1.05rem;
+  line-height: 2;
+  letter-spacing: 0.05em;
+
+  p {
+    margin: 0.5em 0;
+  }
+}
+
+.lotus-about-lead {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--lotus-gold-light);
+}
+
+.lotus-about-affirm {
+  margin-top: 1.2em !important;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--lotus-gold);
+}
+
+.lotus-about-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 2.5rem;
+}
+
+.lotus-about-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 168px;
+  padding: 1rem 1.4rem;
+  border-radius: 14px;
+  border: 1px solid var(--lotus-border);
+  background-color: var(--lotus-bg-panel);
+  text-decoration: none;
+  transition: all var(--lotus-transition, 0.2s ease);
+
+  &:hover {
+    border-color: var(--lotus-border-strong);
+    background-color: var(--lotus-bg-elevated);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px var(--lotus-shadow);
+  }
+}
+
+.lotus-about-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--lotus-gold);
+}
+
+.lotus-about-card-desc {
+  font-size: 0.8rem;
+  color: var(--lotus-text-sub);
+}
