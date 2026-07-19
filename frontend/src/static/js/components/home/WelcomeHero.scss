@@ -14,10 +14,14 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    // 与横幅一致的取景：整体下移 30%，避免超宽屏裁切时佛头出画。
-    object-position: center 50%;
+    object-position: center 80%;
     transform: scale(1.02);
     transition: transform 8s ease-out;
+  }
+
+  // 只下调暗色 hero 取景（与横幅一致，下移 30%）；亮色（paper）保持 80% 不动。
+  .welcome-hero-bg-dark {
+    object-position: center 50%;
   }
 
   .welcome-hero-bg-paper {

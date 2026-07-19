@@ -48,9 +48,14 @@
   inset: 0;
   z-index: 0;
   background-size: cover;
-  // 取景位置：佛陀头部在图中约 43-48% 高度处，46% 让佛头完整落在横幅可视窗内。
-  background-position: center 46%;
+  background-position: center 76%;
   opacity: 0.56;
+}
+
+// 只下调暗色 hero 的取景：佛陀头部在图中约 43-48% 高度处，46% 让佛头完整落在横幅可视窗内。
+// 亮色（paper）hero 保持上面的 76% 不动。
+.welcome-header-banner-bg-dark {
+  background-position: center 46%;
 }
 
 .welcome-header-banner-bg-paper {
