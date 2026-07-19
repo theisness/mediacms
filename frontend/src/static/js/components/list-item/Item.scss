@@ -282,8 +282,8 @@ a.item-thumb {
 
 .item-views + .item-date {
   &:before {
-    content: '•';
-    content: '\2022';
+    // 用 ASCII 转义输出分隔点，避免裸 UTF-8 字符在无 charset 响应头下被误解码成乱码。
+    content: unquote('"\\2022"');
     margin: 0 4px;
   }
 }

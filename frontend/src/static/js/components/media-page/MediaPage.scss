@@ -2042,8 +2042,7 @@
       }
 
       .item-date:before {
-        content: '•';
-        content: '\2022';
+        content: unquote('"\\2022"');
         margin: 0 4px;
       }
 

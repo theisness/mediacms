@@ -43,8 +43,7 @@
 
   .items-list-hor .item-views {
     &:before {
-      content: '•';
-      content: '\2022';
+      content: unquote('"\\2022"');
       margin: 0 4px;
     }
   }
@@ -93,8 +92,7 @@
     }
 
     .item-meta > .item-views + .item-date:before {
-      content: '•';
-      content: '\2022';
+      content: unquote('"\\2022"');
       margin: 0 4px;
     }
 
@@ -106,8 +104,7 @@
 
 @media (min-width: 600px) {
   .items-list-hor .item-date:before {
-    content: '•';
-    content: '\2022';
+    content: unquote('"\\2022"');
     margin: 0 4px;
   }
 
