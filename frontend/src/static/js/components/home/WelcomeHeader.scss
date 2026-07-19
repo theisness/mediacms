@@ -102,6 +102,8 @@
   display: block;
   width: min(320px, 72vw);
   height: auto;
+  // 相对横幅左移 5vw、上移横幅高度的 5%（桌面 176px / 移动 144px，取桌面值，差异可忽略）。
+  transform: translate(-5vw, calc(-0.05 * (120px + var(--header-height, 56px))));
   filter: drop-shadow(0 3px 16px rgba(0, 0, 0, 0.45));
 }
 
