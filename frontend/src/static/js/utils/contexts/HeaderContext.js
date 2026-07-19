@@ -8,7 +8,8 @@ const links = config.url;
 const theme = config.theme;
 const user = config.member;
 
-const hasThemeSwitcher = theme.switch.enabled && 'header' === theme.switch.position;
+// 主题入口统一放在头像菜单；只有显式 disabled 才关闭，兼容旧配置未提供 enabled 的情况。
+const hasThemeSwitcher = !theme.switch || false !== theme.switch.enabled;
 
 function popupTopNavItems() {
   const items = [];
@@ -33,11 +34,32 @@ function popupTopNavItems() {
       }
     }
 
-    items.push({
-      link: links.signout,
-      icon: 'exit_to_app',
-      text: translateString('Sign out'),
-    });
+    if (user.can.saveMedia && user.pages.playlists) {
+      items.push({
+        link: user.pages.playlists,
+        icon: 'playlist_play',
+        iconSrc: '/static/images/lotus-brand/nav-icons/playlists.png',
+        text: translateString('My playlists'),
+      });
+    }
+
+    if (config.enabled.pages.history && config.enabled.pages.history.enabled) {
+      items.push({
+        link: links.user.history,
+        icon: 'history',
+        iconSrc: '/static/images/lotus-brand/nav-icons/history.png',
+        text: translateString('History'),
+      });
+    }
+
+    if (user.can.likeMedia && config.enabled.pages.liked && config.enabled.pages.liked.enabled) {
+      items.push({
+        link: links.user.liked,
+        icon: 'thumb_up',
+        iconSrc: '/static/images/lotus-brand/nav-icons/liked.png',
+        text: translateString('Liked media'),
+      });
+    }
   }
 
   return items;
@@ -51,7 +73,7 @@ function popupMiddleNavItems() {
       itemType: 'open-subpage',
       icon: 'brightness_4',
       iconPos: 'left',
-      text: 'Switch theme',
+      text: translateString('Switch theme'),
       buttonAttr: {
         className: 'change-page',
         'data-page-id': 'switch-theme',
@@ -107,11 +129,57 @@ function popupMiddleNavItems() {
 function popupBottomNavItems() {
   const items = [];
 
+  if (!user.is.anonymous) {
+    if (user.is.admin && config.enabled.pages.members && config.enabled.pages.members.enabled) {
+      items.push({
+        link: links.members,
+        icon: 'people',
+        iconSrc: '/static/images/lotus-brand/nav-icons/members.png',
+        text: translateString('Members'),
+      });
+    }
+
+    if (user.can.manageMedia) {
+      items.push({
+        link: links.manage.media,
+        icon: 'video_settings',
+        iconSrc: '/static/images/lotus-brand/nav-icons/manage-media.png',
+        text: translateString('Manage media'),
+      });
+    }
+
+    if (user.can.manageUsers) {
+      items.push({
+        link: links.manage.users,
+        icon: 'manage_accounts',
+        iconSrc: '/static/images/lotus-brand/nav-icons/manage-users.png',
+        text: translateString('Manage users'),
+      });
+    }
+
+    if (user.can.manageComments) {
+      items.push({
+        link: links.manage.comments,
+        icon: 'comment_bank',
+        iconSrc: '/static/images/lotus-brand/nav-icons/manage-comments.png',
+        text: translateString('Manage comments'),
+      });
+    }
+  }
+
   if (user.is.admin) {
     items.push({
       link: links.admin,
       icon: 'admin_panel_settings',
       text: translateString('Administration Portal'),
+    });
+  }
+
+  if (!user.is.anonymous) {
+    items.push({
+      link: links.signout,
+      icon: 'exit_to_app',
+      text: translateString('Sign out'),
     });
   }
 

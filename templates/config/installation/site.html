@@ -4,20 +4,20 @@ MediaCMS.site = {
     url: '{{FRONTEND_HOST}}',
     api: '{{FRONTEND_HOST}}/api/v1',
     theme: {
-    	mode: '{{DEFAULT_THEME}}',   
-		switch: {
-			position: 'sidebar',	// Valid values: 'header', 'sidebar'.
-		},
+        mode: '{{DEFAULT_THEME}}',
+        switch: {
+            position: 'header', // 侧栏已取消，主题入口统一放入头像菜单。
+        },
     },
-    logo:{
-    	lightMode:{
-            img: "/static/images/logo_light.png",
+    logo: {
+        lightMode: {
+            img: "/static/images/lotus-brand/logo_lotus_paper.png",
             svg: "",
-    	},
-    	darkMode:{
-            img: "/static/images/logo_dark.png",
+        },
+        darkMode: {
+            img: "/static/images/lotus-brand/lotus-wordmark-chatgpt.png",
             svg: "",
-    	},
+        },
     },
     pages: {
 	    latest:{

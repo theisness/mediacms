@@ -1,5 +1,5 @@
 // 轻量 PJAX：拦截同域内部链接，只替换主内容区 .page-main-wrap，
-// 保留 #app-header / #app-sidebar / #app-footer 的 React 树，避免整页白闪。
+// 保留独立的 #app-header 与静态 #app-footer，避免整页白闪。
 // 黑名单页面（含复杂播放器 / 表单的页面）回退原生整页刷新。
 
 import ReactDOM from 'react-dom';
@@ -8,7 +8,9 @@ const BLACKLIST = [
   /^\/v\//, // 媒体详情页 /v/{token}
   /^\/w\//, // 备用媒体详情页 /w/{token}
   /^\/embed/, // 嵌入页
-  /^\/add-media/, // 上传页
+  /^\/add-media/, // 兼容旧上传页路径
+  /^\/upload/, // 生产上传页
+  /^\/scpublisher/, // 上传页兼容入口
   /^\/edit-media/, // 编辑页
   /^\/edit-channel/, // 编辑频道
   /^\/edit-profile/, // 编辑资料
@@ -16,6 +18,7 @@ const BLACKLIST = [
   /^\/signout/, // 登出
   /^\/register/, // 注册
   /^\/reset-password/, // 重置密码
+  /^\/accounts\//, // allauth 登录/注册/登出流程必须整页刷新，重建用户与主题上下文
 ];
 
 let isNavigating = false;
@@ -194,24 +197,17 @@ function swapPageContent(newDoc) {
   }
 }
 
-function updateActiveSidebar(pathname) {
-  // 侧边栏 active 态同步
+function updateActiveNavigation(pathname) {
+  // PJAX 保留 header，因此手动同步一级频道 active 态。
   setTimeout(() => {
-    const sidebarLinks = document.querySelectorAll('.page-sidebar a, .page-sidebar button');
-    sidebarLinks.forEach((link) => {
+    const navigationLinks = document.querySelectorAll('.header-primary-nav a');
+    navigationLinks.forEach((link) => {
       const href = link.getAttribute('href');
       if (!href) return;
       try {
         const linkUrl = new URL(href, window.location.origin);
         const active = linkUrl.pathname === pathname;
-        const li = link.closest('li');
-        if (li) {
-          if (active) {
-            li.classList.add('active');
-          } else {
-            li.classList.remove('active');
-          }
-        }
+        link.classList.toggle('active', active);
       } catch (e) {
         // ignore
       }
@@ -239,7 +235,8 @@ export function navigate(url, pushState = true) {
 
   const targetUrl = url instanceof URL ? url : new URL(url, window.location.href);
 
-  if (!isSameOrigin(targetUrl) || isBlacklisted(targetUrl)) {
+  const currentUrl = new URL(window.location.href);
+  if (!isSameOrigin(targetUrl) || isBlacklisted(targetUrl) || isBlacklisted(currentUrl)) {
     isNavigating = false;
     window.location.assign(targetUrl.href);
     return;
@@ -287,7 +284,7 @@ export function navigate(url, pushState = true) {
           }
 
           restoreTheme();
-          updateActiveSidebar(targetUrl.pathname);
+          updateActiveNavigation(targetUrl.pathname);
 
           if (targetUrl.hash) {
             const el = document.querySelector(targetUrl.hash);
@@ -295,6 +292,9 @@ export function navigate(url, pushState = true) {
           } else {
             window.scrollTo(0, 0);
           }
+
+          // 先完成滚动位置复位，再通知 header，避免新页面在顶部短暂沿用旧页面的毛玻璃状态。
+          window.dispatchEvent(new CustomEvent('lotus:navigation-complete', { detail: { url: targetUrl.href } }));
 
           hideTransition();
           isNavigating = false;
@@ -327,7 +327,7 @@ function onLinkClick(ev) {
   }
 
   if (!isSameOrigin(url)) return;
-  if (isBlacklisted(url)) return;
+  if (isBlacklisted(url) || isBlacklisted(new URL(window.location.href))) return;
 
   ev.preventDefault();
   navigate(url);

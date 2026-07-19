@@ -185,3 +185,27 @@
     background-color: #eee;
   }
 }
+
+// 桌面端给左侧品牌/频道与右侧用户操作预留固定安全区，避免导航挤进搜索框。
+@media screen and (min-width: 1024px) {
+  .page-header > .search-field-wrap {
+    position: absolute;
+    top: 0;
+    left: clamp(390px, 31vw, 480px);
+    right: clamp(220px, 20vw, 300px);
+    width: auto;
+    max-width: none;
+    margin: 0;
+  }
+}
+
+// 大屏居中占视口约 40%，并以导航/操作区安全边界为上限，窗口缩放时同步拉伸。
+@media screen and (min-width: 1200px) {
+  .page-header > .search-field-wrap {
+    left: 50%;
+    right: auto;
+    width: min(40vw, calc(100vw - clamp(390px, 31vw, 480px) - clamp(220px, 20vw, 300px)));
+    max-width: none;
+    transform: translateX(-50%);
+  }
+}

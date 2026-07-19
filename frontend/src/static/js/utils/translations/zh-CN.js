@@ -15,7 +15,7 @@ export const ZH_TRANSLATIONS = {
   Contact: '联系',
   Terms: '条款',
   History: '历史',
-  'My media': '我的影片',
+  'My media': '我的媒体',
   'My playlists': '我的播放列表',
   'Liked media': '喜欢的影片',
   Playlists: '播放列表',
@@ -24,11 +24,15 @@ export const ZH_TRANSLATIONS = {
   // 头部 / 用户
   'Sign in': '登录',
   Register: '注册',
-  'Sign out': '退出',
+  'Sign out': '退出登录',
   'Upload media': '上传影片',
-  'Edit profile': '编辑资料',
-  'Change password': '修改密码',
-  'Administration Portal': '管理后台',
+  'Edit profile': '编辑个人资料',
+  'Change password': '更改密码',
+  'Administration Portal': '管理员门户',
+  'Manage media': '管理影片',
+  'Manage users': '管理用户',
+  'Manage comments': '管理评论',
+  'Switch theme': '切换主题',
 
   // 列表 / 操作
   'VIEW ALL': '查看全部',

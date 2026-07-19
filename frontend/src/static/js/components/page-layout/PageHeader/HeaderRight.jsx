@@ -64,7 +64,7 @@ function headerPopupPages(user, popupNavItems, hasHeaderThemeSwitcher) {
                 <i className="material-icons">arrow_back</i>
               </CircleIconButton>
             </span>
-            <span>Switch theme</span>
+            <span>{translateString('Switch theme')}</span>
           </div>
         </PopupTop>
         <PopupMain>
@@ -81,7 +81,12 @@ function UploadMediaButton({ user, links }) {
   return !user.is.anonymous && user.can.addMedia ? (
     <div className={'hidden-only-in-small'}>
       <CircleIconButton type="link" href={links.user.addMedia} title="Upload media">
-        <MaterialIcon type="video_call" />
+        <img
+          className="header-action-icon"
+          src="/static/images/lotus-brand/nav-icons/upload.png"
+          alt=""
+          aria-hidden="true"
+        />
         <span className="hidden-txt">Upload media</span>
       </CircleIconButton>
     </div>
@@ -161,7 +166,7 @@ export function HeaderRight(props) {
                         )}
                       </PopupTrigger>
 
-                      <PopupContent contentRef={popupContentRef}>
+                      <PopupContent contentRef={popupContentRef} className="user-menu-popup">
                         <NavigationContentApp
                           initPage="main"
                           pages={headerPopupPages(user, header.popupNavItems, header.hasThemeSwitcher)}

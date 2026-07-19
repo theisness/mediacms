@@ -156,6 +156,46 @@ $__button-link-horizontal-padding: 16;
       }
     }
   }
+
+  // 用户头像菜单收敛为短列表；窄屏/小高度时在弹层内部滚动，不再撑出视口。
+  .user-menu-popup {
+    max-height: calc(100vh - var(--header-height) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: var(--lotus-gold-dim);
+    }
+
+    .popup-top {
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+
+    .nav-menu {
+      padding-top: 4px;
+      padding-bottom: 4px;
+
+      li > * {
+        padding-top: 3px;
+        padding-bottom: 3px;
+
+        > * {
+          line-height: 30px;
+        }
+      }
+
+      .menu-item-icon {
+        margin-right: 12px;
+      }
+    }
+  }
 }
 
 .mobile-search-toggle {
@@ -286,6 +326,67 @@ a.user-menu-top-link {
     float: left;
     max-width: 100%;
     max-height: var(--logo-height, var(--default-logo-height));
+  }
+}
+
+.header-home-link {
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: var(--header-height);
+    text-decoration: none;
+  }
+
+  img {
+    display: block;
+    width: auto;
+    height: 30px;
+    max-width: 168px;
+    object-fit: contain;
+  }
+}
+
+.header-primary-nav {
+  white-space: nowrap;
+
+  a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: var(--header-height);
+    padding: 0 10px;
+    color: var(--header-text-color, inherit);
+    font-size: 14px;
+    text-decoration: none;
+
+    &:hover,
+    &.active {
+      color: var(--lotus-gold-light);
+    }
+
+    &.active::after {
+      content: '';
+      position: absolute;
+      right: 10px;
+      bottom: 5px;
+      left: 10px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--lotus-gold);
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .header-primary-nav,
+  .header-home-label {
+    display: none !important;
+  }
+
+  .header-home-link img {
+    max-width: 132px;
+    height: 28px;
   }
 }
 

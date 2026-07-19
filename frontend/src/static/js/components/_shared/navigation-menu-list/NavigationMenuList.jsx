@@ -26,7 +26,7 @@ function NavigationMenuListItem(props) {
   if (-1 < iconPosIndex) {
     children[iconPosIndex] = (
       <span key="Icon" className={'right' === props.iconPos ? 'menu-item-icon-right' : 'menu-item-icon'}>
-        {<MaterialIcon type={props.icon} />}
+        {props.iconSrc ? <img src={props.iconSrc} alt="" aria-hidden="true" /> : <MaterialIcon type={props.icon} />}
       </span>
     );
   }
@@ -78,6 +78,7 @@ NavigationMenuListItem.propTypes = {
   itemType: PropTypes.oneOf(['link', 'open-subpage', 'button', 'label', 'div']),
   link: PropTypes.string,
   icon: PropTypes.string,
+  iconSrc: PropTypes.string,
   iconPos: PropTypes.oneOf(['left', 'right']),
   text: PropTypes.string,
   active: PropTypes.bool,

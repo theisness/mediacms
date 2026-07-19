@@ -11,7 +11,7 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   background-color: var(--lotus-bg-deep);
 
@@ -49,8 +49,41 @@
   z-index: 0;
   background-size: cover;
   // 把佛陀头部下移到 header 安全区外，同时保留莲池与放映机。
-  background-position: center 46%;
+  background-position: center 76%;
   opacity: 0.56;
+}
+
+.welcome-header-banner-bg-paper {
+  display: none;
+}
+
+// 宣纸白使用独立的晨光版 hero，并以浅色顶遮罩承托深色导航文字。
+:root[data-theme="paper"] .welcome-header-banner {
+  background-color: var(--lotus-bg-deep);
+
+  &::before {
+    background: linear-gradient(
+      180deg,
+      rgba(247, 244, 237, 0.82) 0%,
+      rgba(247, 244, 237, 0.48) 52%,
+      rgba(247, 244, 237, 0) 100%
+    );
+  }
+}
+
+:root[data-theme="paper"] .welcome-header-banner-bg-dark {
+  display: none;
+}
+
+:root[data-theme="paper"] .welcome-header-banner-bg-paper {
+  display: block;
+  opacity: 0.92;
+}
+
+:root[data-theme="paper"] .welcome-header-banner-wordmark {
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.92))
+    drop-shadow(0 3px 12px rgba(44, 36, 25, 0.24));
 }
 
 .welcome-header-banner-content {
@@ -58,21 +91,18 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  width: min(560px, calc(100% - 8rem));
+  margin-left: clamp(1.5rem, 8vw, 9rem);
   gap: 0.25rem;
   color: var(--lotus-text);
 }
 
-.welcome-header-banner-title {
-  font-family: 'Source Han Serif CN', 'Noto Serif SC', serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--lotus-gold-light);
-}
-
-.welcome-header-banner-subtitle {
-  font-size: 0.875rem;
-  color: var(--lotus-text-muted);
+.welcome-header-banner-wordmark {
+  display: block;
+  width: min(320px, 72vw);
+  height: auto;
+  filter: drop-shadow(0 3px 16px rgba(0, 0, 0, 0.45));
 }
 
 .welcome-header-banner-scroll {
@@ -113,11 +143,11 @@
     top: calc(var(--header-height, 56px) + 44px);
   }
 
-  .welcome-header-banner-title {
-    font-size: 1.125rem;
-  }
+}
 
-  .welcome-header-banner-subtitle {
-    font-size: 0.75rem;
+@media screen and (max-width: 639px) {
+  .welcome-header-banner-content {
+    width: calc(100% - 5rem);
+    margin-left: 1.25rem;
   }
 }

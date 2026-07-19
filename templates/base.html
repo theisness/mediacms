@@ -3,15 +3,13 @@
 
 {% block beforecontent %}
 {% include "components/header.html" %}
-{% include "components/sidebar.html" %}
 {% endblock %}
 
 {% block content %}
 <div class="page-main">
-    <div class="page-main-inner">
-    {% block innercontent %}{% endblock innercontent %}
-    </div>
-    <div class="page-sidebar-content-overlay"></div>
+	<div class="page-main-inner">
+	{% block innercontent %}{% endblock innercontent %}
+	</div>
 </div>
 {% endblock %}
 

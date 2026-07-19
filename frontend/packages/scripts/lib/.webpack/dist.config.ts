@@ -56,6 +56,10 @@ export const config: Configuration = {
   mode: 'production',
   optimization: {
     minimize: true,
+    // Webpack 5.98 can orphan re-exported helper modules when module
+    // concatenation is combined with this project's one-chunk-per-entry
+    // LimitChunkCountPlugin setup ("math.js has no id assigned").
+    concatenateModules: false,
     runtimeChunk: false,
     splitChunks: {
       chunks: 'all',

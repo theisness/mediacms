@@ -153,6 +153,11 @@
 <script src="{% static "js/add-media.js" %}"></script>
 <script>
 	document.addEventListener("DOMContentLoaded", function(event) {
+		var uploaderElement = document.querySelector('.media-uploader');
+		if ( !uploaderElement || !document.getElementById('qq-template') || 'undefined' === typeof qq ) {
+			return;
+		}
+
 		function getCSRFToken() {
 			var i, cookies, cookie, cookieVal = null;
 			if ( document.cookie && '' !== document.cookie ) {
@@ -171,7 +176,7 @@
 		}
 		var default_concurrent_chunked_uploader = new qq.FineUploader({
 			debug: false,
-			element: document.querySelector('.media-uploader'),
+			element: uploaderElement,
 			request: {
 				endpoint: '{% url 'uploader:upload' %}',
 				customHeaders: {

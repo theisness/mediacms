@@ -1,48 +1,25 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useTheme } from '../../../utils/hooks/';
 
 import './ThemeSwitchOption.scss';
 
 export function HeaderThemeSwitcher() {
-  const { currentThemeMode, changeThemeMode } = useTheme();
-
-  const inputRef = useRef(null);
-
-  function onKeyPress(ev) {
-    if (0 === ev.keyCode) {
-      changeThemeMode();
-    }
-  }
-
-  function onClick(ev) {
-    if (ev.target !== inputRef.current) {
-      changeThemeMode();
-    }
-  }
-
-  function onChange(ev) {
-    ev.stopPropagation();
-    changeThemeMode();
-  }
+  const { currentThemeMode, themes, setThemeMode } = useTheme();
 
   return (
-    <div className="theme-switch" tabIndex={0} onKeyPress={onKeyPress} onClick={onClick}>
-      <span>Dark Theme</span>
-      <span>
-        <label className="checkbox-label right-selectbox">
-          <span className="checkbox-switcher-wrap">
-            <span className="checkbox-switcher">
-              <input
-                ref={inputRef}
-                type="checkbox"
-                tabIndex={-1}
-                checked={'dark' === currentThemeMode}
-                onChange={onChange}
-              />
-            </span>
-          </span>
-        </label>
-      </span>
+    <div className="theme-switch theme-options" aria-label="切换主题">
+      {themes.map((theme) => (
+        <button
+          key={theme.id}
+          type="button"
+          className={'theme-option' + (theme.id === currentThemeMode ? ' active' : '')}
+          onClick={() => setThemeMode(theme.id)}
+          aria-pressed={theme.id === currentThemeMode}
+        >
+          <span className="theme-swatch" style={{ backgroundColor: theme.swatch }} />
+          <span>{theme.label}</span>
+        </button>
+      ))}
     </div>
   );
 }

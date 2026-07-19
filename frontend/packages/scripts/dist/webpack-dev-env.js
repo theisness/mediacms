@@ -238,6 +238,7 @@ var config$1 = {
     mode: 'production',
     optimization: {
         minimize: true,
+        concatenateModules: false,
         runtimeChunk: false,
         splitChunks: {
             chunks: 'all',

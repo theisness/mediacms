@@ -117,16 +117,6 @@ button {
 .user-action-form-wrap {
   margin: 2em 1em 1em;
 
-  @media screen and (min-width: 1220px) {
-    .sliding-sidebar & {
-      transition-property: padding-right;
-      transition-duration: 0.2s;
-    }
-
-    .visible-sidebar & {
-      padding-right: $_sidebar-width-value * 1px;
-    }
-  }
 }
 
 .user-action-form-inner {

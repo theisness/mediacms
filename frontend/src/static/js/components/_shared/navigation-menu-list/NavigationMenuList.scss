@@ -143,5 +143,12 @@
     .material-icons {
       font-size: 1.715em;
     }
+
+    img {
+      display: block;
+      width: 1.715em;
+      height: 1.715em;
+      object-fit: contain;
+    }
   }
 }

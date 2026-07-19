@@ -62,7 +62,15 @@ export function PageHeader(props) {
   const { visibleMobileSearch } = useLayout();
   // 首次进入时保持 false，避免 HomePage 的大欢迎页与紧凑横幅同时出现；
   // 之后的新页面加载保持 true，PJAX 导航期间也能持续使用同一条 hero 背景。
-  const [showWelcomeHeader] = useState(() => hasSeenWelcome());
+  const [showWelcomeHeader, setShowWelcomeHeader] = useState(() => hasSeenWelcome());
+  const [isScrolled, setIsScrolled] = useState(() => typeof window !== 'undefined' && window.scrollY > 12);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 12);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     Alerts();
@@ -72,6 +80,12 @@ export function PageHeader(props) {
     }
   }, []);
 
+  useEffect(() => {
+    const onNavigationComplete = () => setShowWelcomeHeader(hasSeenWelcome());
+    window.addEventListener('lotus:navigation-complete', onNavigationComplete);
+    return () => window.removeEventListener('lotus:navigation-complete', onNavigationComplete);
+  }, []);
+
   return (
     <>
       <header
@@ -79,7 +93,8 @@ export function PageHeader(props) {
           'page-header' +
           (visibleMobileSearch ? ' mobile-search-field' : '') +
           (isAnonymous ? ' anonymous-user' : '') +
-          (showWelcomeHeader ? ' welcome-banner-active' : '')
+          (showWelcomeHeader ? ' welcome-banner-active' : '') +
+          (isScrolled ? ' is-scrolled' : '')
         }
       >
         <HeaderLeft />

@@ -23,12 +23,20 @@ export function WelcomeHeader() {
   return (
     <section className="welcome-header-banner">
       <div
-        className="welcome-header-banner-bg"
-        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero.webp')" }}
+        className="welcome-header-banner-bg welcome-header-banner-bg-dark"
+        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero-chatgpt.webp')" }}
+      />
+      <div
+        className="welcome-header-banner-bg welcome-header-banner-bg-paper"
+        style={{ backgroundImage: "url('/static/images/lotus-brand/welcome-hero-paper-chatgpt-v2.webp')" }}
+        aria-hidden="true"
       />
       <div className="welcome-header-banner-content">
-        <span className="welcome-header-banner-title">莲花影院</span>
-        <span className="welcome-header-banner-subtitle">清净视听，以影像传递智慧与安宁</span>
+        <img
+          className="welcome-header-banner-wordmark"
+          src="/static/images/lotus-brand/lotus-wordmark-chatgpt.png"
+          alt="莲花影院"
+        />
       </div>
       <button
         type="button"

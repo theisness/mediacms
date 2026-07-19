@@ -20,65 +20,42 @@ const AppProviders = ({ children }) => (
   </LayoutProvider>
 );
 
-import { PageHeader, PageSidebar } from '../components/page-layout';
+import { PageHeader } from '../components/page-layout';
 
 const mountedRoots = {
   header: false,
-  sidebar: false,
 };
+
+function renderHeader(appHeader) {
+  if (!appHeader) return;
+  const hasMountedDom = appHeader.dataset.lotusHeaderMounted === 'true' && appHeader.childNodes.length > 0;
+  if ((mountedRoots.header && appHeader.childNodes.length > 0) || hasMountedDom) return;
+
+  ReactDOM.render(
+    <AppProviders>
+      <PageHeader />
+    </AppProviders>,
+    appHeader
+  );
+
+  mountedRoots.header = true;
+  appHeader.dataset.lotusHeaderMounted = 'true';
+}
 
 export function renderPage(idSelector, PageComponent) {
   const appHeader = document.getElementById('app-header');
-  const appSidebar = document.getElementById('app-sidebar');
   const appContent = idSelector ? document.getElementById(idSelector) : undefined;
 
-  // SPA 导航时，header/sidebar 已经挂载，只重新渲染内容区，避免闪烁
-  if (appContent && PageComponent) {
-    if (!mountedRoots.header && appHeader) {
-      mountedRoots.header = true;
-    }
-    if (!mountedRoots.sidebar && appSidebar) {
-      mountedRoots.sidebar = true;
-    }
+  // Header 拥有独立且唯一的 React 根。PJAX 只替换页面内容，静态上传页也不再借侧栏当挂载宿主。
+  renderHeader(appHeader);
 
+  if (appContent && PageComponent) {
     ReactDOM.render(
       <AppProviders>
-        {appHeader ? ReactDOM.createPortal(<PageHeader />, appHeader) : null}
-        {appSidebar ? ReactDOM.createPortal(<PageSidebar />, appSidebar) : null}
         <PageComponent />
       </AppProviders>,
       appContent
     );
-  } else if (appHeader && appSidebar) {
-    ReactDOM.render(
-      <AppProviders>
-        {ReactDOM.createPortal(<PageHeader />, appHeader)}
-        <PageSidebar />
-      </AppProviders>,
-      appSidebar
-    );
-    mountedRoots.header = true;
-    mountedRoots.sidebar = true;
-  } else if (appHeader) {
-    ReactDOM.render(
-      <LayoutProvider>
-        <ThemeProvider>
-          <UserProvider>
-            <PageHeader />
-          </UserProvider>
-        </ThemeProvider>
-      </LayoutProvider>,
-      appSidebar
-    );
-    mountedRoots.header = true;
-  } else if (appSidebar) {
-    ReactDOM.render(
-      <AppProviders>
-        <PageSidebar />
-      </AppProviders>,
-      appSidebar
-    );
-    mountedRoots.sidebar = true;
   }
 }
 
@@ -95,10 +72,11 @@ export function isHeaderMounted() {
 }
 
 export function isSidebarMounted() {
-  return mountedRoots.sidebar;
+  return false;
 }
 
 export function resetMountedRoots() {
   mountedRoots.header = false;
-  mountedRoots.sidebar = false;
+  const appHeader = document.getElementById('app-header');
+  if (appHeader) delete appHeader.dataset.lotusHeaderMounted;
 }

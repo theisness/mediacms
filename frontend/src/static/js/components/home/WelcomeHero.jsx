@@ -1,5 +1,6 @@
 import React from 'react';
 import { LinksConsumer } from '../../utils/contexts/';
+import { PageStore } from '../../utils/stores/';
 import { MaterialIcon } from '../_shared';
 
 import './WelcomeHero.scss';
@@ -26,9 +27,16 @@ export const WelcomeHero = () => {
       {(links) => (
         <section className="welcome-hero">
           <img
-            className="welcome-hero-bg"
-            src="/static/images/lotus-brand/welcome-hero.webp"
+            className="welcome-hero-bg welcome-hero-bg-dark"
+            src="/static/images/lotus-brand/welcome-hero-chatgpt.webp"
             alt="莲花影院"
+            loading="eager"
+          />
+          <img
+            className="welcome-hero-bg welcome-hero-bg-paper"
+            src="/static/images/lotus-brand/welcome-hero-paper-chatgpt-v2.webp"
+            alt=""
+            aria-hidden="true"
             loading="eager"
           />
           <div className="welcome-hero-overlay" />
@@ -37,24 +45,39 @@ export const WelcomeHero = () => {
               <span className="welcome-hero-line">观一花一世界</span>
               <span className="welcome-hero-line">赏一影一菩提</span>
             </h1>
-            <p className="welcome-hero-subtitle">
-              莲花影院 · 清净视听，以影像传递智慧与安宁
-            </p>
             <nav className="welcome-hero-actions">
+              <a href={links.home} className="welcome-hero-button home">
+                <img src="/static/images/lotus-brand/nav-icons/home.png" alt="" aria-hidden="true" />
+                <span>首页</span>
+              </a>
               <a href={links.featured} className="welcome-hero-button primary">
-                <MaterialIcon type="star" />
+                <img src="/static/images/lotus-brand/nav-icons/featured.png" alt="" aria-hidden="true" />
                 <span>精选影片</span>
               </a>
+              {PageStore.get('config-enabled').pages.recommended &&
+                PageStore.get('config-enabled').pages.recommended.enabled && (
+                <a href={links.recommended} className="welcome-hero-button">
+                  <img src="/static/images/lotus-brand/nav-icons/recommended.png" alt="" aria-hidden="true" />
+                  <span>推荐影片</span>
+                </a>
+              )}
               <a href={links.latest} className="welcome-hero-button">
-                <MaterialIcon type="new_releases" />
+                <img src="/static/images/lotus-brand/nav-icons/latest.png" alt="" aria-hidden="true" />
                 <span>最新上传</span>
               </a>
               <a href={links.archive.categories} className="welcome-hero-button">
-                <MaterialIcon type="list_alt" />
+                <img src="/static/images/lotus-brand/nav-icons/categories.png" alt="" aria-hidden="true" />
                 <span>分类浏览</span>
               </a>
+              {PageStore.get('config-enabled').taxonomies.tags &&
+                PageStore.get('config-enabled').taxonomies.tags.enabled && (
+                <a href={links.archive.tags} className="welcome-hero-button">
+                  <img src="/static/images/lotus-brand/nav-icons/tags.png" alt="" aria-hidden="true" />
+                  <span>标签浏览</span>
+                </a>
+              )}
               <a href={links.user.addMedia} className="welcome-hero-button">
-                <MaterialIcon type="video_call" />
+                <img src="/static/images/lotus-brand/nav-icons/upload.png" alt="" aria-hidden="true" />
                 <span>上传作品</span>
               </a>
             </nav>
