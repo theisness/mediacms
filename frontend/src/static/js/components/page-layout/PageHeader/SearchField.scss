@@ -186,26 +186,32 @@
   }
 }
 
-// 桌面端给左侧品牌/频道与右侧用户操作预留固定安全区，避免导航挤进搜索框。
+// 桌面端改为 flex 行内布局：搜索框是导航与用户操作区之间的正常 flex 项，
+// 永远在 header nav 右边、空间够时在可用空间内居中、窗口变窄自动收缩，不会与导航重叠。
+// 需要 .page-header:not(...) 提权——PageHeader.scss 的 display:table 等规则在产物中更靠后。
 @media screen and (min-width: 1024px) {
-  .page-header > .search-field-wrap {
-    position: absolute;
-    top: 0;
-    left: clamp(390px, 31vw, 480px);
-    right: clamp(220px, 20vw, 300px);
-    width: auto;
-    max-width: none;
-    margin: 0;
+  .page-header:not(.mobile-search-field) {
+    display: flex;
+    align-items: center;
   }
-}
 
-// 大屏居中占视口约 40%，并以导航/操作区安全边界为上限，窗口缩放时同步拉伸。
-@media screen and (min-width: 1200px) {
-  .page-header > .search-field-wrap {
-    left: 50%;
-    right: auto;
-    width: min(40vw, calc(100vw - clamp(390px, 31vw, 480px) - clamp(220px, 20vw, 300px)));
+  .page-header:not(.mobile-search-field) > .page-header-left,
+  .page-header:not(.mobile-search-field) > .page-header-right {
+    position: static;
+    flex: 0 0 auto;
+  }
+
+  .page-header:not(.mobile-search-field) > .page-header-left {
+    padding-right: 0;
+  }
+
+  .page-header:not(.mobile-search-field) > .search-field-wrap {
+    position: static;
+    flex: 0 1 640px;
+    width: auto;
+    min-width: 280px;
     max-width: none;
-    transform: translateX(-50%);
+    margin: 0 auto;
+    transform: none;
   }
 }
