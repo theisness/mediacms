@@ -16,7 +16,11 @@ export function PopupContent(props) {
 
     const domElem = findDOMNode(wrapperRef.current);
 
-    if (-1 === ev.path.indexOf(domElem)) {
+    // ev.path 是非标准属性（Firefox / 部分 WebView 没有，合成事件也可能缺），
+    // 用 composedPath 兜底，避免 undefined.indexOf 抛 TypeError。
+    const evPath = ev.path || (typeof ev.composedPath === 'function' ? ev.composedPath() : []);
+
+    if (-1 === evPath.indexOf(domElem)) {
       hide();
     }
   }, []);

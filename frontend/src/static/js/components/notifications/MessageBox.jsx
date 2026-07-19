@@ -18,18 +18,6 @@ function truncate(str, len = 42) {
   return str.length > len ? str.slice(0, len) + '…' : str;
 }
 
-function parseMediaUrl(mediaUrl) {
-  try {
-    const url = new URL(mediaUrl, window.location.origin);
-    const parts = url.pathname.split('/').filter(Boolean);
-    // MediaCMS 媒体详情路径通常为 /v/{friendly_token} 或 /w/{friendly_token}
-    const token = parts.length > 1 ? parts[parts.length - 1] : null;
-    return { pathname: url.pathname, token };
-  } catch (e) {
-    return { pathname: mediaUrl, token: null };
-  }
-}
-
 function MessageList({ items, emptyText }) {
   if (!items || !items.length) {
     return <div className="message-box-empty">{emptyText}</div>;
@@ -38,11 +26,11 @@ function MessageList({ items, emptyText }) {
   return (
     <ul className="message-list">
       {items.map((item) => {
-        const { pathname } = parseMediaUrl(item.media_url);
+        // API 返回的 media_url 形如 /view?m={token}，必须原样带上 query，拼上评论锚点即可。
         const commentAnchor = item.uid ? `#comment-${item.uid}` : '';
         return (
           <li key={item.uid} className="message-item">
-            <a href={`${pathname}${commentAnchor}`} className="message-link">
+            <a href={`${item.media_url || ''}${commentAnchor}`} className="message-link">
               <img
                 className="message-thumb"
                 src={item.author_thumbnail_url || '/static/images/lotus-brand/favicon-lotus.png'}

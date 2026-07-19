@@ -5,9 +5,12 @@
 import ReactDOM from 'react-dom';
 
 const BLACKLIST = [
-  /^\/v\//, // 媒体详情页 /v/{token}
+  /^\/view/, // 媒体详情页 /view?m={token}（本站实际使用的详情页路径，播放器复杂必须整页刷新）
+  /^\/v\//, // 媒体详情页 /v/{token}（上游新版路径，保留兜底）
   /^\/w\//, // 备用媒体详情页 /w/{token}
   /^\/embed/, // 嵌入页
+  /^\/manage\//, // 管理页（服务端渲染，非 SPA）
+  /^\/admin\//, // Django 后台（服务端渲染，非 SPA）
   /^\/add-media/, // 兼容旧上传页路径
   /^\/upload/, // 生产上传页
   /^\/scpublisher/, // 上传页兼容入口
@@ -162,8 +165,10 @@ function updateMeta(newDoc) {
 }
 
 function evalMediaCmsConfig(newDoc) {
+  // 配置脚本实际形如 `var MediaCMS = {...}; ...; window.MediaCMS = MediaCMS;`，
+  // 原先按 window['MediaCMS'] 匹配永远落空，导致 PJAX 后配置不更新。
   const mediaCmsScript = Array.from(newDoc.querySelectorAll('script')).find((s) =>
-    s.textContent.includes("window['MediaCMS']")
+    s.textContent.includes('window.MediaCMS = MediaCMS')
   );
   if (mediaCmsScript) {
     try {
