@@ -85,7 +85,7 @@ body * {
 }
 
 // 宣纸白主题：横幅上的导航文字弃用大半径「发光」模糊，改金色主题色 + 干净下落阴影。
-:root[data-theme='paper'] .page-header.welcome-banner-active:not(.is-scrolled) {
+:root:not([data-theme='indigo']):not([data-theme='crimson']) .page-header.welcome-banner-active:not(.is-scrolled) {
   .header-primary-nav a,
   .page-header-right .circle-icon-button {
     color: var(--lotus-gold-dim);
@@ -99,7 +99,7 @@ body * {
 }
 
 // 宣纸白主题：注册实心按钮里 --lotus-bg-deep 是近白色，压在金底上看不清 → 深金底 + 白字。
-:root[data-theme='paper'] .page-header .register-link {
+:root:not([data-theme='indigo']):not([data-theme='crimson']) .page-header .register-link {
   color: #ffffff;
   background-color: var(--lotus-gold-dim);
   border-color: var(--lotus-gold-dim);

@@ -1,13 +1,247 @@
 // ============================================================
 // 莲花影院设计 Tokens —— 三主题可切换
 // ============================================================
-// 默认主题：深靛鎏金禅意（lotus-indigo）
-// data-theme="paper"：素雅宣纸白
+// 默认主题：素雅宣纸白（lotus-paper，无 data-theme 属性即生效）
+// data-theme="indigo"：深靛鎏金禅意
 // data-theme="crimson"：玄夜朱金
 // ============================================================
 
 :root {
   // ---- 核心品牌色 ----
+  --lotus-bg-deep: #F7F4ED;
+  --lotus-bg-panel: #FFFDF9;
+  --lotus-bg-elevated: #FFFFFF;
+  --lotus-gold: #B98E48;
+  --lotus-gold-light: #D4B06A;
+  --lotus-gold-dim: #8F6E36;
+  --lotus-saffron: #A67C3D;
+  --lotus-cinnabar: #B35A5A;
+  --lotus-text: #2C2419;
+  --lotus-text-muted: #7A6F5C;
+  --lotus-text-sub: #9A8F7C;
+  --lotus-border: rgba(44, 36, 25, 0.08);
+  --lotus-border-strong: rgba(44, 36, 25, 0.18);
+  --lotus-glass: rgba(255, 253, 249, 0.82);
+  --lotus-shadow: rgba(44, 36, 25, 0.12);
+  --lotus-overlay: rgba(247, 244, 237, 0.92);
+
+  // ---- 兼容旧 MediaCMS 变量名（映射到 lotus 语义） ----
+  --body-text-color: var(--lotus-text);
+  --body-bg-color: var(--lotus-bg-deep);
+  --hr-color: var(--lotus-border);
+  --dotted-outline-color: rgba(44, 36, 25, 0.3);
+
+  --input-color: var(--lotus-text);
+  --input-bg-color: var(--lotus-bg-elevated);
+  --input-border-color: var(--lotus-border-strong);
+
+  --header-bg-color: var(--lotus-bg-panel);
+  --header-circle-button-color: var(--lotus-gold);
+  --header-popup-menu-color: var(--lotus-text);
+  --header-popup-menu-icon-color: var(--lotus-text-muted);
+
+  --sidebar-bg-color: var(--lotus-bg-panel);
+  --sidebar-nav-border-color: var(--lotus-border);
+  --sidebar-nav-item-text-color: var(--lotus-text);
+  --sidebar-nav-item-icon-color: var(--lotus-text-muted);
+  --sidebar-bottom-link-color: var(--lotus-text-muted);
+
+  --spinner-loader-color: var(--lotus-gold);
+
+  --nav-menu-active-item-bg-color: rgba(185, 142, 72, 0.12);
+  --nav-menu-item-hover-bg-color: rgba(185, 142, 72, 0.06);
+  --in-popup-nav-menu-item-hover-bg-color: rgba(185, 142, 72, 0.1);
+
+  --search-field-input-text-color: var(--lotus-text);
+  --search-field-input-bg-color: var(--lotus-bg-deep);
+  --search-field-input-border-color: var(--lotus-border-strong);
+  --search-field-submit-text-color: var(--lotus-gold);
+  --search-field-submit-bg-color: rgba(185, 142, 72, 0.08);
+  --search-field-submit-border-color: var(--lotus-border);
+  --search-field-submit-hover-bg-color: rgba(185, 142, 72, 0.15);
+  --search-field-submit-hover-border-color: var(--lotus-gold-dim);
+
+  --search-results-item-content-link-title-text-color: var(--lotus-text);
+
+  --logged-in-user-thumb-bg-color: rgba(44, 36, 25, 0.06);
+
+  --popup-bg-color: var(--lotus-bg-elevated);
+  --popup-hr-bg-color: var(--lotus-border);
+  --popup-top-text-color: var(--lotus-text);
+  --popup-top-bg-color: rgba(185, 142, 72, 0.08);
+  --popup-msg-title-text-color: var(--lotus-text);
+  --popup-msg-main-text-color: var(--lotus-text-muted);
+
+  --comments-textarea-wrapper-border-color: var(--lotus-border-strong);
+  --comments-textarea-wrapper-after-bg-color: var(--lotus-gold);
+  --comments-textarea-text-color: var(--lotus-text);
+  --comments-textarea-text-placeholder-color: var(--lotus-text-muted);
+  --comments-list-inner-border-color: var(--lotus-border);
+  --comment-author-text-color: var(--lotus-text);
+  --comment-date-text-color: var(--lotus-text-muted);
+  --comment-date-hover-text-color: var(--lotus-text);
+  --comment-text-color: var(--lotus-text);
+  --comment-text-mentions-background-color-highlight: rgba(185, 142, 72, 0.25);
+  --comment-actions-material-icon-text-color: var(--lotus-text-muted);
+  --comment-actions-likes-num-text-color: var(--lotus-text-muted);
+  --comment-actions-reply-button-text-color: var(--lotus-text-muted);
+  --comment-actions-reply-button-hover-text-color: var(--lotus-gold-light);
+  --comment-actions-cancel-removal-button-text-color: var(--lotus-text-muted);
+  --comment-actions-cancel-removal-button-hover-text-color: var(--lotus-text);
+
+  --item-bg-color: var(--lotus-bg-panel);
+  --item-title-text-color: var(--lotus-text);
+  --item-thumb-bg-color: var(--lotus-bg-elevated);
+  --item-meta-text-color: var(--lotus-text-muted);
+  --item-meta-link-text-color: var(--lotus-text);
+  --item-meta-link-hover-text-color: var(--lotus-gold-light);
+
+  --profile-page-item-content-title-bg-color: var(--lotus-bg-panel);
+  --playlist-item-main-view-full-link-text-color: var(--lotus-text-muted);
+  --playlist-item-main-view-full-link-hover-text-color: var(--lotus-text);
+
+  --item-list-load-more-text-color: var(--lotus-text-muted);
+  --item-list-load-more-hover-text-color: var(--lotus-gold-light);
+
+  --media-list-row-border-color: var(--lotus-border);
+  --media-list-header-title-link-text-color: var(--lotus-text-muted);
+
+  --playlist-form-title-focused-bg-color: var(--lotus-text);
+  --playlist-privacy-border-color: var(--lotus-border-strong);
+  --playlist-form-cancel-button-text-color: var(--lotus-text-muted);
+  --playlist-form-cancel-button-hover-text-color: var(--lotus-text);
+
+  --playlist-save-popup-text-color: var(--lotus-text);
+  --playlist-save-popup-border-color: var(--lotus-border);
+  --playlist-save-popup-create-icon-text-color: var(--lotus-text-muted);
+  --playlist-save-popup-create-focus-bg-color: rgba(185, 142, 72, 0.1);
+
+  --playlist-view-header-bg-color: var(--lotus-bg-panel);
+  --playlist-view-header-toggle-text-color: var(--lotus-text);
+  --playlist-view-header-toggle-bg-color: var(--lotus-bg-panel);
+  --playlist-view-title-link-text-color: var(--lotus-text);
+  --playlist-view-meta-text-color: var(--lotus-text-muted);
+  --playlist-view-meta-link-color: var(--lotus-text-muted);
+  --playlist-view-meta-link-hover-text-color: var(--lotus-text);
+  --playlist-view-status-text-color: var(--lotus-text-muted);
+  --playlist-view-status-bg-color: rgba(185, 142, 72, 0.1);
+  --playlist-view-status-icon-text-color: var(--lotus-text-muted);
+  --playlist-view-actions-bg-color: var(--lotus-bg-panel);
+  --playlist-view-media-bg-color: var(--lotus-bg-elevated);
+  --playlist-view-media-order-number-color: var(--lotus-text-muted);
+  --playlist-view-item-title-text-color: var(--lotus-text);
+  --playlist-view-item-author-text-color: var(--lotus-text);
+  --playlist-view-item-author-bg-color: var(--lotus-bg-elevated);
+
+  --profile-page-bg-color: var(--lotus-bg-deep);
+  --profile-page-header-bg-color: var(--lotus-bg-panel);
+  --profile-page-info-videos-number-text-color: var(--lotus-text-muted);
+  --profile-page-nav-link-text-color: var(--lotus-text-muted);
+  --profile-page-nav-link-hover-text-color: var(--lotus-text);
+  --profile-page-nav-link-active-text-color: var(--lotus-text);
+  --profile-page-nav-link-active-after-bg-color: var(--lotus-gold);
+
+  --add-media-page-tmplt-dialog-bg-color: var(--lotus-bg-elevated);
+  --add-media-page-tmplt-uploader-bg-color: var(--lotus-bg-elevated);
+  --add-media-page-tmplt-dropzone-bg-color: rgba(255, 255, 255, 0.5);
+  --add-media-page-tmplt-drag-drop-inner-text-color: var(--lotus-text-muted);
+  --add-media-page-tmplt-upload-item-spiner-text-color: var(--lotus-text-sub);
+  --add-media-page-tmplt-upload-item-actions-text-color: var(--lotus-text-muted);
+  --add-media-page-qq-gallery-upload-button-text-color: var(--lotus-text-muted);
+  --add-media-page-qq-gallery-upload-button-icon-text-color: var(--lotus-text-muted);
+  --add-media-page-qq-gallery-upload-button-hover-text-color: var(--lotus-text);
+  --add-media-page-qq-gallery-upload-button-hover-icon-text-color: var(--lotus-text);
+  --add-media-page-qq-gallery-upload-button-focus-text-color: var(--lotus-text-muted);
+
+  --playlist-page-bg-color: var(--lotus-bg-deep);
+  --playlist-page-details-text-color: var(--lotus-text-muted);
+  --playlist-page-thumb-bg-color: var(--lotus-bg-elevated);
+  --playlist-page-title-link-text-color: var(--lotus-text);
+  --playlist-page-actions-circle-icon-text-color: var(--lotus-bg-deep);
+  --playlist-page-actions-circle-icon-bg-color: inherit;
+  --playlist-page-actions-nav-item-button-text-color: var(--lotus-text);
+  --playlist-page-actions-popup-message-bottom-cancel-removal-button-text-color: var(--lotus-text-muted);
+  --playlist-page-actions-popup-message-bottom-cancel-removal-button-hover-text-color: var(--lotus-text);
+  --playlist-page-status-text-color: var(--lotus-text-muted);
+  --playlist-page-status-bg-color: rgba(185, 142, 72, 0.1);
+  --playlist-page-status-icon-text-color: var(--lotus-text-muted);
+  --playlist-page-author-border-top-color: var(--lotus-border);
+  --playlist-page-author-name-link-color: var(--lotus-text);
+  --playlist-page-author-edit-playlist-icon-button-text-color: var(--lotus-text-muted);
+  --playlist-page-author-edit-playlist-icon-button-bg-color: var(--lotus-bg-panel);
+  --playlist-page-author-edit-playlist-icon-button-active-text-color: var(--lotus-text);
+  --playlist-page-author-edit-playlist-form-wrap-text-color: var(--lotus-text);
+  --playlist-page-author-edit-playlist-form-wrap-bg-color: var(--lotus-bg-elevated);
+  --playlist-page-author-edit-playlist-form-wrap-border-color: var(--lotus-border);
+  --playlist-page-author-edit-playlist-author-thumb-text-color: var(--lotus-text);
+  --playlist-page-author-edit-playlist-author-thumb-bg-color: var(--lotus-bg-elevated);
+  --playlist-page-details-bg-color: var(--lotus-bg-panel);
+  --playlist-page-video-list-bg-color: var(--lotus-bg-elevated);
+  --playlist-page-video-list-item-title-bg-color: var(--lotus-bg-elevated);
+  --playlist-page-video-list-item-hover-bg-color: rgba(185, 142, 72, 0.06);
+  --playlist-page-video-list-item-title-hover-bg-color: rgba(185, 142, 72, 0.06);
+
+  --media-author-actions-popup-bottom-cancel-removal-button-text-color: var(--lotus-text-muted);
+  --media-author-actions-popup-bottom-cancel-removal-button-hover-text-color: var(--lotus-text);
+  --profile-banner-wrap-popup-bottom-cancel-removal-button-text-color: var(--lotus-text-muted);
+  --profile-banner-wrap-popup-bottom-cancel-removal-button-hover-text-color: var(--lotus-text);
+  --media-title-banner-border-color: var(--lotus-border);
+  --media-title-labels-area-text-color: var(--lotus-text-muted);
+  --media-title-labels-area-bg-color: rgba(185, 142, 72, 0.06);
+  --media-title-views-text-color: var(--lotus-text-muted);
+  --media-actions-not-popup-circle-icon-focus-bg-color: rgba(185, 142, 72, 0.06);
+  --media-actions-not-popup-circle-icon-active-bg-color: rgba(185, 142, 72, 0.12);
+  --media-actions-like-before-border-color: var(--lotus-gold);
+  --media-actions-share-title-text-color: var(--lotus-text);
+  --media-actions-share-options-nav-button-text-color: var(--lotus-text-muted);
+  --media-actions-share-options-link-text-color: var(--lotus-text);
+  --media-actions-share-copy-field-border-color: var(--lotus-border);
+  --media-actions-share-copy-field-bg-color: var(--lotus-bg-elevated);
+  --media-actions-share-copy-field-input-text-color: var(--lotus-text);
+  --media-actions-more-options-popup-bg-color: var(--lotus-bg-elevated);
+  --media-actions-more-options-popup-nav-link-text-color: var(--lotus-text);
+  --media-actions-share-fullscreen-popup-main-bg-color: var(--lotus-bg-elevated);
+  --report-form-title-text-color: var(--lotus-text);
+  --report-form-field-label-text-color: var(--lotus-text-muted);
+  --report-form-field-input-text-color: var(--lotus-text);
+  --report-form-field-input-border-color: var(--lotus-border);
+  --report-form-field-input-bg-color: var(--lotus-bg-elevated);
+  --report-form-help-text-color: var(--lotus-text-muted);
+  --form-actions-bottom-border-top-color: var(--lotus-border);
+  --media-author-banner-name-text-color: var(--lotus-text);
+  --media-author-banner-date-text-color: var(--lotus-text-muted);
+  --media-content-banner-border-color: var(--lotus-border);
+  --share-embed-inner-on-right-border-color: var(--lotus-border);
+  --share-embed-inner-on-right-ttl-text-color: var(--lotus-text);
+  --share-embed-inner-on-right-icon-text-color: var(--lotus-text-muted);
+  --share-embed-inner-textarea-text-color: var(--lotus-text);
+  --share-embed-inner-textarea-border-color: var(--lotus-border);
+  --share-embed-inner-textarea-bg-color: var(--lotus-bg-elevated);
+  --share-embed-inner-embed-wrap-iconn-text-color: var(--lotus-text-muted);
+  --media-status-info-item-text-color: var(--lotus-text);
+  --viewer-sidebar-auto-play-border-bottom-color: var(--lotus-border);
+  --viewer-sidebar-auto-play-next-label-text-color: var(--lotus-text);
+  --viewer-sidebar-auto-play-option-text-color: var(--lotus-text-muted);
+  --user-action-form-inner-bg-color: var(--lotus-bg-elevated);
+  --user-action-form-inner-title-border-bottom-color: var(--lotus-border);
+  --user-action-form-inner-input-border-color: var(--lotus-border-strong);
+  --user-action-form-inner-input-text-color: var(--lotus-text);
+  --user-action-form-inner-input-bg-color: var(--lotus-bg-deep);
+
+  // ---- 莲花影院扩展变量 ----
+  --lotus-theme-indicator: var(--lotus-gold);
+  --lotus-welcome-gradient: linear-gradient(180deg, rgba(247, 244, 237, 0) 0%, rgba(247, 244, 237, 0.9) 100%);
+  --lotus-card-radius: 12px;
+  --lotus-button-radius: 9999px;
+  --lotus-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --lotus-header-height: 56px;
+  --lotus-sidebar-width: 240px;
+}
+
+// ============================================================
+// 主题：深靛鎏金禅意
+// ============================================================
+:root[data-theme="indigo"] {
   --lotus-bg-deep: #12172A;
   --lotus-bg-panel: #1A2035;
   --lotus-bg-elevated: #202B45;
@@ -25,7 +259,6 @@
   --lotus-shadow: rgba(0, 0, 0, 0.35);
   --lotus-overlay: rgba(18, 23, 42, 0.85);
 
-  // ---- 兼容旧 MediaCMS 变量名（映射到 lotus 语义） ----
   --body-text-color: var(--lotus-text);
   --body-bg-color: var(--lotus-bg-deep);
   --hr-color: var(--lotus-border);
@@ -228,77 +461,8 @@
   --user-action-form-inner-input-text-color: var(--lotus-text);
   --user-action-form-inner-input-bg-color: var(--lotus-bg-deep);
 
-  // ---- 莲花影院扩展变量 ----
   --lotus-theme-indicator: var(--lotus-gold);
   --lotus-welcome-gradient: linear-gradient(180deg, rgba(18, 23, 42, 0) 0%, rgba(18, 23, 42, 0.85) 100%);
-  --lotus-card-radius: 12px;
-  --lotus-button-radius: 9999px;
-  --lotus-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --lotus-header-height: 56px;
-  --lotus-sidebar-width: 240px;
-}
-
-// ============================================================
-// 主题：素雅宣纸白
-// ============================================================
-:root[data-theme="paper"] {
-  --lotus-bg-deep: #F7F4ED;
-  --lotus-bg-panel: #FFFDF9;
-  --lotus-bg-elevated: #FFFFFF;
-  --lotus-gold: #B98E48;
-  --lotus-gold-light: #D4B06A;
-  --lotus-gold-dim: #8F6E36;
-  --lotus-saffron: #A67C3D;
-  --lotus-cinnabar: #B35A5A;
-  --lotus-text: #2C2419;
-  --lotus-text-muted: #7A6F5C;
-  --lotus-text-sub: #9A8F7C;
-  --lotus-border: rgba(44, 36, 25, 0.08);
-  --lotus-border-strong: rgba(44, 36, 25, 0.18);
-  --lotus-glass: rgba(255, 253, 249, 0.82);
-  --lotus-shadow: rgba(44, 36, 25, 0.12);
-  --lotus-overlay: rgba(247, 244, 237, 0.92);
-
-  --body-text-color: var(--lotus-text);
-  --body-bg-color: var(--lotus-bg-deep);
-  --dotted-outline-color: rgba(44, 36, 25, 0.3);
-
-  --input-bg-color: var(--lotus-bg-elevated);
-  --header-bg-color: var(--lotus-bg-panel);
-  --sidebar-bg-color: var(--lotus-bg-panel);
-  --sidebar-nav-item-icon-color: var(--lotus-text-muted);
-
-  --nav-menu-active-item-bg-color: rgba(185, 142, 72, 0.12);
-  --nav-menu-item-hover-bg-color: rgba(185, 142, 72, 0.06);
-  --in-popup-nav-menu-item-hover-bg-color: rgba(185, 142, 72, 0.1);
-
-  --search-field-input-bg-color: var(--lotus-bg-deep);
-  --search-field-submit-bg-color: rgba(185, 142, 72, 0.08);
-  --search-field-submit-hover-bg-color: rgba(185, 142, 72, 0.15);
-
-  --popup-bg-color: var(--lotus-bg-elevated);
-  --popup-top-bg-color: rgba(185, 142, 72, 0.08);
-  --comment-text-mentions-background-color-highlight: rgba(185, 142, 72, 0.25);
-
-  --item-bg-color: var(--lotus-bg-panel);
-  --item-thumb-bg-color: var(--lotus-bg-elevated);
-
-  --profile-page-bg-color: var(--lotus-bg-deep);
-  --profile-page-header-bg-color: var(--lotus-bg-panel);
-
-  --add-media-page-tmplt-dropzone-bg-color: rgba(255, 255, 255, 0.5);
-
-  --playlist-page-bg-color: var(--lotus-bg-deep);
-  --playlist-page-thumb-bg-color: var(--lotus-bg-elevated);
-
-  --media-title-labels-area-bg-color: rgba(185, 142, 72, 0.06);
-  --media-actions-not-popup-circle-icon-focus-bg-color: rgba(185, 142, 72, 0.06);
-  --media-actions-not-popup-circle-icon-active-bg-color: rgba(185, 142, 72, 0.12);
-
-  --user-action-form-inner-bg-color: var(--lotus-bg-elevated);
-  --user-action-form-inner-input-bg-color: var(--lotus-bg-deep);
-
-  --lotus-welcome-gradient: linear-gradient(180deg, rgba(247, 244, 237, 0) 0%, rgba(247, 244, 237, 0.9) 100%);
 }
 
 // ============================================================

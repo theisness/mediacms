@@ -12,7 +12,7 @@ const THEMES = [
   { id: 'crimson', label: '玄夜朱金', swatch: '#0D0D0D', metaColor: '#0D0D0D' },
 ];
 
-const DEFAULT_THEME = 'indigo';
+const DEFAULT_THEME = 'paper';
 const THEME_CACHE_KEY = 'mode';
 
 function initLogo(logo) {

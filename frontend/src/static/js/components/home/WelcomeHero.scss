@@ -193,7 +193,7 @@
 }
 
 // paper 主题适配：切换晨光版 hero，以柔和浅遮罩承托深色文字。
-:root[data-theme="paper"] .welcome-hero-overlay {
+:root:not([data-theme="indigo"]):not([data-theme="crimson"]) .welcome-hero-overlay {
   background: linear-gradient(
     180deg,
     rgba(247, 244, 237, 0.16) 0%,
@@ -202,7 +202,7 @@
   );
 }
 
-:root[data-theme="paper"] .welcome-hero {
+:root:not([data-theme="indigo"]):not([data-theme="crimson"]) .welcome-hero {
   .welcome-hero-bg-dark {
     display: none;
   }

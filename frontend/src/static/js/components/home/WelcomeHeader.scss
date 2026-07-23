@@ -63,7 +63,7 @@
 }
 
 // 宣纸白使用独立的晨光版 hero，并以浅色顶遮罩承托深色导航文字。
-:root[data-theme="paper"] .welcome-header-banner {
+:root:not([data-theme="indigo"]):not([data-theme="crimson"]) .welcome-header-banner {
   background-color: var(--lotus-bg-deep);
 
   &::before {
@@ -76,16 +76,16 @@
   }
 }
 
-:root[data-theme="paper"] .welcome-header-banner-bg-dark {
+:root:not([data-theme="indigo"]):not([data-theme="crimson"]) .welcome-header-banner-bg-dark {
   display: none;
 }
 
-:root[data-theme="paper"] .welcome-header-banner-bg-paper {
+:root:not([data-theme="indigo"]):not([data-theme="crimson"]) .welcome-header-banner-bg-paper {
   display: block;
   opacity: 0.92;
 }
 
-:root[data-theme="paper"] .welcome-header-banner-wordmark {
+:root:not([data-theme="indigo"]):not([data-theme="crimson"]) .welcome-header-banner-wordmark {
   filter:
     drop-shadow(0 1px 0 rgba(255, 255, 255, 0.92))
     drop-shadow(0 3px 12px rgba(44, 36, 25, 0.24));
