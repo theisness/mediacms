@@ -81,12 +81,7 @@ function UploadMediaButton({ user, links }) {
   return !user.is.anonymous && user.can.addMedia ? (
     <div className={'hidden-only-in-small'}>
       <CircleIconButton type="link" href={links.user.addMedia} title="Upload media">
-        <img
-          className="header-action-icon"
-          src="/static/images/lotus-brand/nav-icons/upload.png"
-          alt=""
-          aria-hidden="true"
-        />
+        <MaterialIcon type="cloud_upload" />
         <span className="hidden-txt">Upload media</span>
       </CircleIconButton>
     </div>
