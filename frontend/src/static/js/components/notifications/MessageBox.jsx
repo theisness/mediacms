@@ -18,6 +18,26 @@ function truncate(str, len = 42) {
   return str.length > len ? str.slice(0, len) + '…' : str;
 }
 
+// 已读水位：localStorage 持久化（无 TTL），按站点 + 用户区分。
+// 红点只在「存在 add_date 晚于水位的评论」时亮；打开一次盒子即把水位推到最新。
+function seenStorageKey(siteId, username) {
+  return 'MediaCMS[' + siteId + '][messageBoxSeen][' + (username || 'unknown') + ']';
+}
+
+function commentTs(item) {
+  const t = new Date(item && item.add_date).getTime();
+  return isNaN(t) ? 0 : t;
+}
+
+function latestTs(items) {
+  let ts = 0;
+  (items || []).forEach((item) => {
+    const t = commentTs(item);
+    if (t > ts) ts = t;
+  });
+  return ts;
+}
+
 function MessageList({ items, emptyText }) {
   if (!items || !items.length) {
     return <div className="message-box-empty">{emptyText}</div>;
@@ -53,59 +73,103 @@ function MessageList({ items, emptyText }) {
 }
 
 export function MessageBox() {
-  const { isAnonymous } = useUser();
+  const { isAnonymous, username } = useUser();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(TAB_RECENT);
   const [recent, setRecent] = useState([]);
   const [featured, setFeatured] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const boxRef = useRef(null);
   const cacheRef = useRef(null);
+  const seenKeyRef = useRef(null);
 
   useEffect(() => {
     const siteId = PageStore.get('config-site').id || 'mediacms-frontend';
     cacheRef.current = new BrowserCache('MediaCMS[' + siteId + '][messageBox]', CACHE_TTL_SECONDS);
-  }, []);
+    seenKeyRef.current = seenStorageKey(siteId, username);
+  }, [username]);
 
-  useEffect(() => {
-    if (isAnonymous || !open || !cacheRef.current) return;
+  const getSeen = () => {
+    if (!seenKeyRef.current) return 0;
+    try {
+      return parseInt(localStorage.getItem(seenKeyRef.current), 10) || 0;
+    } catch (e) {
+      return 0;
+    }
+  };
 
-    const cacheKey = activeTab;
-    const cached = cacheRef.current.get(cacheKey);
+  // 打开盒子即视为已读：水位推到当前最新评论时间，红点熄灭。
+  const markSeen = (items) => {
+    const ts = latestTs(items) || new Date().getTime();
+    if (seenKeyRef.current) {
+      try {
+        localStorage.setItem(seenKeyRef.current, String(ts));
+      } catch (e) {
+        /* localStorage 不可用时静默降级：仅本次会话内熄灭 */
+      }
+    }
+    setUnreadCount(0);
+  };
+
+  const loadTab = (tab, onLoaded) => {
+    const cached = cacheRef.current.get(tab);
     if (cached && Array.isArray(cached)) {
-      if (activeTab === TAB_FEATURED) setFeatured(cached);
-      else setRecent(cached);
+      onLoaded(cached);
       return;
     }
 
-    setLoading(true);
     const apiUrl = PageStore.get('config-api') || {};
     const commentsUrl = apiUrl.comments;
     if (!commentsUrl) {
-      setLoading(false);
+      onLoaded(null);
       return;
     }
 
     const url =
-      activeTab === TAB_FEATURED
+      tab === TAB_FEATURED
         ? `${commentsUrl}?is_featured=true&page_size=5`
-      : `${commentsUrl}?ordering=-add_date&page_size=5`;
+        : `${commentsUrl}?ordering=-add_date&page_size=5`;
 
     getRequest(
       url,
       true,
       (res) => {
         const results = res && res.data && res.data.results ? res.data.results : [];
-        cacheRef.current.set(cacheKey, results);
-        const visibleResults = results.slice(0, 5);
-        if (activeTab === TAB_FEATURED) setFeatured(visibleResults);
-        else setRecent(visibleResults);
-        setLoading(false);
+        cacheRef.current.set(tab, results);
+        onLoaded(results);
       },
-      () => {
-        setLoading(false);
-      }
+      () => onLoaded(null) // 失败回 null：不清已读水位，避免红点被误灭
     );
+  };
+
+  // 进页面就拉一次最新评论，跟已读水位比对：有新评论自动亮红点，无需点开。
+  useEffect(() => {
+    if (isAnonymous || !cacheRef.current) return;
+    loadTab(TAB_RECENT, (results) => {
+      if (!results) return;
+      const visible = results.slice(0, 5);
+      setRecent(visible);
+      const seen = getSeen();
+      setUnreadCount(visible.filter((item) => commentTs(item) > seen).length);
+    });
+  }, [isAnonymous, username]);
+
+  useEffect(() => {
+    if (isAnonymous || !open || !cacheRef.current) return;
+
+    setLoading(true);
+    loadTab(activeTab, (results) => {
+      setLoading(false);
+      if (!results) return;
+      const visibleResults = results.slice(0, 5);
+      if (activeTab === TAB_FEATURED) {
+        setFeatured(visibleResults);
+      } else {
+        setRecent(visibleResults);
+        markSeen(visibleResults);
+      }
+    });
   }, [isAnonymous, open, activeTab]);
 
   useEffect(() => {
@@ -124,8 +188,6 @@ export function MessageBox() {
   if (isAnonymous) {
     return null;
   }
-
-  const unreadCount = recent.length + featured.length > 0 ? recent.length + featured.length : 0;
 
   return (
     <ApiUrlConsumer>
