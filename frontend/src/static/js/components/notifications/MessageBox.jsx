@@ -12,6 +12,7 @@ import './MessageBox.scss';
 const CACHE_TTL_SECONDS = 60;
 const TAB_RECENT = 'recent';
 const TAB_FEATURED = 'featured';
+const PAGE_SIZE = 20;
 
 function truncate(str, len = 42) {
   if (!str) return '';
@@ -128,8 +129,8 @@ export function MessageBox() {
 
     const url =
       tab === TAB_FEATURED
-        ? `${commentsUrl}?is_featured=true&page_size=5`
-        : `${commentsUrl}?ordering=-add_date&page_size=5`;
+        ? `${commentsUrl}?is_featured=true&page_size=${PAGE_SIZE}`
+        : `${commentsUrl}?ordering=-add_date&page_size=${PAGE_SIZE}`;
 
     getRequest(
       url,
@@ -148,7 +149,7 @@ export function MessageBox() {
     if (isAnonymous || !cacheRef.current) return;
     loadTab(TAB_RECENT, (results) => {
       if (!results) return;
-      const visible = results.slice(0, 5);
+      const visible = results.slice(0, PAGE_SIZE);
       setRecent(visible);
       const seen = getSeen();
       setUnreadCount(visible.filter((item) => commentTs(item) > seen).length);
@@ -162,7 +163,7 @@ export function MessageBox() {
     loadTab(activeTab, (results) => {
       setLoading(false);
       if (!results) return;
-      const visibleResults = results.slice(0, 5);
+      const visibleResults = results.slice(0, PAGE_SIZE);
       if (activeTab === TAB_FEATURED) {
         setFeatured(visibleResults);
       } else {
