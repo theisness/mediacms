@@ -451,6 +451,14 @@ FILMLIST_DISCOURSE_API_KEY = ""
 FILMLIST_DISCOURSE_API_USERNAME = ""
 FILMLIST_POST_IDS = []  # 如 [1655, 1656, 1657, 1658]，顺序＝楼层顺序
 
+# --- 莲花导航 SSO（HMAC 跳转登录） ---
+# 默认关闭；密钥放 local_settings.py（与导航 config.sso.mediacmsSecret 同一串），不进 repo。
+LOTUS_SSO_ENABLED = False
+LOTUS_SSO_SECRET = ""
+# 身份源（IdP）签发页地址，生产值放 local_settings.py，开源仓不含真实域名
+LOTUS_SSO_IDP_URL = ""
+LOTUS_SSO_NONCE_TTL = 600  # 秒
+
 # if True, delete the original uploaded file after a video is fully
 # transcoded (all encodings + HLS + sprite are produced), to reclaim disk.
 # WARNING: irreversible — re-encoding from the original is no longer possible

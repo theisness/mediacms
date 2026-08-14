@@ -1,8 +1,11 @@
 from django.urls import path, re_path
 
-from . import views
+from . import lotus_sso, views
 
 urlpatterns = [
+    # 莲花导航 SSO（HMAC 跳转）；LOTUS_SSO_ENABLED=False 时视图内 404
+    path("accounts/lotus-sso/", lotus_sso.lotus_sso_start, name="lotus_sso_start"),
+    path("accounts/lotus-sso/callback/", lotus_sso.lotus_sso_callback, name="lotus_sso_callback"),
     re_path(r"^user/(?P<username>[\w@._-]*)$", views.view_user, name="get_user"),
     re_path(r"^user/(?P<username>[\w@._-]*)/$", views.view_user, name="get_user"),
     re_path(

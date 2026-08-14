@@ -19,6 +19,12 @@
 		  <button class="primaryAction" type="submit">登录</button>
 		</form>
 
+		{% if lotus_sso_enabled %}
+		<p style="margin-top:1.2em;">
+		  <a href="{% url 'lotus_sso_start' %}{% if redirect_field_value %}?next={{ redirect_field_value|urlencode }}{% endif %}">用莲花导航登录</a>
+		</p>
+		{% endif %}
+
     </div>
 </div>
 {% endblock innercontent %}
