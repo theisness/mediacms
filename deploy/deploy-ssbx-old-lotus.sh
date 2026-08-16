@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-# 一键上线莲花影院前端到 ssbx-old / video.ssbx.site。
+# 一键上线莲花影院（模板/静态/后端白名单）到国内生产 ssbx.site。
+# 文件名历史遗留（曾默认 ssbx-old）；**2026-08-10 起默认 DEPLOY_HOST=ssbx.site**，
+# video.ssbx.site / ssbx-old 已废弃，勿再指美国机。
 #
 # 用法：
 #   cd /home/pyf/ssbx/mediacms
 #   ./deploy/deploy-ssbx-old-lotus.sh
 #
 # 可覆盖：
-#   DEPLOY_HOST=ssbx-old DEPLOY_APP=/home/mediacms.io/mediacms ./deploy/deploy-ssbx-old-lotus.sh
+#   DEPLOY_HOST=ssbx.site DEPLOY_APP=/home/mediacms.io/mediacms ./deploy/deploy-ssbx-old-lotus.sh
 #
 # 脚本负责构建、现网备份、静态资源/模板同步、属主修正和服务重启；
 # 不做浏览器验收、不使用 rsync --delete，保留远端备份以便手工回滚。
@@ -15,7 +17,7 @@ set -Eeuo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 FRONTEND_DIR="$ROOT_DIR/frontend"
-DEPLOY_HOST="${DEPLOY_HOST:-ssbx-old}"
+DEPLOY_HOST="${DEPLOY_HOST:-ssbx.site}"
 DEPLOY_APP="${DEPLOY_APP:-/home/mediacms.io/mediacms}"
 DEPLOY_SERVICE="${DEPLOY_SERVICE:-mediacms.service}"
 STAMP="$(date +%Y%m%d-%H%M%S)"
@@ -137,4 +139,4 @@ ssh_run "set -e
   echo service=active
   echo backup='$REMOTE_BACKUP'"
 
-echo "[deploy] 完成。未执行浏览器验收；请手工检查 video.ssbx.site。"
+echo "[deploy] 完成。未执行浏览器验收；请手工检查 https://ssbx.site/。"
